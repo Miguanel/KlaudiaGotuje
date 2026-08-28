@@ -1,0 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+@import "tailwindcss";
+
+/* Konfiguracja dla drukarek */
+@media print {
+  body {
+    background-color: white !important;
+    color: black !important;
+  }
+
+  /* Ukrywamy nagłówek, stopkę i ewentualne przyciski nawigacyjne */
+  header, footer, a, button {
+    display: none !important;
+  }
+
+  /* Wymuszamy, by kroki i zdjęcia nie dzieliły się w połowie strony */
+  .print\:break-inside-avoid {
+    break-inside: avoid;
+  }
+}
+
+
