@@ -23,6 +23,7 @@ export interface RecipeStep {
   step_number: number;
   instruction: string;
   image_url: string | null;
+  ingredients?: Ingredient[];
 }
 
 export interface Recipe {
@@ -34,6 +35,16 @@ export interface Recipe {
   created_at: string;
   category: Category | null;
   ingredients: Ingredient[];
+  comments: Comment[];
+  average_rating: number | null;
   steps: RecipeStep[];
   main_image_url: string | null;
+}
+
+export interface Comment {
+  id: string;
+  author_name: string;
+  content: string;
+  rating: number;
+  created_at: string;
 }

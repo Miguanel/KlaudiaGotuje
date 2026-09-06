@@ -1,25 +1,30 @@
 import { useState } from 'react';
 import type { Ingredient } from '../types';
+import { convertIngredientUnit } from '../utils/unitConverter';
 
 interface Props {
   skladniki: Ingredient[];
   bazowePorcje?: number;
+  recipeName?: string;
 }
 
-export default function IngredientsPanel({ skladniki, bazowePorcje = 4 }: Props) {
+export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeName = 'Przepis' }: Props) {
   const [porcje, setPorcje] = useState<number>(bazowePorcje);
-
-  // Stan do zapamiętywania zaznaczonych składników (przechowuje ich ID)
   const [zaznaczone, setZaznaczone] = useState<Set<string>>(new Set());
+  const [addedToShopping, setAddedToShopping] = useState(false);
+  const [weightMode, setWeightMode] = useState<'default' | 'grams'>('default');
 
-  const obliczIlosc = (iloscStr: string | number) => {
+  const obliczIlosc = (iloscStr: string | number, name: string, unit: string) => {
     const num = Number(iloscStr);
-    if (isNaN(num)) return iloscStr;
-    const przeliczona = (num / bazowePorcje) * porcje;
-    return Number.isInteger(przeliczona) ? przeliczona : przeliczona.toFixed(1);
+    if (isNaN(num)) return { quantity: iloscStr, unit };
+
+    const przeliczonaPorcja = (num / bazowePorcje) * porcje;
+    const converted = convertIngredientUnit(name, przeliczonaPorcja, unit, weightMode);
+
+    const finalQty = Number.isInteger(converted.quantity) ? converted.quantity : Number(converted.quantity).toFixed(1);
+    return { quantity: finalQty, unit: converted.unit };
   };
 
-  // Funkcja przełączająca stan zaznaczenia
   const toggleSkładnik = (id: string) => {
     setZaznaczone(prev => {
       const nowe = new Set(prev);
@@ -29,30 +34,68 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4 }: Props)
     });
   };
 
-  // Funkcja wywołująca systemowe okno drukowania
   const handlePrint = () => {
     window.print();
   };
 
-  return (
-    <div className="sticky top-24 bg-white p-6 rounded-2xl border border-gray-200 shadow-sm print:border-none print:shadow-none print:p-0">
+  const addToShoppingList = () => {
+    const currentList = JSON.parse(localStorage.getItem('shopping_list') || '[]');
 
-      {/* Przycisk Drukuj - widoczny tylko na ekranie, ukryty przy drukowaniu */}
-      <div className="flex justify-between items-center mb-6 print:hidden">
+    const newItems = skladniki.map(skladnik => {
+      const calc = obliczIlosc(skladnik.quantity, skladnik.name, skladnik.unit);
+      return {
+        id: `${Date.now()}-${skladnik.id}`,
+        name: skladnik.name,
+        quantity: calc.quantity,
+        unit: calc.unit,
+        checked: false,
+        recipeName: recipeName
+      };
+    });
+
+    localStorage.setItem('shopping_list', JSON.stringify([...currentList, ...newItems]));
+    setAddedToShopping(true);
+    setTimeout(() => setAddedToShopping(false), 2500);
+  };
+
+  return (
+    <div className="sticky top-24 bg-white p-4 sm:p-6 rounded-2xl border border-gray-200 shadow-sm print:border-none print:shadow-none print:p-0">
+
+      <div className="flex flex-wrap justify-between items-center gap-3 mb-5 print:hidden">
         <h3 className="text-xl font-bold text-gray-900">Składniki</h3>
         <button
           onClick={handlePrint}
-          className="flex items-center gap-2 text-sm font-semibold text-gray-500 hover:text-orange-500 transition-colors"
+          className="flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-orange-500 transition-colors"
           title="Wydrukuj przepis"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
           </svg>
           Drukuj
         </button>
       </div>
 
-      <div className="flex justify-between items-center bg-gray-50 p-3 rounded-xl mb-6 print:hidden">
+      {/* PRZEŁĄCZNIK MIAR */}
+      <div className="flex bg-gray-100 p-1 rounded-xl mb-4 print:hidden">
+        <button
+          onClick={() => setWeightMode('default')}
+          className={`flex-1 py-1.5 px-1 text-[11px] sm:text-xs font-bold rounded-lg transition-all ${
+            weightMode === 'default' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+          }`}
+        >
+          Miary domowe
+        </button>
+        <button
+          onClick={() => setWeightMode('grams')}
+          className={`flex-1 py-1.5 px-1 text-[11px] sm:text-xs font-bold rounded-lg transition-all ${
+            weightMode === 'grams' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+          }`}
+        >
+          ⚖️ Na gramy
+        </button>
+      </div>
+
+      <div className="flex flex-wrap justify-between items-center gap-3 bg-gray-50 p-3 rounded-xl mb-4 print:hidden">
         <span className="text-sm font-medium text-gray-600">Liczba porcji:</span>
         <div className="flex items-center gap-3 bg-white px-3 py-1 rounded-lg border border-gray-200 shadow-sm">
           <button
@@ -67,19 +110,31 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4 }: Props)
         </div>
       </div>
 
-      {/* Napis widoczny tylko na wydruku */}
+      <button
+        onClick={addToShoppingList}
+        className={`w-full mb-6 py-2.5 px-4 rounded-xl text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2 print:hidden ${
+          addedToShopping
+            ? 'bg-green-600 text-white'
+            : 'bg-orange-500 hover:bg-orange-600 text-white'
+        }`}
+      >
+        <span>🛒</span>
+        {addedToShopping ? 'Dodano do listy!' : 'Dodaj składniki do zakupów'}
+      </button>
+
       <h3 className="hidden print:block text-xl font-bold mb-4">Składniki ({porcje} porcji):</h3>
 
       <ul className="space-y-1">
         {skladniki.map(skladnik => {
           const isChecked = zaznaczone.has(skladnik.id);
+          const calc = obliczIlosc(skladnik.quantity, skladnik.name, skladnik.unit);
+
           return (
             <li
               key={skladnik.id}
               onClick={() => toggleSkładnik(skladnik.id)}
-              className="flex items-center gap-4 p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors group print:break-inside-avoid"
+              className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors group print:break-inside-avoid"
             >
-              {/* Checkbox (tylko na ekranie) */}
               <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 transition-colors print:hidden ${
                 isChecked ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300 group-hover:border-orange-500'
               }`}>
@@ -90,12 +145,12 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4 }: Props)
                 )}
               </div>
 
-              <div className={`flex justify-between w-full transition-all ${
+              <div className={`flex justify-between w-full gap-2 transition-all ${
                 isChecked ? 'opacity-40 line-through' : 'opacity-100'
               } print:opacity-100 print:no-underline`}>
-                <span className="text-gray-700">{skladnik.nazwa}</span>
-                <span className="font-bold text-gray-900 ml-4 text-right">
-                  {obliczIlosc(skladnik.ilosc)} {skladnik.jednostka}
+                <span className="text-gray-700 text-sm md:text-base">{skladnik.name}</span>
+                <span className="font-bold text-gray-900 text-right whitespace-nowrap text-sm md:text-base">
+                  {calc.quantity} {calc.unit}
                 </span>
               </div>
             </li>

@@ -57,24 +57,24 @@ class Tag(models.Model):
 
 
 class Recipe(models.Model):
+    DIET_CHOICES = [
+        ('dowolna', 'Dowolna'),
+        ('wege', 'Wegetariańska'),
+        ('wegańska', 'Wegańska'),
+        ('bezglutenowa', 'Bezglutenowa'),
+        ('fit', 'Fit / Lekka'),
+    ]
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     tags = models.ManyToManyField(Tag, blank=True, related_name='recipes', verbose_name="Tagi")
-
-    # Relacja. SET_NULL gwarantuje, że usunięcie kategorii nie usunie przepisu!
     category = models.ForeignKey(
-        Category,
-        on_delete=models.SET_NULL,
-        null=True,
-        blank=True,
-        related_name='recipes',
-        verbose_name="Kategoria główna"
+        Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='recipes', verbose_name="Kategoria główna"
     )
-
     name = models.CharField(max_length=200, verbose_name="Nazwa przepisu")
     description = models.TextField(verbose_name="Opis / Wstęp")
     prep_time = models.PositiveIntegerField(help_text="Czas w minutach", verbose_name="Czas przygotowania")
-    main_image = models.ImageField(upload_to='przepisy/glowne/', null=True, blank=True,
-                                   verbose_name="Zdjęcie główne")
+    diet = models.CharField(max_length=50, choices=DIET_CHOICES, default='dowolna', verbose_name="Dieta") # <-- NOWE POLE
+    main_image = models.ImageField(upload_to='przepisy/glowne/', null=True, blank=True, verbose_name="Zdjęcie główne")
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
@@ -109,6 +109,9 @@ class RecipeStep(models.Model):
     instruction = models.TextField(verbose_name="Instrukcja")
     image = models.ImageField(upload_to='przepisy/kroki/', null=True, blank=True, verbose_name="Zdjęcie poglądowe")
 
+    ingredients = models.ManyToManyField(Ingredient, blank=True, related_name='steps',
+                                         verbose_name="Powiązane składniki")
+
     class Meta:
         verbose_name = "Krok przygotowania"
         verbose_name_plural = "Kroki przygotowania"
@@ -116,3 +119,20 @@ class RecipeStep(models.Model):
 
     def __str__(self):
         return f"Krok {self.step_number}"
+
+
+class Comment(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    recipe = models.ForeignKey(Recipe, on_delete=models.CASCADE, related_name='comments', verbose_name="Przepis")
+    author_name = models.CharField(max_length=100, verbose_name="Imię autora")
+    content = models.TextField(verbose_name="Treść komentarza")
+    rating = models.PositiveIntegerField(choices=[(i, str(i)) for i in range(1, 6)], verbose_name="Ocena (1-5)")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Data utworzenia")
+
+    class Meta:
+        verbose_name = "Komentarz"
+        verbose_name_plural = "Komentarze"
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"{self.author_name} ({self.rating}★) - {self.recipe.name}"
