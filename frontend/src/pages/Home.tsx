@@ -138,9 +138,9 @@ export default function Home() {
             className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-800 outline-none focus:border-[#2c5e09]"
           >
             <option value="dowolna">Dowolna</option>
-            <option value="wege">Wegetariańska</option>
-            <option value="wegańska">Wegańska</option>
-            <option value="bezglutenowa">Bezglutenowa</option>
+            <option value="wege">Makarony</option>
+            <option value="wegańska">Drożdżowe</option>
+            <option value="bezglutenowa">Przetwory</option>
             <option value="fit">Fit / Lekka</option>
           </select>
         </div>
