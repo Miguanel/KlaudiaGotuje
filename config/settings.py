@@ -14,7 +14,8 @@ environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 # Użycie zmiennych z pliku .env
 SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
-ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'diamentowe-smaki-engibadwoman.onrender.com']
+# ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'diamentowe-smaki-engibadwoman.onrender.com']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
