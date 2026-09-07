@@ -16,9 +16,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
-    # Jawne skierowanie ścieżki /assets/ do plików statycznych Django (rozwiązuje błąd MIME type)
-    re_path(r'^assets/(?P<path>.*)$', serve,
-            kwargs={'document_root': settings.BASE_DIR / 'frontend' / 'dist' / 'assets'}),
+    # # Jawne skierowanie ścieżki /assets/ do plików statycznych Django (rozwiązuje błąd MIME type)
+    # re_path(r'^assets/(?P<path>.*)$', serve,
+    #         kwargs={'document_root': settings.BASE_DIR / 'frontend' / 'dist' / 'assets'}),
 
     # Wszystkie pozostałe adresy przejmuje React (Single Page Application)
     re_path(r'^.*$', TemplateView.as_view(template_name='index.html')),
