@@ -132,7 +132,11 @@ X_FRAME_OPTIONS = 'DENY'
 
 # 2. Pliki statyczne i media (zdjęcia przepisów)
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+STATICFILES_DIRS = [
+    BASE_DIR / 'frontend' / 'dist',
+]
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
