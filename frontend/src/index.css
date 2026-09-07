@@ -1,22 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
 @import "tailwindcss";
 
-/* Konfiguracja dla drukarek */
-@media print {
-  body {
-    background-color: white !important;
-    color: black !important;
-  }
+@theme {
+  /* Nadpisanie pomarańczowego na neonowy róż */
+  --color-orange-500: #FF1493; /* DeepPink */
+  --color-orange-600: #FF007F; /* Neon Pink */
+  --color-orange-700: #C71585; /* MediumVioletRed */
 
-  /* Ukrywamy nagłówek, stopkę i ewentualne przyciski nawigacyjne */
-  header, footer, a, button {
-    display: none !important;
-  }
-
-  /* Wymuszamy, by kroki i zdjęcia nie dzieliły się w połowie strony */
-  .print\:break-inside-avoid {
-    break-inside: avoid;
-  }
+  /* Lekko różowe tła zamiast szarych */
+  --color-gray-50: #FDF0F5;
+  --color-gray-100: #FCE4EC;
 }
 
+body {
+  background-color: #FDF0F5 !important;
+}
 
+/* Konfiguracja dla drukarek */
+@media print {
+  body { background-color: white !important; color: black !important; }
+  header, footer, a, button { display: none !important; }
+  .print\:break-inside-avoid { break-inside: avoid; }
+}
