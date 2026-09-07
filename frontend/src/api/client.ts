@@ -3,12 +3,14 @@ import type { Recipe, Category, Tag } from '../types';
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8000';
 
 class ApiError extends Error {
-  constructor(public status: number, message: string) {
+  status: number;
+
+  constructor(status: number, message: string) {
     super(message);
+    this.status = status;
     this.name = 'ApiError';
   }
 }
-
 async function fetchJson<T>(endpoint: string): Promise<T> {
   const response = await fetch(`${BACKEND_URL}${endpoint}`);
   if (!response.ok) {

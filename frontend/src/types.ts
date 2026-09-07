@@ -39,6 +39,9 @@ export interface Recipe {
   average_rating: number | null;
   steps: RecipeStep[];
   main_image_url: string | null;
+  diet: string;
+  comments_count: number;
+  photos_count: number;
 }
 
 export interface Comment {
