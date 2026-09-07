@@ -132,13 +132,12 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 SECURE_BROWSER_XSS_FILTER = True
 X_FRAME_OPTIONS = 'DENY'
 
-# 2. Pliki statyczne i media (zdjęcia przepisów)
+# Pliki statyczne i media
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
-STATICFILES_DIRS = [
-    BASE_DIR / 'frontend' / 'dist',
-]
+# Usunęliśmy stąd frontend/dist, ponieważ frontend jest osobnym serwisem Static Site
+STATICFILES_DIRS = []
 
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media'
