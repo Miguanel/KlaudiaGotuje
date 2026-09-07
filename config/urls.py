@@ -9,7 +9,11 @@ from rest_framework_simplejwt.views import (
     TokenRefreshView,
 )
 
+def home_view(request):
+    return HttpResponse("Witaj w API Diamentowe Smaki Engibadwoman! Backend działa poprawnie 💎")
+
 urlpatterns = [
+    path('', home_view, name='home'),
     path('admin/', admin.site.urls),
     path('api/', api.urls),
     # Endpointy JWT dla logowania
