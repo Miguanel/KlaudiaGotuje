@@ -26,7 +26,7 @@ export default function Layout() {
 
           {/* LOGO */}
           <Link to="/" className="text-xl sm:text-2xl font-black tracking-tight text-gray-900" onClick={closeMenu}>
-            Diamentowe Smaki EngiBadWoman<span className="text-orange-500">.</span>
+            Diamentowe Smaki -EngiBadWoman<span className="text-orange-500">.</span>
           </Link>
 
           {/* PRZYCISK HAMBURGER MENU (WIDOCZNY TYLKO NA URZĄDZENIACH MOBILNYCH) */}
