@@ -24,20 +24,248 @@ def run_seed():
     cat_zupy = Category.objects.create(name="Zupy", parent_category=cat_obiady)
     cat_dania = Category.objects.create(name="Dania główne", parent_category=cat_obiady)
 
-    print("Tworzenie tagów...")
-    tag_wege = Tag.objects.create(name="Wege")
+    print("Tworzenie tagów (zgodnych z nowym filtrem)...")
+    tag_makarony = Tag.objects.create(name="Makarony")
+    tag_drozdzowe = Tag.objects.create(name="Drożdżowe")
+    tag_przetwory = Tag.objects.create(name="Przetwory")
+    tag_fit = Tag.objects.create(name="Fit / Lekka")
     tag_szybkie = Tag.objects.create(name="Szybkie")
     tag_tradycyjne = Tag.objects.create(name="Tradycyjne")
-    tag_slodkie = Tag.objects.create(name="Na słodko")
-    tag_fit = Tag.objects.create(name="Fit")
 
-    print("Generowanie 20 przepisów...")
+    print("Generowanie przepisów dopasowanych do nowych tagów...")
 
     recipes_data = [
+        # --- MAKARONY ---
+        {
+            "name": "Spaghetti Carbonara z boczkiem",
+            "category": cat_dania,
+            "tags": [tag_makarony, tag_tradycyjne],
+            "description": "Klasyczne włoskie spaghetti z chrupiącym boczkiem, żółtkami i serem Pecorino.",
+            "prep_time": 25,
+            "ingredients": [
+                {"name": "Makaron spaghetti", "quantity": 400, "unit": "g"},
+                {"name": "Boczek wędzony", "quantity": 200, "unit": "g"},
+                {"name": "Żółtka jaj", "quantity": 4, "unit": "szt."},
+                {"name": "Ser Pecorino", "quantity": 80, "unit": "g"}
+            ],
+            "steps": [
+                "Ugotuj makaron al dente w osolonej wodzie.",
+                "Pokrój boczek w kostkę i podsmaż na chrupko na suchej patelni.",
+                "W misce wymieszaj żółtka z startym serem i dużą ilością pieprzu.",
+                "Połącz gorący makaron z boczkiem, zdejmij z ognia, dodaj masę jajeczną i energicznie wymieszaj."
+            ]
+        },
+        {
+            "name": "Domowe tagliatelle w sosie pomidorowym",
+            "category": cat_dania,
+            "tags": [tag_makarony, tag_szybkie],
+            "description": "Świeży makaron wstążki w lekkim sosie z pomidorów i świeżej bazylii.",
+            "prep_time": 20,
+            "ingredients": [
+                {"name": "Tagliatelle", "quantity": 400, "unit": "g"},
+                {"name": "Pomidory z puszki", "quantity": 500, "unit": "g"},
+                {"name": "Czosnek", "quantity": 2, "unit": "ząbki"},
+                {"name": "Świeża bazylia", "quantity": 1, "unit": "pęczek"}
+            ],
+            "steps": [
+                "Ugotuj makaron zgodnie z instrukcją na opakowaniu.",
+                "Na oliwie podsmaż posiekany czosnek, dodaj pomidory i duś przez 10 minut.",
+                "Wymieszaj sos z makaronem i posyp obficie świeżą bazylią."
+            ]
+        },
+        {
+            "name": "Makaron z sosem szpinakowym i fetą",
+            "category": cat_dania,
+            "tags": [tag_makarony, tag_fit],
+            "description": "Kremowy, zielony sos ze szpinaku i czosnku z dodatkiem słonej fety.",
+            "prep_time": 25,
+            "ingredients": [
+                {"name": "Makaron penne", "quantity": 400, "unit": "g"},
+                {"name": "Szpinak świeży", "quantity": 250, "unit": "g"},
+                {"name": "Ser feta", "quantity": 100, "unit": "g"},
+                {"name": "Czosnek", "quantity": 3, "unit": "ząbki"}
+            ],
+            "steps": [
+                "Ugotuj makaron w osolonej wodzie.",
+                "Na patelni podsmaż czosnek, wrzuć szpinak i smaż, aż zmięknie.",
+                "Dodaj pokruszoną fetę, wymieszaj, a następnie połącz z ugotowanym makaronem."
+            ]
+        },
+
+        # --- DROŻDŻOWE ---
+        {
+            "name": "Domowa pizza na puszystym cieście drożdżowym",
+            "category": cat_dania,
+            "tags": [tag_drozdzowe, tag_tradycyjne],
+            "description": "Prawdziwa domowa pizza z ciągnącym się sosem pomidorowym i serem.",
+            "prep_time": 90,
+            "ingredients": [
+                {"name": "Mąka pszenna", "quantity": 500, "unit": "g"},
+                {"name": "Drożdże świeże", "quantity": 25, "unit": "g"},
+                {"name": "Ciepła woda", "quantity": 300, "unit": "ml"},
+                {"name": "Sos pomidorowy", "quantity": 150, "unit": "g"},
+                {"name": "Mozzarella", "quantity": 200, "unit": "g"}
+            ],
+            "steps": [
+                "Rozpuść drożdże w ciepłej wodzie z odrobiną cukru.",
+                "Wymieszaj z mąką i solą, zagnieć gładkie ciasto drożdżowe i odstaw do wyrośnięcia na godzinę.",
+                "Rozwałkuj ciasto, posmaruj sosem pomidorowym, posyp mozzarellą.",
+                "Piecz w piekarniku nagrzanym do 220°C przez około 12-15 minut."
+            ]
+        },
+        {
+            "name": "Słodkie bułeczki drożdżowe z kruszonką",
+            "category": cat_desery,
+            "tags": [tag_drozdzowe],
+            "description": "Mięciutkie, pachnące maślanym aromatem bułeczki z chrupiącą kruszonką.",
+            "prep_time": 120,
+            "ingredients": [
+                {"name": "Mąka pszenna", "quantity": 600, "unit": "g"},
+                {"name": "Drożdże", "quantity": 30, "unit": "g"},
+                {"name": "Mleko ciepłe", "quantity": 250, "unit": "ml"},
+                {"name": "Cukier", "quantity": 100, "unit": "g"},
+                {"name": "Masło", "quantity": 100, "unit": "g"}
+            ],
+            "steps": [
+                "Przygotuj rozczyn z drożdży, odrobiny mleka i cukru.",
+                "Zagnieć ciasto ze wszystkimi składnikami i pozostaw do podwojenia objętości.",
+                "Uformuj małe bułeczki, posyp przygotowaną wcześniej kruszonką z masła i mąki.",
+                "Piecz w 180°C przez 25 minut."
+            ]
+        },
+        {
+            "name": "Puszyste drożdżówki z jagodami",
+            "category": cat_desery,
+            "tags": [tag_drozdzowe],
+            "description": "Letni klasyk – puszyste ciasto drożdżowe wypełnione po brzegi słodkimi jagodami.",
+            "prep_time": 90,
+            "ingredients": [
+                {"name": "Ciasto drożdżowe", "quantity": 1, "unit": "porcja"},
+                {"name": "Świeże jagody", "quantity": 300, "unit": "g"},
+                {"name": "Cukier puder", "quantity": 50, "unit": "g"}
+            ],
+            "steps": [
+                "Z przygotowanego ciasta drożdżowego formuj krążki z wgłębieniem w środku.",
+                "W środek nałóż sowitą porcję jagód wymieszanych z odrobiną mąki.",
+                "Piecz w 180°C na złoty kolor, a po ostudzeniu oprósz cukrem pudrem."
+            ]
+        },
+
+        # --- PRZETWORY ---
+        {
+            "name": "Domowa konfitura truskawkowa",
+            "category": cat_desery,
+            "tags": [tag_przetwory, tag_tradycyjne],
+            "description": "Gęsta, aromatyczna konfitura z całymi owocami truskawek na zimowe wieczory.",
+            "prep_time": 180,
+            "ingredients": [
+                {"name": "Truskawki", "quantity": 2000, "unit": "g"},
+                {"name": "Cukier", "quantity": 1000, "unit": "g"},
+                {"name": "Sok z cytryny", "quantity": 2, "unit": "łyżki"}
+            ],
+            "steps": [
+                "Oczyść truskawki, zasyp cukrem i odstaw na kilka godzin, aby puściły sok.",
+                "Gotuj na małym ogniu przez około 2-3 godziny, regularnie zbierając pianę.",
+                "Gorącą konfiturę przełóż do wyparzonych słoików i mocno zakręć."
+            ]
+        },
+        {
+            "name": "Tradycyjne ogórki kiszone",
+            "category": cat_dania,
+            "tags": [tag_przetwory, tag_tradycyjne],
+            "description": "Chrupiące, idealnie ukiszone ogórki z czosnkiem, chrzanem i koprem.",
+            "prep_time": 40,
+            "ingredients": [
+                {"name": "Ogórki gruntowe", "quantity": 3000, "unit": "g"},
+                {"name": "Czosnek", "quantity": 1, "unit": "główka"},
+                {"name": "Korzeń chrzanu", "quantity": 1, "unit": "szt."},
+                {"name": "Koper z baldachiem", "quantity": 4, "unit": "szt."},
+                {"name": "Sól kamienna", "quantity": 3, "unit": "łyżki"}
+            ],
+            "steps": [
+                "Umyj ogórki i ciasno ułóż w czystym słoiku, przekładając czosnkiem, chrzanem i koprem.",
+                "Przygotuj solankę: rozpuść 1 łyżkę soli na 1 litr ciepłej wody.",
+                "Zalej ogórki gorącą solanką, tak aby były całkowicie przykryte, i odstaw w ciemne miejsce."
+            ]
+        },
+        {
+            "name": "Domowy dżem malinowy",
+            "category": cat_desery,
+            "tags": [tag_przetwory],
+            "description": "Słodko-kwaśny dżem z malin doskonały do naleśników i herbaty.",
+            "prep_time": 60,
+            "ingredients": [
+                {"name": "Maliny", "quantity": 1500, "unit": "g"},
+                {"name": "Cukier", "quantity": 600, "unit": "g"}
+            ],
+            "steps": [
+                "Przełóż maliny do garnka i podgrzewaj, aż puszczą sok.",
+                "Dodaj cukier i gotuj na średnim ogniu przez około 45 minut, aż dżem zgęstnieje.",
+                "Przelej do słoików i pasteryzuj przez 10 minut."
+            ]
+        },
+
+        # --- FIT / LEKKA ---
+        {
+            "name": "Lekka sałatka z kurczakiem i awokado",
+            "category": cat_dania,
+            "tags": [tag_fit, tag_szybkie],
+            "description": "Orzeźwiająca, pełna białka i zdrowych tłuszczów sałatka obiadowa.",
+            "prep_time": 20,
+            "ingredients": [
+                {"name": "Mix sałat", "quantity": 150, "unit": "g"},
+                {"name": "Pierś z kurczaka", "quantity": 250, "unit": "g"},
+                {"name": "Awokado", "quantity": 1, "unit": "szt."},
+                {"name": "Pomidorki koktajlowe", "quantity": 200, "unit": "g"}
+            ],
+            "steps": [
+                "Ugrilluj lub podsmaż pokrojoną pierś z kurczaka doprawioną ulubionymi ziołami.",
+                "Na talerzu ułóż mix sałat, pokrojone awokado oraz połówki pomidorków.",
+                "Dodaj ciepłego kurczaka i skrop całość oliwą z oliwek oraz sokiem z cytryny."
+            ]
+        },
+        {
+            "name": "Fit koktajl szpinakowy z bananem",
+            "category": cat_napoje,
+            "tags": [tag_fit, tag_szybkie],
+            "description": "Błyskawiczny, witaminowy zastrzyk energii na bazie świeżego szpinaku.",
+            "prep_time": 5,
+            "ingredients": [
+                {"name": "Szpinak baby", "quantity": 50, "unit": "g"},
+                {"name": "Dojrzały banan", "quantity": 1, "unit": "szt."},
+                {"name": "Jogurt naturalny", "quantity": 200, "unit": "ml"},
+                {"name": "Sok z pomarańczy", "quantity": 100, "unit": "ml"}
+            ],
+            "steps": [
+                "Wrzuć wszystkie składniki do blendera.",
+                "Zblenduj na idealnie gładką masę bez grudek.",
+                "Przelej do wysokiej szklanki i podawaj od razu."
+            ]
+        },
+        {
+            "name": "Kremowa owsianka z masłem orzechowym",
+            "category": cat_sniadania,
+            "tags": [tag_fit, tag_szybkie],
+            "description": "Sycące śniadanie bogate w białko i błonnik, idealne przed treningiem.",
+            "prep_time": 10,
+            "ingredients": [
+                {"name": "Płatki owsiane", "quantity": 50, "unit": "g"},
+                {"name": "Mleko migdałowe", "quantity": 200, "unit": "ml"},
+                {"name": "Masło orzechowe", "quantity": 1, "unit": "łyżka"},
+                {"name": "Banan", "quantity": 1, "unit": "szt."}
+            ],
+            "steps": [
+                "Ugotuj płatki owsiane na mleku migdałowym przez około 5 minut.",
+                "Po ugotowaniu wmieszaj łyżkę masła orzechowego, aby powstała kremowa konsystencja.",
+                "Udekoruj plasterkami banana na wierzchu."
+            ]
+        },
+
+        # --- SZYBKIE I TRADYCYJNE (Dodatkowe wypełnienie do 15-20 przepisów) ---
         {
             "name": "Klasyczna jajecznica na maśle",
             "category": cat_sniadania,
-            "tags": [tag_wege, tag_szybkie],
+            "tags": [tag_szybkie, tag_tradycyjne],
             "description": "Prosty, ale idealny przepis na kremową jajecznicę. Doskonały start każdego dnia.",
             "prep_time": 10,
             "ingredients": [
@@ -48,79 +276,7 @@ def run_seed():
             "steps": [
                 "Rozgrzej patelnię na średnim ogniu i rozpuść połowę masła.",
                 "Wbij jajka bezpośrednio na patelnię, poczekaj 15 sekund aż białko zacznie się ścinać.",
-                "Delikatnie mieszaj szpatułką. Gdy jajka będą w 80% ścięte, zdejmij z ognia, dodaj resztę masła i sól."
-            ]
-        },
-        {
-            "name": "Owsianka z malinami i miodem",
-            "category": cat_sniadania,
-            "tags": [tag_wege, tag_slodkie, tag_fit],
-            "description": "Rozgrzewająca, zdrowa owsianka pełna błonnika i witamin.",
-            "prep_time": 15,
-            "ingredients": [
-                {"name": "Płatki owsiane", "quantity": 50, "unit": "g"},
-                {"name": "Mleko", "quantity": 200, "unit": "ml"},
-                {"name": "Maliny", "quantity": 100, "unit": "g"},
-                {"name": "Miód", "quantity": 1, "unit": "łyżka"}
-            ],
-            "steps": [
-                "Zalej płatki owsiane mlekiem w rondelku.",
-                "Gotuj na małym ogniu przez około 10 minut, regularnie mieszając.",
-                "Przełóż do miseczki, polej miodem i posyp świeżymi malinami."
-            ]
-        },
-        {
-            "name": "Puszyste placuszki bananowe",
-            "category": cat_sniadania,
-            "tags": [tag_wege, tag_slodkie],
-            "description": "Szybkie placki bez dodatku białego cukru, naturalnie słodkie od bananów.",
-            "prep_time": 20,
-            "ingredients": [
-                {"name": "Dojrzałe banany", "quantity": 2, "unit": "szt."},
-                {"name": "Jajka", "quantity": 2, "unit": "szt."},
-                {"name": "Mąka pszenna", "quantity": 100, "unit": "g"},
-                {"name": "Olej do smażenia", "quantity": 2, "unit": "łyżki"}
-            ],
-            "steps": [
-                "Rozgnieć banany widelcem w misce na gładką masę.",
-                "Dodaj jajka oraz mąkę, a następnie dokładnie wymieszaj widelcem lub trzepaczką.",
-                "Smaż małe placuszki na rozgrzanym oleju z obu stron na złoty kolor."
-            ]
-        },
-        {
-            "name": "Tosty francuskie z cynamonem",
-            "category": cat_sniadania,
-            "tags": [tag_slodkie, tag_szybkie],
-            "description": "Chrupiące z zewnątrz i miękkie w środku pieczywo w słodkiej, jajecznej pierzynce.",
-            "prep_time": 15,
-            "ingredients": [
-                {"name": "Chleb tostowy", "quantity": 4, "unit": "skibki"},
-                {"name": "Jajko", "quantity": 1, "unit": "szt."},
-                {"name": "Mleko", "quantity": 50, "unit": "ml"},
-                {"name": "Cynamon", "quantity": 1, "unit": "łyżeczka"}
-            ],
-            "steps": [
-                "W głębokim talerzu wymieszaj jajko, mleko oraz cynamon.",
-                "Mocz każdą kromkę chleba w miksturze z obu stron.",
-                "Smaż na rozgrzanej maślanej patelni na złocisty kolor."
-            ]
-        },
-        {
-            "name": "Szakszuka z pomidorami i fetą",
-            "category": cat_sniadania,
-            "tags": [tag_wege],
-            "description": "Bliskowschodnie danie z jajek ściętych w aromatycznym sosie pomidorowym.",
-            "prep_time": 25,
-            "ingredients": [
-                {"name": "Jajka", "quantity": 3, "unit": "szt."},
-                {"name": "Krojone pomidory z puszki", "quantity": 400, "unit": "g"},
-                {"name": "Czosnek", "quantity": 2, "unit": "ząbki"},
-                {"name": "Ser feta", "quantity": 50, "unit": "g"}
-            ],
-            "steps": [
-                "Na patelni podsmaż posiekany czosnek, wlej pomidory z puszki i duś przez 10 minut.",
-                "Zrób w sosie małe wgłębienia i wbij w nie ostrożnie jajka.",
-                "Przykryj patelnię pokrywką i gotuj, aż białka się ścięta. Posyp pokruszoną fetą."
+                "Delikatnie mieszaj szpatułką. Gdy jajka będą w 80% ścięte, zdejmij z ognia i dopraw."
             ]
         },
         {
@@ -142,78 +298,10 @@ def run_seed():
             ]
         },
         {
-            "name": "Zupa krem z pieczonych pomidorów",
-            "category": cat_zupy,
-            "tags": [tag_wege],
-            "description": "Aromatyczna zupa ze słodkich pomidorów pieczonych z czosnkiem.",
-            "prep_time": 45,
-            "ingredients": [
-                {"name": "Pomidory", "quantity": 1000, "unit": "g"},
-                {"name": "Czosnek", "quantity": 1, "unit": "główka"},
-                {"name": "Oliwa z oliwek", "quantity": 4, "unit": "łyżki"}
-            ],
-            "steps": [
-                "Pomidory przekrój na pół i ułóż na blasze razem z naciętą główką czosnku.",
-                "Skrop oliwą i piecz w 200°C przez 40 minut.",
-                "Zblenduj upieczone składniki na gładki krem."
-            ]
-        },
-        {
-            "name": "Aromatyczna zupa grzybowa",
-            "category": cat_zupy,
-            "tags": [tag_tradycyjne, tag_wege],
-            "description": "Głęboka w smaku zupa ze świeżych lub suszonych grzybów leśnych.",
-            "prep_time": 60,
-            "ingredients": [
-                {"name": "Grzyby leśne", "quantity": 400, "unit": "g"},
-                {"name": "Ziemniaki", "quantity": 4, "unit": "szt."},
-                {"name": "Śmietana 30%", "quantity": 100, "unit": "ml"}
-            ],
-            "steps": [
-                "Oczyszczone grzyby pokrój i podsmaż na maśle z cebulą.",
-                "Zalej bulionem, dodaj pokrojone w kostkę ziemniaki i gotuj do miękkości.",
-                "Zabiel zupę śmietaną na koniec gotowania."
-            ]
-        },
-        {
-            "name": "Kremowa zupa brokułowa",
-            "category": cat_zupy,
-            "tags": [tag_wege, tag_fit],
-            "description": "Lekka, zielona zupa krem podawana z chrupiącymi grzankami.",
-            "prep_time": 30,
-            "ingredients": [
-                {"name": "Brokuł", "quantity": 1, "unit": "szt."},
-                {"name": "Ziemniak", "quantity": 2, "unit": "szt."},
-                {"name": "Śmietanka 18%", "quantity": 80, "unit": "ml"}
-            ],
-            "steps": [
-                "Podziel brokuł na różyczki i ugotuj razem z obranymi ziemniakami w osolonej wodzie.",
-                "Gdy warzywa zmiękną, zblenduj je na gładki krem, dodając śmietankę.",
-                "Dopraw solą, pieprzem i odrobiną gałki muszkatołowej."
-            ]
-        },
-        {
-            "name": "Sycąca zupa gulaszowa",
-            "category": cat_zupy,
-            "tags": [tag_tradycyjne],
-            "description": "Gęsta, mięsna zupa pełna warzyw i papryki z dodatkiem słodkiej i ostrej papryki.",
-            "prep_time": 90,
-            "ingredients": [
-                {"name": "Łopatka wieprzowa", "quantity": 500, "unit": "g"},
-                {"name": "Papryka czerwona", "quantity": 2, "unit": "szt."},
-                {"name": "Ziemniaki", "quantity": 3, "unit": "szt."}
-            ],
-            "steps": [
-                "Mięso pokrój w kostkę i obsmaż w garnku na złoty kolor.",
-                "Dodaj pokrojoną paprykę, cebulę i zalej bulionem. Duś przez godzinę.",
-                "Dodaj pokrojone ziemniaki i gotuj, aż zmiękną."
-            ]
-        },
-        {
             "name": "Kotlet schabowy z ziemniakami",
             "category": cat_dania,
             "tags": [tag_tradycyjne],
-            "description": "Klasyczny polski obiad – chrupiący schabowy i młode ziemniaki z koperkiem.",
+            "description": "Klasyczny polski obiad – chrupiący schabowy i ziemniaki z koperkiem.",
             "prep_time": 40,
             "ingredients": [
                 {"name": "Schab wieprzowy", "quantity": 400, "unit": "g"},
@@ -223,81 +311,13 @@ def run_seed():
             "steps": [
                 "Rozbij mięso tłuczkiem, oprósz solą i pieprzem.",
                 "Otocz w mące, roztrzepanym jajku i bułce tartej.",
-                "Smaż na rozgrzanym smalcu lub oleju z obu stron."
-            ]
-        },
-        {
-            "name": "Spaghetti Bolognese",
-            "category": cat_dania,
-            "tags": [tag_szybkie],
-            "description": "Włoski klasyk z mięsnym sosem pomidorowym i ziołami.",
-            "prep_time": 50,
-            "ingredients": [
-                {"name": "Makaron spaghetti", "quantity": 400, "unit": "g"},
-                {"name": "Mięso mielone wołowe", "quantity": 500, "unit": "g"},
-                {"name": "Passata pomidorowa", "quantity": 700, "unit": "ml"}
-            ],
-            "steps": [
-                "Podsmaż mięso mielone na patelni, dodaj czosnek i passatę pomidorową.",
-                "Duś sos na wolnym ogniu przez ok. 35-40 minut.",
-                "Wymieszaj sos z ugotowanym al dente makaronem."
-            ]
-        },
-        {
-            "name": "Kurczak curry z ryżem",
-            "category": cat_dania,
-            "tags": [tag_szybkie],
-            "description": "Szybkie, aromatyczne danie z mleczkiem kokosowym i kurczakiem.",
-            "prep_time": 30,
-            "ingredients": [
-                {"name": "Pierś z kurczaka", "quantity": 500, "unit": "g"},
-                {"name": "Mleczko kokosowe", "quantity": 400, "unit": "ml"},
-                {"name": "Pasta curry", "quantity": 2, "unit": "łyżki"}
-            ],
-            "steps": [
-                "Pokrój kurczaka w kostkę i podsmaż na patelni.",
-                "Dodaj pastę curry, a następnie wlej mleczko kokosowe.",
-                "Gotuj całość przez 15 minut i podawaj z ugotowanym ryżem."
-            ]
-        },
-        {
-            "name": "Domowe pierogi ruskie",
-            "category": cat_dania,
-            "tags": [tag_tradycyjne, tag_wege],
-            "description": "Delikatne ciasto wypełnione farszem z twarogu, ziemniaków i smażonej cebulki.",
-            "prep_time": 120,
-            "ingredients": [
-                {"name": "Mąka pszenna", "quantity": 500, "unit": "g"},
-                {"name": "Twaróg", "quantity": 400, "unit": "g"},
-                {"name": "Ziemniaki", "quantity": 400, "unit": "g"}
-            ],
-            "steps": [
-                "Zagniecione z mąki i ciepłej wody ciasto rozwałkuj i wykrawaj kółka.",
-                "Wymieszaj ugotowane ziemniaki z twaróg i podsmażoną cebulką na farsz.",
-                "Lep pierogi i wrzucaj do wrzącej, osolonej wody na 3 minuty po wypłynięciu."
-            ]
-        },
-        {
-            "name": "Łosoś pieczony z cytryną i ziołami",
-            "category": cat_dania,
-            "tags": [tag_fit, tag_szybkie],
-            "description": "Zdrowe i niezwykle soczyste danie rybne gotowe w kwadrans.",
-            "prep_time": 25,
-            "ingredients": [
-                {"name": "Filet z łososia", "quantity": 400, "unit": "g"},
-                {"name": "Cytryna", "quantity": 1, "unit": "szt."},
-                {"name": "Świeży koper", "quantity": 1, "unit": "pęczek"}
-            ],
-            "steps": [
-                "Ułóż filety z łososia na blaszce wyłożonej papierem do pieczenia.",
-                "Skrop rybę sokiem z cytryny, posyp solą, pieprzem i posiekanym koprem.",
-                "Piecz w 180°C przez około 15-18 minut."
+                "Smaż na rozgrzanym smalcu lub oleju z obu stron na złoty kolor."
             ]
         },
         {
             "name": "Domowa szarlotka z kruszonką",
             "category": cat_desery,
-            "tags": [tag_slodkie, tag_tradycyjne],
+            "tags": [tag_tradycyjne],
             "description": "Kultowe ciasto z mnóstwem jabłek i chrupiącą maślaną kruszonką.",
             "prep_time": 90,
             "ingredients": [
@@ -309,40 +329,6 @@ def run_seed():
                 "Zagnieć kruche ciasto z mąki, masła i cukru, podziel na dwie części.",
                 "Jabłka obierz, zetrzyj na tarce i wymieszaj z cynamonem.",
                 "Wyłóż spód blachy ciastem, daj jabłka i zetrzyj resztę ciasta góry. Piecz 50 min w 180°C."
-            ]
-        },
-        {
-            "name": "Puszysty sernik wiedeński",
-            "category": cat_desery,
-            "tags": [tag_slodkie],
-            "description": "Kremowy, tradycyjny sernik bez spodu, rozpuszczający się w ustach.",
-            "prep_time": 100,
-            "ingredients": [
-                {"name": "Twaróg sernikowy", "quantity": 1000, "unit": "g"},
-                {"name": "Jajka", "quantity": 6, "unit": "szt."},
-                {"name": "Cukier puder", "quantity": 200, "unit": "g"}
-            ],
-            "steps": [
-                "Ubij białka na sztywną pianę.",
-                "Zmiksuj twaróg z żółtkami i cukrem pudrem, połącz delikatnie z pianą.",
-                "Piecz w 160°C przez ok. 70 minut."
-            ]
-        },
-        {
-            "name": "Naleśniki z twarogiem na słodko",
-            "category": cat_desery,
-            "tags": [tag_slodkie, tag_szybkie],
-            "description": "Cieniutkie naleśniki nadziewane słodką masą twarogową.",
-            "prep_time": 30,
-            "ingredients": [
-                {"name": "Mąka", "quantity": 250, "unit": "g"},
-                {"name": "Mleko", "quantity": 300, "unit": "ml"},
-                {"name": "Twaróg półtłusty", "quantity": 300, "unit": "g"}
-            ],
-            "steps": [
-                "Wymieszaj składniki na ciasto naleśnikowe i smaż cienkie placki.",
-                "Rozgnieć twaróg z cukrem waniliowym i odrobiną śmietany.",
-                "Farsz nakładaj na naleśniki, zwijaj w rulony i podsmaż lekko na maśle."
             ]
         },
         {
@@ -360,23 +346,6 @@ def run_seed():
                 "Wyciskaj sok z cytryn do dzbanka.",
                 "Dodaj listki mięty, plasterki cytryny oraz miód lub cukier do smaku.",
                 "Zalej schłodzoną wodą gazowaną i wrzuć kostki lodu."
-            ]
-        },
-        {
-            "name": "Orzeźwiające smoothie truskawkowe",
-            "category": cat_napoje,
-            "tags": [tag_fit, tag_szybkie, tag_wege],
-            "description": "Szybki koktajl ze świeżych truskawek i jogurtu naturalnego.",
-            "prep_time": 5,
-            "ingredients": [
-                {"name": "Truskawki", "quantity": 300, "unit": "g"},
-                {"name": "Jogurt naturalny", "quantity": 200, "unit": "ml"},
-                {"name": "Miód", "quantity": 1, "unit": "łyżka"}
-            ],
-            "steps": [
-                "Oczyść truskawki z szypułek i wrzuć do blendera.",
-                "Dodaj jogurt naturalny oraz miód.",
-                "Zblenduj na gładką, jednolitą masę i przelej do szklanek."
             ]
         }
     ]
