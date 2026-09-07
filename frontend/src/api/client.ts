@@ -11,6 +11,7 @@ class ApiError extends Error {
     this.name = 'ApiError';
   }
 }
+
 async function fetchJson<T>(endpoint: string): Promise<T> {
   const response = await fetch(`${BACKEND_URL}${endpoint}`);
   if (!response.ok) {
@@ -27,6 +28,7 @@ export const apiClient = {
     getAll: () => fetchJson<Tag[]>('/api/tagi'),
   },
   recipes: {
+    // Metoda obsługująca filtry i sortowanie
     getAll: (categorySlug?: string | null, searchQuery?: string, tagSlug?: string | null, diet?: string, sort?: string) => {
       const params = new URLSearchParams();
       if (categorySlug) params.append('category_slug', categorySlug);
@@ -43,7 +45,6 @@ export const apiClient = {
 
     getById: (id: string) => fetchJson<Recipe>(`/api/przepisy/${id}`),
 
-    // NOWA METODA POBIERAJĄCA PODOBNE PRZEPISY
     getSimilar: (id: string) => fetchJson<Recipe[]>(`/api/przepisy/${id}/podobne`),
 
     addComment: (recipeId: string, data: { author_name: string; content: string; rating: number }) => {
@@ -53,6 +54,19 @@ export const apiClient = {
         body: JSON.stringify(data),
       }).then(async res => {
         if (!res.ok) throw new Error('Nie udało się dodać komentarza');
+        return res.json();
+      });
+    },
+
+    // BRAKUJĄCA METODA, KTÓRA POWODOWAŁA BŁĄD BUILDOWANIA
+    deleteComment: (commentId: string, token: string) => {
+      return fetch(`${BACKEND_URL}/api/komentarze/${commentId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        },
+      }).then(async res => {
+        if (!res.ok) throw new Error('Nie udało się usunąć komentarza');
         return res.json();
       });
     },
@@ -75,17 +89,5 @@ export const apiClient = {
       if (!path) return 'https://placehold.co/1000x400?text=Brak+Zdjecia';
       return `${BACKEND_URL}${path}`;
     }
-  },
-  deleteComment: (commentId: string, token: string) => {
-      return fetch(`${BACKEND_URL}/api/komentarze/${commentId}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      }).then(async res => {
-        if (!res.ok) throw new Error('Nie udało się usunąć komentarza');
-        return res.json();
-      });
-    },
-
+  }
 };
