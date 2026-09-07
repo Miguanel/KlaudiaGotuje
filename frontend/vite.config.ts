@@ -1,9 +1,8 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
 
-// https://vite.dev/config/
+// USUNIĘTE: import tailwindcss from ... (ponieważ nie jest używane w pliku konfiguracyjnym)
+
 export default defineConfig({
   plugins: [react()],
-  base: '/', // Kluczowe dla poprawnego generowania ścieżek względnych/absolutnych przez Vite
 })
