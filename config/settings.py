@@ -144,9 +144,8 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 # 3. Konfiguracja wyglądu Django Unfold
 UNFOLD = {
-    "SITE_TITLE": "Baza Przepisów",
-    "SITE_HEADER": "Zarządzanie Przepisami",
-    # Wymusza ukrycie niepotrzebnych rzeczy, żeby panel był czystszy
+    "SITE_TITLE": "Diamentowe Smaki - Admin",
+    "SITE_HEADER": "Diamentowe Smaki",
     "SHOW_HISTORY": False,
 }
 

@@ -25,8 +25,8 @@ export default function Layout() {
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
 
           {/* LOGO */}
-          <Link to="/" className="text-2xl font-black tracking-tight text-gray-900" onClick={closeMenu}>
-            KlaudiaGotuje<span className="text-orange-500">.</span>
+          <Link to="/" className="text-xl sm:text-2xl font-black tracking-tight text-gray-900" onClick={closeMenu}>
+            Diamentowe Smaki<span className="text-orange-500">.</span>
           </Link>
 
           {/* PRZYCISK HAMBURGER MENU (WIDOCZNY TYLKO NA URZĄDZENIACH MOBILNYCH) */}
@@ -124,7 +124,7 @@ export default function Layout() {
       </main>
 
       <footer className="bg-white border-t border-gray-200 py-12 text-center text-sm text-gray-500">
-        <p className="font-bold text-gray-900 mb-1">KlaudiaGotuje</p>
+        <p className="font-bold text-gray-900 mb-1">Diamentowe Smaki</p>
         <p>© {new Date().getFullYear()} Wszystkie prawa zastrzeżone.</p>
       </footer>
     </div>
