@@ -59,13 +59,13 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
   };
 
   return (
-    <div className="sticky top-24 bg-white p-4 sm:p-6 rounded-2xl border border-gray-200 shadow-sm print:border-none print:shadow-none print:p-0">
+    <div className="sticky top-24 bg-[#160A22] p-5 sm:p-6 rounded-3xl border border-[#25113A] shadow-neon print:border-none print:shadow-none print:p-0 text-white">
 
       <div className="flex flex-wrap justify-between items-center gap-3 mb-5 print:hidden">
-        <h3 className="text-xl font-bold text-gray-900">Składniki</h3>
+        <h3 className="text-xl font-black text-glow">💎 Składniki</h3>
         <button
           onClick={handlePrint}
-          className="flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-orange-500 transition-colors"
+          className="flex items-center gap-1.5 text-sm font-bold text-gray-400 hover:text-[#FF1493] transition-colors"
           title="Wydrukuj przepis"
         >
           <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,55 +76,55 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
       </div>
 
       {/* PRZEŁĄCZNIK MIAR */}
-      <div className="flex bg-gray-100 p-1 rounded-xl mb-4 print:hidden">
+      <div className="flex bg-[#0B0510] p-1 rounded-xl mb-4 border border-[#25113A] print:hidden">
         <button
           onClick={() => setWeightMode('default')}
-          className={`flex-1 py-1.5 px-1 text-[11px] sm:text-xs font-bold rounded-lg transition-all ${
-            weightMode === 'default' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+          className={`flex-1 py-1.5 px-1 text-[11px] sm:text-xs font-black rounded-lg transition-all ${
+            weightMode === 'default' ? 'bg-[#FF1493] text-white shadow-neon' : 'text-gray-400 hover:text-white'
           }`}
         >
           Miary domowe
         </button>
         <button
           onClick={() => setWeightMode('grams')}
-          className={`flex-1 py-1.5 px-1 text-[11px] sm:text-xs font-bold rounded-lg transition-all ${
-            weightMode === 'grams' ? 'bg-white text-orange-600 shadow-sm' : 'text-gray-500 hover:text-gray-900'
+          className={`flex-1 py-1.5 px-1 text-[11px] sm:text-xs font-black rounded-lg transition-all ${
+            weightMode === 'grams' ? 'bg-[#FF1493] text-white shadow-neon' : 'text-gray-400 hover:text-white'
           }`}
         >
           ⚖️ Na gramy
         </button>
       </div>
 
-      <div className="flex flex-wrap justify-between items-center gap-3 bg-gray-50 p-3 rounded-xl mb-4 print:hidden">
-        <span className="text-sm font-medium text-gray-600">Liczba porcji:</span>
-        <div className="flex items-center gap-3 bg-white px-3 py-1 rounded-lg border border-gray-200 shadow-sm">
+      <div className="flex flex-wrap justify-between items-center gap-3 bg-[#0B0510] p-3.5 rounded-2xl border border-[#25113A] mb-4 print:hidden">
+        <span className="text-sm font-bold text-gray-300">Liczba porcji:</span>
+        <div className="flex items-center gap-3 bg-[#160A22] px-3 py-1 rounded-xl border border-[#25113A]">
           <button
             onClick={() => setPorcje(p => Math.max(1, p - 1))}
-            className="w-6 h-6 flex items-center justify-center font-bold text-gray-400 hover:text-gray-900 transition"
+            className="w-6 h-6 flex items-center justify-center font-black text-gray-400 hover:text-[#FF1493] transition"
           >-</button>
-          <span className="font-bold text-gray-900 min-w-[20px] text-center">{porcje}</span>
+          <span className="font-black text-white min-w-[20px] text-center text-glow">{porcje}</span>
           <button
             onClick={() => setPorcje(p => p + 1)}
-            className="w-6 h-6 flex items-center justify-center font-bold text-gray-400 hover:text-gray-900 transition"
+            className="w-6 h-6 flex items-center justify-center font-black text-gray-400 hover:text-[#FF1493] transition"
           >+</button>
         </div>
       </div>
 
       <button
         onClick={addToShoppingList}
-        className={`w-full mb-6 py-2.5 px-4 rounded-xl text-sm font-bold shadow-sm transition-all flex items-center justify-center gap-2 print:hidden ${
+        className={`w-full mb-6 py-3 px-4 rounded-2xl text-sm font-black shadow-sm transition-all flex items-center justify-center gap-2 print:hidden ${
           addedToShopping
-            ? 'bg-green-600 text-white'
-            : 'bg-orange-500 hover:bg-orange-600 text-white'
+            ? 'bg-green-600 text-white shadow-lg'
+            : 'bg-[#FF1493] hover:bg-[#FF007F] text-white shadow-neon hover:scale-[1.02]'
         }`}
       >
         <span>🛒</span>
-        {addedToShopping ? 'Dodano do listy!' : 'Dodaj składniki do zakupów'}
+        {addedToShopping ? 'Dodano do listy! ✨' : 'Dodaj składniki do zakupów'}
       </button>
 
       <h3 className="hidden print:block text-xl font-bold mb-4">Składniki ({porcje} porcji):</h3>
 
-      <ul className="space-y-1">
+      <ul className="space-y-2">
         {skladniki.map(skladnik => {
           const isChecked = zaznaczone.has(skladnik.id);
           const calc = obliczIlosc(skladnik.quantity, skladnik.name, skladnik.unit);
@@ -133,10 +133,10 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
             <li
               key={skladnik.id}
               onClick={() => toggleSkładnik(skladnik.id)}
-              className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors group print:break-inside-avoid"
+              className="flex items-center gap-3 p-2.5 rounded-xl hover:bg-[#0B0510]/60 cursor-pointer transition-colors group print:break-inside-avoid border border-transparent hover:border-[#25113A]"
             >
-              <div className={`w-5 h-5 rounded border flex items-center justify-center flex-shrink-0 transition-colors print:hidden ${
-                isChecked ? 'bg-green-500 border-green-500 text-white' : 'border-gray-300 group-hover:border-orange-500'
+              <div className={`w-5 h-5 rounded-lg border flex items-center justify-center flex-shrink-0 transition-colors print:hidden ${
+                isChecked ? 'bg-[#FF1493] border-[#FF1493] text-white shadow-neon' : 'border-[#25113A] bg-[#0B0510] group-hover:border-[#FF1493]'
               }`}>
                 {isChecked && (
                   <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -146,10 +146,10 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
               </div>
 
               <div className={`flex justify-between w-full gap-2 transition-all ${
-                isChecked ? 'opacity-40 line-through' : 'opacity-100'
+                isChecked ? 'opacity-30 line-through' : 'opacity-100'
               } print:opacity-100 print:no-underline`}>
-                <span className="text-gray-700 text-sm md:text-base">{skladnik.name}</span>
-                <span className="font-bold text-gray-900 text-right whitespace-nowrap text-sm md:text-base">
+                <span className="text-gray-200 text-sm md:text-base font-medium">{skladnik.name}</span>
+                <span className="font-black text-[#FF66B2] text-right whitespace-nowrap text-sm md:text-base">
                   {calc.quantity} {calc.unit}
                 </span>
               </div>

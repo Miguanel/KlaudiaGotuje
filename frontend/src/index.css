@@ -1,24 +1,35 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  /* Nadpisanie pomarańczowego na neonowy róż */
-  --color-orange-500: #FF1493; /* DeepPink */
-  --color-orange-600: #FF007F; /* Neon Pink */
-  --color-orange-700: #C71585; /* MediumVioletRed */
+  /* Główne kolory w stylu Neon / Księżniczka */
+  --color-pink-400: #FF66B2;
+  --color-pink-500: #FF1493; /* Głębsza Fuksja */
+  --color-pink-600: #FF007F; /* Neonowy Róż */
 
-  /* Lekko różowe tła zamiast szarych */
-  --color-gray-50: #FDF0F5;
-  --color-gray-100: #FCE4EC;
+  /* Ciemne, mroczne tła podbijające neony */
+  --color-dark-900: #0B0510; /* Prawie czarny fiolet */
+  --color-dark-800: #160A22; /* Ciemne tło kart */
+  --color-dark-700: #25113A; /* Obramowania i detale */
 }
 
 body {
-  background-color: #FDF0F5 !important;
+  background-color: var(--color-dark-900) !important;
+  color: white !important;
+}
+
+/* Własne klasy dla neonowego blasku (Glow Effect) */
+@utility text-glow {
+  text-shadow: 0 0 10px rgba(255, 20, 147, 0.8), 0 0 20px rgba(255, 20, 147, 0.4);
+}
+
+@utility shadow-neon {
+  box-shadow: 0 0 15px rgba(255, 20, 147, 0.3), 0 0 5px rgba(255, 20, 147, 0.1);
 }
 
 /* Konfiguracja dla drukarek */
 @media print {
-  body { background-color: white !important; color: black !important; }
+  body { background-color: white !important; color: black !important; text-shadow: none !important; }
   header, footer, a, button { display: none !important; }
   .print\:break-inside-avoid { break-inside: avoid; }
 }

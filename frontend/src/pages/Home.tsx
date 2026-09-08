@@ -63,39 +63,40 @@ export default function Home() {
   const nazwaAktywnejKategorii = aktywnaKategoria ? categories.find(c => c.slug === aktywnaKategoria)?.name : null;
   const nazwaAktywnegoTagu = aktywnyTag ? tags.find(t => t.slug === aktywnyTag)?.name : null;
 
-  if (error) return <div className="p-10 text-center text-red-500 font-medium">Błąd: {error}</div>;
+  if (error) return <div className="p-10 text-center text-[#FF1493] text-glow font-medium">Błąd: {error}</div>;
 
   return (
     <div className="max-w-5xl mx-auto px-4 py-12">
-      <nav className="flex items-center text-[15px] text-gray-600 font-medium mb-6 bg-white border border-gray-200 px-4 py-2.5 rounded-md shadow-sm w-fit">
-        <button onClick={() => setSearchParams({})} className="text-[#006600] hover:underline">
-          Przepisy
+      {/* OKRUSZKI (BREADCRUMBS) */}
+      <nav className="flex items-center text-[15px] text-gray-400 font-medium mb-6 bg-[#160A22] border border-[#25113A] px-4 py-2.5 rounded-md shadow-sm w-fit">
+        <button onClick={() => setSearchParams({})} className="text-[#FF1493] hover:text-glow transition-all">
+          ✨ Przepisy
         </button>
         {nazwaAktywnejKategorii && (
           <>
-            <span className="mx-2 text-gray-500 font-bold">›</span>
-            <span className="text-[#006600]">{nazwaAktywnejKategorii}</span>
+            <span className="mx-2 text-gray-600 font-bold">›</span>
+            <span className="text-[#FF007F] text-glow">{nazwaAktywnejKategorii}</span>
           </>
         )}
         {nazwaAktywnegoTagu && (
           <>
-            <span className="mx-2 text-gray-500 font-bold">›</span>
-            <span className="text-orange-600 font-bold">#{nazwaAktywnegoTagu}</span>
+            <span className="mx-2 text-gray-600 font-bold">›</span>
+            <span className="text-white font-bold">#{nazwaAktywnegoTagu}</span>
           </>
         )}
       </nav>
 
       {/* NAGŁÓWEK I WYSZUKIWARKA */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6 border-b border-gray-200/60 pb-8">
+      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6 border-b border-[#25113A] pb-8">
         <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
-            {nazwaAktywnejKategorii || (nazwaAktywnegoTagu ? `Przepisy: #${nazwaAktywnegoTagu}` : 'Odkryj przepisy')}
+          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 text-glow">
+            {nazwaAktywnejKategorii || (nazwaAktywnegoTagu ? `Przepisy: #${nazwaAktywnegoTagu}` : '✨ Odkryj przepisy 💎')}
           </h1>
-          <p className="text-gray-500 text-sm md:text-base mb-6">Co dobrego dzisiaj ugotujemy?</p>
+          <p className="text-gray-400 text-sm md:text-base mb-6">Co pysznego dzisiaj wyczarujemy? 💖</p>
 
           <div className="relative max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-5 w-5 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
@@ -104,38 +105,38 @@ export default function Home() {
               placeholder="Szukaj przepisu lub składnika..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2.5 border border-gray-200 rounded-xl leading-5 bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all shadow-sm"
+              className="block w-full pl-10 pr-3 py-2.5 border border-[#25113A] rounded-xl leading-5 bg-[#0B0510] text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#FF1493] focus:border-[#FF1493] transition-all shadow-sm"
             />
           </div>
         </div>
       </div>
 
-      {/* PASEK SORTOWANIA I DIET (W STYLU ANI GOTUJE) */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-white p-4 rounded-2xl border border-gray-200 shadow-sm">
+      {/* PASEK SORTOWANIA I DIET */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-[#160A22] p-4 rounded-2xl border border-[#25113A] shadow-sm">
         <div className="flex items-center gap-3">
-          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Sortuj:</span>
+          <span className="text-xs font-black text-gray-400 uppercase tracking-wider">Sortuj:</span>
           <button
             onClick={() => ustawParametr('sort', 'date')}
-            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'date' ? 'text-gray-950' : 'text-gray-400 hover:text-gray-600'}`}
+            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'date' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
           >
-            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'date' ? 'bg-[#2c5e09]' : 'bg-gray-300'}`}></span>
-            Data publikacji
+            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'date' ? 'bg-[#FF007F] shadow-neon' : 'bg-[#25113A]'}`}></span>
+            Najnowsze 👑
           </button>
           <button
             onClick={() => ustawParametr('sort', 'popular')}
-            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'popular' ? 'text-gray-950' : 'text-gray-400 hover:text-gray-600'}`}
+            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'popular' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
           >
-            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'popular' ? 'bg-[#2c5e09]' : 'bg-gray-300'}`}></span>
-            Popularność
+            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'popular' ? 'bg-[#FF007F] shadow-neon' : 'bg-[#25113A]'}`}></span>
+            Bestsellery 💎
           </button>
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs font-bold text-gray-500 uppercase tracking-wider">Dieta:</span>
+          <span className="text-xs font-black text-gray-400 uppercase tracking-wider">Kategoria:</span>
           <select
             value={wybranadieta}
             onChange={(e) => ustawParametr('diet', e.target.value)}
-            className="px-3 py-1.5 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-gray-800 outline-none focus:border-[#2c5e09]"
+            className="px-3 py-1.5 bg-[#0B0510] border border-[#25113A] rounded-xl text-sm font-bold text-white outline-none focus:border-[#FF1493]"
           >
             <option value="dowolna">Dowolna</option>
             <option value="wege">Makarony</option>
@@ -146,7 +147,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* KARUZELA PRZEPISÓW */}
+      {/* KARUZELA PRZEPISÓW (Miniaturki) */}
       {!loading && recipes.length > 0 && (
         <section
           className="relative py-4 flex items-center my-6 group"
@@ -156,7 +157,7 @@ export default function Home() {
           }}
         >
           <button
-            className="absolute left-0 z-10 hidden md:flex items-center justify-center w-8 h-8 bg-white/90 rounded-full shadow-md text-gray-600 hover:bg-white hover:text-orange-500 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+            className="absolute left-0 z-10 hidden md:flex items-center justify-center w-8 h-8 bg-[#160A22]/90 border border-[#25113A] rounded-full shadow-neon text-gray-300 hover:text-[#FF1493] transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
             onClick={() => scroll('left')}
           >
             ❮
@@ -173,17 +174,17 @@ export default function Home() {
                   <div className="relative w-full h-[120px] mb-2">
                     <button
                       onClick={(e) => toggleFavorite(recipe.id, e)}
-                      className="absolute top-2 right-2 z-20 w-7 h-7 bg-white/80 backdrop-blur rounded-full flex items-center justify-center text-xs shadow hover:scale-110 transition-transform"
+                      className="absolute top-2 right-2 z-20 w-7 h-7 bg-[#0B0510]/80 backdrop-blur rounded-full flex items-center justify-center text-xs shadow hover:scale-110 hover:shadow-neon transition-transform"
                     >
-                      {isFav ? '❤️' : '🤍'}
+                      {isFav ? '💖' : '🤍'}
                     </button>
                     <img
                       src={apiClient.utils.getImageUrl(recipe.main_image_url)}
                       alt={recipe.name}
-                      className="w-full h-full object-cover rounded-2xl shadow-sm group-hover/item:shadow-md transition-shadow pointer-events-none"
+                      className="w-full h-full object-cover rounded-2xl shadow-sm border border-[#25113A] group-hover/item:shadow-neon transition-all pointer-events-none"
                     />
                   </div>
-                  <span className="font-medium text-xs text-gray-800 line-clamp-2 group-hover/item:text-orange-500 transition-colors">
+                  <span className="font-bold text-xs text-gray-300 line-clamp-2 group-hover/item:text-[#FF1493] transition-colors">
                     {recipe.name}
                   </span>
                 </Link>
@@ -192,7 +193,7 @@ export default function Home() {
           </div>
 
           <button
-            className="absolute right-0 z-10 hidden md:flex items-center justify-center w-8 h-8 bg-white/90 rounded-full shadow-md text-gray-600 hover:bg-white hover:text-orange-500 transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+            className="absolute right-0 z-10 hidden md:flex items-center justify-center w-8 h-8 bg-[#160A22]/90 border border-[#25113A] rounded-full shadow-neon text-gray-300 hover:text-[#FF1493] transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
             onClick={() => scroll('right')}
           >
             ❯
@@ -205,21 +206,21 @@ export default function Home() {
         <div className="flex justify-start md:justify-center md:flex-wrap overflow-x-auto py-2 whitespace-nowrap [&::-webkit-scrollbar]:hidden">
           <button
             onClick={() => ustawParametr('category', null)}
-            className={`inline-block px-4 py-2 mr-2 mb-2 rounded-md shadow-sm font-bold text-sm uppercase transition-colors ${
-              !aktywnaKategoria ? 'bg-[#2c5e09] text-white ring-2 ring-offset-1 ring-[#3b7f0c]' : 'bg-[#3b7f0c] text-white hover:bg-[#2c5e09]'
+            className={`inline-block px-5 py-2.5 mr-2 mb-2 rounded-xl shadow-sm font-black text-sm uppercase transition-all ${
+              !aktywnaKategoria ? 'bg-[#FF1493] text-white shadow-neon scale-105' : 'bg-[#160A22] text-gray-400 border border-[#25113A] hover:text-[#FF1493] hover:border-[#FF1493]'
             }`}
           >
-            Wszystkie kategorie
+            Wszystkie
           </button>
 
           {categories.map(cat => (
             <button
               key={`cat-${cat.id}`}
               onClick={() => ustawParametr('category', cat.slug)}
-              className={`inline-block px-4 py-2 mr-2 mb-2 text-white rounded-md shadow-sm font-bold text-sm uppercase transition-colors ${
+              className={`inline-block px-5 py-2.5 mr-2 mb-2 rounded-xl shadow-sm font-black text-sm uppercase transition-all ${
                 aktywnaKategoria === cat.slug
-                  ? 'bg-[#2c5e09] ring-2 ring-offset-1 ring-[#3b7f0c]'
-                  : 'bg-[#3b7f0c] hover:bg-[#2c5e09]'
+                  ? 'bg-[#FF1493] text-white shadow-neon scale-105'
+                  : 'bg-[#160A22] text-gray-400 border border-[#25113A] hover:text-[#FF1493] hover:border-[#FF1493]'
               }`}
             >
               {cat.name}
@@ -232,23 +233,23 @@ export default function Home() {
       {tags.length > 0 && (
         <section className="mb-10">
           <div className="flex items-center justify-start md:justify-center md:flex-wrap overflow-x-auto py-1 whitespace-nowrap [&::-webkit-scrollbar]:hidden gap-2">
-            <span className="text-xs font-bold text-gray-400 uppercase tracking-wider mr-2">Tagi:</span>
+            <span className="text-xs font-black text-gray-500 uppercase tracking-wider mr-2">Tagi:</span>
             <button
               onClick={() => ustawParametr('tag', null)}
-              className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
-                !aktywnyTag ? 'bg-orange-500 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                !aktywnyTag ? 'bg-[#FF007F] text-white shadow-neon' : 'bg-[#160A22] text-gray-400 border border-[#25113A] hover:text-[#FF1493]'
               }`}
             >
-              Wszystkie tagi
+              Dowolne
             </button>
             {tags.map(tag => (
               <button
                 key={`tag-pill-${tag.id}`}
                 onClick={() => ustawParametr('tag', tag.slug)}
-                className={`px-3 py-1 rounded-full text-xs font-semibold transition-colors ${
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
                   aktywnyTag === tag.slug
-                    ? 'bg-orange-500 text-white shadow-sm'
-                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                    ? 'bg-[#FF007F] text-white shadow-neon'
+                    : 'bg-[#160A22] text-gray-400 border border-[#25113A] hover:text-[#FF1493]'
                 }`}
               >
                 #{tag.name}
@@ -258,14 +259,14 @@ export default function Home() {
         </section>
       )}
 
-      {/* SIATKA PRZEPISÓW ZE STATYSTYKAMI W STYLU ANI GOTUJE */}
+      {/* SIATKA PRZEPISÓW (Kafelki jak na Instagramie) */}
       {loading ? (
         <RecipeGridSkeleton />
       ) : recipes.length === 0 ? (
-        <div className="bg-white p-12 text-center rounded-2xl border border-gray-100 shadow-sm">
-          <p className="text-gray-500 text-lg">Brak przepisów spełniających wybrane kryteria.</p>
-          <button onClick={() => setSearchParams({})} className="mt-4 text-orange-500 font-bold hover:underline">
-            Wyczyść filtry
+        <div className="bg-[#160A22] p-12 text-center rounded-3xl border border-[#25113A] shadow-neon">
+          <p className="text-gray-400 text-lg font-bold">Brak przepisów spełniających wybrane kryteria. 🥺</p>
+          <button onClick={() => setSearchParams({})} className="mt-4 text-[#FF1493] text-glow font-black hover:underline">
+            Wyczyść filtry ✨
           </button>
         </div>
       ) : (
@@ -276,47 +277,47 @@ export default function Home() {
               <Link
                 to={`/przepis/${recipe.id}`}
                 key={`grid-${recipe.id}`}
-                className="group block bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 relative flex flex-col justify-between"
+                className="group block bg-[#160A22] rounded-[2rem] overflow-hidden border border-[#25113A] hover:border-[#FF1493] transition-all duration-300 relative flex flex-col justify-between hover:shadow-neon hover:-translate-y-1"
               >
                 <div>
                   <button
                     onClick={(e) => toggleFavorite(recipe.id, e)}
-                    className="absolute top-4 right-4 z-25 w-9 h-9 bg-white/90 backdrop-blur rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform"
+                    className="absolute top-4 right-4 z-20 w-10 h-10 bg-[#0B0510]/80 backdrop-blur rounded-full flex items-center justify-center shadow-md hover:scale-110 hover:shadow-neon transition-transform"
                   >
-                    {isFav ? '❤️' : '🤍'}
+                    {isFav ? '💖' : '🤍'}
                   </button>
 
-                  <div className="aspect-[4/3] bg-gray-100 overflow-hidden relative">
+                  <div className="aspect-[4/3] bg-[#0B0510] overflow-hidden relative">
                     {recipe.category && (
-                      <span className="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1.5 rounded-lg text-gray-800 z-10 shadow-sm">
+                      <span className="absolute top-4 left-4 bg-[#FF1493]/90 backdrop-blur text-xs font-black px-3 py-1.5 rounded-xl text-white z-10 shadow-neon">
                         {recipe.category.name}
                       </span>
                     )}
                     <img
                       src={apiClient.utils.getImageUrl(recipe.main_image_url)}
                       alt={recipe.name}
-                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
                     />
                   </div>
 
                   <div className="p-6 pb-4">
-                    <h2 className="text-xl font-bold text-gray-900 group-hover:text-orange-500 transition-colors line-clamp-2">
+                    <h2 className="text-xl font-black text-white group-hover:text-[#FF1493] transition-colors line-clamp-2">
                       {recipe.name}
                     </h2>
                   </div>
                 </div>
 
-                {/* DOLNY PASEK STATYSTYK (KOMENTARZE, ZDJĘCIA, OCENA) */}
-                <div className="px-6 py-3.5 bg-gray-50 border-t border-gray-100 flex items-center justify-between text-xs font-bold text-gray-500 mt-2">
+                {/* DOLNY PASEK STATYSTYK */}
+                <div className="px-6 py-4 bg-[#0B0510]/50 border-t border-[#25113A] flex items-center justify-between text-xs font-bold text-gray-400 mt-2">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1.5" title="Liczba komentarzy">
                       💬 {recipe.comments_count}
                     </span>
                     <span className="flex items-center gap-1.5" title="Liczba zdjęć">
-                      📷 {recipe.photos_count}
+                      📸 {recipe.photos_count}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-red-700 font-extrabold">
+                  <div className="flex items-center gap-1 text-[#FFD700] text-glow font-black">
                     <span>★</span>
                     <span>{recipe.average_rating !== null ? recipe.average_rating.toFixed(2) : 'Brak'}</span>
                   </div>

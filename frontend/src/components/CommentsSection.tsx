@@ -54,11 +54,11 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
   };
 
   return (
-    <div className="mt-12 bg-white p-8 rounded-2xl border border-gray-100 shadow-sm">
-      <div className="flex items-center justify-between mb-6 border-b pb-4">
-        <h2 className="text-2xl font-bold text-gray-900">Komentarze i oceny</h2>
+    <div className="mt-12 bg-[#160A22] p-8 rounded-3xl border border-[#25113A] shadow-neon text-white">
+      <div className="flex items-center justify-between mb-6 border-b border-[#25113A] pb-4">
+        <h2 className="text-2xl font-black text-glow">💬 Komentarze i oceny 💖</h2>
         {averageRating !== null && (
-          <div className="flex items-center gap-1 bg-orange-50 text-orange-700 px-3 py-1.5 rounded-xl font-bold text-sm">
+          <div className="flex items-center gap-1 bg-[#FF1493]/20 border border-[#FF1493] text-[#FF66B2] px-3.5 py-1.5 rounded-xl font-black text-sm shadow-neon">
             <span>⭐</span>
             <span>{averageRating} / 5</span>
           </div>
@@ -66,29 +66,29 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
       </div>
 
       {/* Formularz dodawania */}
-      <form onSubmit={handleSubmit} className="mb-10 bg-gray-50 p-6 rounded-xl border border-gray-200/60">
-        <h3 className="text-lg font-bold text-gray-800 mb-4">Dodaj swoją opinię</h3>
+      <form onSubmit={handleSubmit} className="mb-10 bg-[#0B0510] p-6 rounded-2xl border border-[#25113A]">
+        <h3 className="text-lg font-black text-white mb-4">Zostaw swoją opinię ✨</h3>
 
-        {error && <p className="text-red-500 text-sm mb-4">{error}</p>}
+        {error && <p className="text-red-400 text-sm mb-4 font-bold">{error}</p>}
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
           <div>
-            <label className="block text-xs font-bold text-gray-600 uppercase mb-1">Twoje imię</label>
+            <label className="block text-xs font-black text-gray-400 uppercase mb-1">Twoje imię</label>
             <input
               type="text"
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               required
-              placeholder="np. Anna"
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-orange-500/20 outline-none"
+              placeholder="np. Klaudia"
+              className="w-full px-4 py-2.5 border border-[#25113A] rounded-xl bg-[#160A22] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#FF1493] outline-none"
             />
           </div>
           <div>
-            <label className="block text-xs font-bold text-gray-600 uppercase mb-1">Ocena</label>
+            <label className="block text-xs font-black text-gray-400 uppercase mb-1">Ocena</label>
             <select
               value={rating}
               onChange={(e) => setRating(Number(e.target.value))}
-              className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-orange-500/20 outline-none"
+              className="w-full px-4 py-2.5 border border-[#25113A] rounded-xl bg-[#160A22] text-white focus:ring-2 focus:ring-[#FF1493] outline-none font-bold"
             >
               <option value={5}>⭐⭐⭐⭐⭐ (5/5)</option>
               <option value={4}>⭐⭐⭐⭐ (4/5)</option>
@@ -100,43 +100,43 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
         </div>
 
         <div className="mb-4">
-          <label className="block text-xs font-bold text-gray-600 uppercase mb-1">Komentarz</label>
+          <label className="block text-xs font-black text-gray-400 uppercase mb-1">Komentarz</label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
             rows={3}
-            placeholder="Jak wyszedł Ci ten przepis? Podziel się wrażeniami..."
-            className="w-full px-4 py-2 border border-gray-200 rounded-lg bg-white focus:ring-2 focus:ring-orange-500/20 outline-none"
+            placeholder="Jak wyszedł Ci ten przepis? Podziel się wrażeniami... 💎"
+            className="w-full px-4 py-2.5 border border-[#25113A] rounded-xl bg-[#160A22] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#FF1493] outline-none"
           />
         </div>
 
         <button
           type="submit"
           disabled={submitting}
-          className="bg-orange-500 text-white font-bold px-6 py-2.5 rounded-xl hover:bg-orange-600 transition-colors shadow-sm disabled:opacity-50"
+          className="bg-[#FF1493] text-white font-black px-6 py-3 rounded-xl hover:bg-[#FF007F] transition-all shadow-neon disabled:opacity-50 hover:scale-105"
         >
-          {submitting ? 'Wysyłanie...' : 'Opublikuj komentarz'}
+          {submitting ? 'Wysyłanie...' : 'Opublikuj komentarz 🚀'}
         </button>
       </form>
 
       {/* Lista komentarzy */}
       {comments.length === 0 ? (
-        <p className="text-gray-500 text-center py-6">Brak komentarzy. Bądź pierwszą osobą, która oceni ten przepis!</p>
+        <p className="text-gray-400 text-center py-6 font-bold">Brak komentarzy. Bądź pierwszą osobą, która oceni ten przepis! ✨</p>
       ) : (
         <div className="space-y-6">
           {comments.map(comment => (
-            <div key={comment.id} className="border-b border-gray-100 pb-6 last:border-none">
+            <div key={comment.id} className="border-b border-[#25113A] pb-6 last:border-none">
               <div className="flex justify-between items-center mb-2">
-                <span className="font-bold text-gray-900">{comment.author_name}</span>
+                <span className="font-black text-white text-base">{comment.author_name}</span>
                 <div className="flex items-center gap-4">
-                  <span className="text-xs text-gray-400">
+                  <span className="text-xs text-gray-400 font-bold">
                     {new Date(comment.created_at).toLocaleDateString('pl-PL')}
                   </span>
                   {isAuthenticated && (
                     <button
                       onClick={() => handleDelete(comment.id)}
-                      className="text-xs text-red-500 hover:text-red-700 font-bold bg-red-50 hover:bg-red-100 px-2.5 py-1 rounded-lg transition-colors"
+                      className="text-xs text-red-400 hover:text-red-300 font-black bg-red-950/50 border border-red-900 px-2.5 py-1 rounded-lg transition-colors"
                       title="Usuń komentarz"
                     >
                       Usuń
@@ -149,7 +149,7 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
                   <span key={i}>⭐</span>
                 ))}
               </div>
-              <p className="text-gray-600 text-sm leading-relaxed">{comment.content}</p>
+              <p className="text-gray-300 text-sm leading-relaxed font-medium">{comment.content}</p>
             </div>
           ))}
         </div>

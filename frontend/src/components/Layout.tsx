@@ -20,18 +20,19 @@ export default function Layout() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#FDFBF7]">
-      <header className="bg-white/90 backdrop-blur-md border-b border-gray-200/80 sticky top-0 z-50">
+    <div className="min-h-screen flex flex-col bg-[#0B0510] text-white font-sans">
+      <header className="bg-[#160A22]/80 backdrop-blur-md border-b border-[#25113A] sticky top-0 z-50 shadow-neon">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
 
           {/* LOGO */}
-          <Link to="/" className="text-xl sm:text-2xl font-black tracking-tight text-gray-900" onClick={closeMenu}>
-            Diamentowe Smaki Engibadwoman <span className="text-orange-500">.</span>
+          <Link to="/" className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5 hover:scale-105 transition-transform" onClick={closeMenu}>
+            <span>👑 Diamentowe Smaki <span className="hidden sm:inline">Engibadwoman</span></span>
+            <span className="text-[#FF007F] text-glow">💎</span>
           </Link>
 
           {/* PRZYCISK HAMBURGER MENU (WIDOCZNY TYLKO NA URZĄDZENIACH MOBILNYCH) */}
           <button
-            className="md:hidden p-2 text-gray-600 hover:text-orange-500 focus:outline-none transition-colors"
+            className="md:hidden p-2 text-gray-300 hover:text-[#FF1493] focus:outline-none transition-colors text-glow"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Otwórz menu"
           >
@@ -46,37 +47,37 @@ export default function Layout() {
             </svg>
           </button>
 
-          {/* MENU DESKTOPOWE (UKRYTE NA TELEFONACH, WIDOCZNE OD SZEROKOŚCI "md") */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-semibold text-gray-600">
-            <Link to="/" className="hover:text-orange-500 transition">
-              Przepisy
+          {/* MENU DESKTOPOWE */}
+          <nav className="hidden md:flex items-center gap-6 text-sm font-bold text-gray-300">
+            <Link to="/" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
+              <span>✨</span> Przepisy
             </Link>
-            <Link to="/zakupy" className="hover:text-orange-500 transition flex items-center gap-1.5">
-              <span>🛒</span> Zakupy
+            <Link to="/zakupy" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
+              <span>🛍️</span> Zakupy
             </Link>
-            <Link to="/ulubione" className="hover:text-orange-500 transition flex items-center gap-1.5">
-              <span>❤️</span> Ulubione
+            <Link to="/ulubione" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
+              <span>💖</span> Ulubione
             </Link>
 
             {isAuthenticated && (
-              <Link to="/dodaj-przepis" className="text-orange-600 hover:text-orange-700 transition font-bold">
-                + Dodaj przepis
+              <Link to="/dodaj-przepis" className="text-[#FF007F] text-glow hover:text-[#FF66B2] transition flex items-center gap-1">
+                <span>➕</span> Dodaj przepis
               </Link>
             )}
 
-            <Link to="/o-mnie" className="hover:text-orange-500 transition">
-              O mnie
+            <Link to="/o-mnie" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
+              <span>👸</span> O mnie
             </Link>
 
             {isAuthenticated ? (
               <button
                 onClick={handleLogout}
-                className="text-red-500 hover:text-red-700 transition font-bold"
+                className="text-red-500 hover:text-red-400 transition font-bold"
               >
                 Wyloguj
               </button>
             ) : (
-              <Link to="/login" className="text-orange-500 hover:text-orange-600 transition font-bold">
+              <Link to="/login" className="text-[#FF1493] text-glow hover:text-[#FF66B2] transition font-black">
                 Logowanie
               </Link>
             )}
@@ -85,25 +86,25 @@ export default function Layout() {
 
         {/* MENU MOBILNE (ROZWIJANE POD NAGŁÓWKIEM) */}
         {isMobileMenuOpen && (
-          <nav className="md:hidden absolute top-16 left-0 w-full bg-white border-b border-gray-200 shadow-xl flex flex-col py-4 px-6 gap-4 font-bold text-gray-800 z-40">
-            <Link to="/" className="py-2 border-b border-gray-100 hover:text-orange-500" onClick={closeMenu}>
-              Przepisy
+          <nav className="md:hidden absolute top-16 left-0 w-full bg-[#160A22] border-b border-[#25113A] shadow-neon flex flex-col py-4 px-6 gap-4 font-bold text-gray-200 z-40">
+            <Link to="/" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
+              <span>✨</span> Przepisy
             </Link>
-            <Link to="/zakupy" className="py-2 border-b border-gray-100 hover:text-orange-500 flex items-center gap-2" onClick={closeMenu}>
-              <span>🛒</span> Lista zakupów
+            <Link to="/zakupy" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
+              <span>🛍️</span> Lista zakupów
             </Link>
-            <Link to="/ulubione" className="py-2 border-b border-gray-100 hover:text-orange-500 flex items-center gap-2" onClick={closeMenu}>
-              <span>❤️</span> Ulubione przepisy
+            <Link to="/ulubione" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
+              <span>💖</span> Ulubione przepisy
             </Link>
 
             {isAuthenticated && (
-              <Link to="/dodaj-przepis" className="py-2 border-b border-gray-100 text-orange-600" onClick={closeMenu}>
-                + Dodaj nowy przepis
+              <Link to="/dodaj-przepis" className="py-2 border-b border-[#25113A] text-[#FF007F] text-glow flex items-center gap-2" onClick={closeMenu}>
+                <span>➕</span> Dodaj nowy przepis
               </Link>
             )}
 
-            <Link to="/o-mnie" className="py-2 border-b border-gray-100 hover:text-orange-500" onClick={closeMenu}>
-              O mnie
+            <Link to="/o-mnie" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
+              <span>👸</span> O mnie
             </Link>
 
             {isAuthenticated ? (
@@ -111,7 +112,7 @@ export default function Layout() {
                 Wyloguj administratora
               </button>
             ) : (
-              <Link to="/login" className="py-2 text-orange-500" onClick={closeMenu}>
+              <Link to="/login" className="py-2 text-[#FF1493] text-glow" onClick={closeMenu}>
                 Logowanie do panelu
               </Link>
             )}
@@ -123,8 +124,10 @@ export default function Layout() {
         <Outlet />
       </main>
 
-      <footer className="bg-white border-t border-gray-200 py-12 text-center text-sm text-gray-500">
-        <p className="font-bold text-gray-900 mb-1">Diamentowe Smaki</p>
+      <footer className="bg-[#0B0510] border-t border-[#25113A] py-12 text-center text-sm text-gray-400">
+        <p className="font-bold text-white mb-1 flex justify-center items-center gap-2 text-lg">
+          <span>👑</span> Diamentowe Smaki <span>💎</span>
+        </p>
         <p>© {new Date().getFullYear()} Wszystkie prawa zastrzeżone.</p>
       </footer>
     </div>
