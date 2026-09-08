@@ -125,24 +125,6 @@ export default function Home() {
             onClick={() => ustawParametr('sort', 'date')}
             className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'date' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
           >
-            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'date' ? 'bg-[#FF007F] shadow-neon' : 'bg-[#25113A]'}`}></span>
-            Najnowsze <MdWorkspacePremium className="text-[#FF1493] inline" />
-          </button>
-          <button
-            onClick={() => ustawParametr('sort', 'popular')}
-            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'popular' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
-          >
-            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'popular' ? 'bg-[#FF007F] shadow-neon' : 'bg-[#25113A]'}`}></span>
-            Bestsellery <RiDiamondFill className="text-[#FF007F] inline text-xs" />
-          </button>
-        </div>
-
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-black text-gray-400 uppercase tracking-wider">Sortuj:</span>
-          <button
-            onClick={() => ustawParametr('sort', 'date')}
-            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'date' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
-          >
             <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'date' ? 'bg-amber-400 shadow-[0_0_8px_#D4AF37]' : 'bg-[#25113A]'}`}></span>
             Najnowsze <MdWorkspacePremium className="text-amber-400 inline" />
           </button>
@@ -154,6 +136,7 @@ export default function Home() {
             Bestsellery <RiDiamondFill className="text-slate-300 inline text-xs" />
           </button>
         </div>
+      </div>
 
       {/* KARUZELA PRZEPISÓW (Miniaturki) */}
       {!loading && recipes.length > 0 && (
