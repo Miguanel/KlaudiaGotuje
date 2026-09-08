@@ -5,6 +5,7 @@ import { apiClient } from '../api/client';
 import IngredientsPanel from '../components/IngredientsPanel';
 import RecipeSteps from '../components/RecipeSteps';
 import CommentsSection from '../components/CommentsSection';
+import { FaHeart, FaRegHeart, FaDownload, FaGem, FaStar, FaClock } from 'react-icons/fa';
 
 export default function RecipeDetail() {
   const { id } = useParams();
@@ -42,7 +43,7 @@ export default function RecipeDetail() {
     window.print();
   };
 
-  if (loading) return <div className="p-10 text-center font-black text-[#FF1493] text-glow">Ładowanie przepisu... ✨</div>;
+  if (loading) return <div className="p-10 text-center font-black text-[#FF1493] text-glow">Ładowanie przepisu... <FaStar className="inline animate-spin text-[#FF66B2]" /></div>;
   if (error || !recipe) return <div className="p-10 text-center font-bold text-red-500">Błąd: {error || 'Nie znaleziono przepisu'}</div>;
 
   return (
@@ -51,8 +52,8 @@ export default function RecipeDetail() {
       {/* NAWIGACJA OKRUSZKOWA ORAZ PRZYCISKI AKCJI */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 print:hidden">
         <nav className="flex flex-wrap items-center gap-y-2 text-[14px] md:text-[15px] text-gray-400 font-bold bg-[#160A22] border border-[#25113A] px-4 py-2.5 rounded-xl shadow-sm w-full md:w-fit">
-          <Link to="/" className="text-[#FF1493] hover:text-glow transition-all">
-            ✨ Przepisy
+          <Link to="/" className="text-[#FF1493] hover:text-glow transition-all flex items-center gap-1.5">
+            <FaStar className="text-[#FF66B2]" /> Przepisy
           </Link>
 
           {recipe.category?.parent_category && (
@@ -86,7 +87,7 @@ export default function RecipeDetail() {
             className="flex justify-center items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm bg-[#160A22] text-gray-300 border border-[#25113A] hover:border-[#FF1493] hover:text-[#FF1493] transition-all"
             title="Pobierz przepis jako PDF"
           >
-            <span>📥</span> Pobierz PDF
+            <FaDownload className="text-[#FF66B2]" /> Pobierz PDF
           </button>
 
           <button
@@ -97,15 +98,16 @@ export default function RecipeDetail() {
                 : 'bg-[#160A22] text-gray-300 border border-[#25113A] hover:border-[#FF1493] hover:text-[#FF1493]'
             }`}
           >
-            <span>{isFavorite ? '💖' : '🤍'}</span>
+            {isFavorite ? <FaHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}
             {isFavorite ? 'W ulubionych' : 'Dodaj do ulubionych'}
           </button>
         </div>
       </div>
 
       {/* TYTUŁ I GŁÓWNE ZDJĘCIE PRZEPISU */}
-      <h1 className="text-3xl md:text-5xl font-black text-white mb-6 text-glow print:text-4xl">
-        {recipe.name} 💎
+      <h1 className="text-3xl md:text-5xl font-black text-white mb-6 text-glow print:text-4xl flex items-center gap-3">
+        <span>{recipe.name}</span>
+        <FaGem className="text-[#FF007F] text-glow inline text-3xl" />
       </h1>
 
       <div className="rounded-[2rem] overflow-hidden mb-6 md:mb-8 shadow-neon border border-[#25113A] print:shadow-none print:border-none print:mb-4">
@@ -157,7 +159,9 @@ export default function RecipeDetail() {
       {/* REKOMENDOWANE PODOBNE PRZEPISY */}
       {similarRecipes && similarRecipes.length > 0 && (
         <div className="mt-16 pt-8 border-t border-[#25113A] print:hidden">
-          <h2 className="text-2xl font-black text-white mb-8 text-glow">💖 Mogą Ci się spodobać 💖</h2>
+          <h2 className="text-2xl font-black text-white mb-8 text-glow flex items-center gap-2">
+            <FaHeart className="text-[#FF1493]" /> Mogą Ci się spodobać <FaHeart className="text-[#FF1493]" />
+          </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {similarRecipes.map(similar => (
               <Link key={similar.id} to={`/przepis/${similar.id}`} className="group bg-[#160A22] rounded-3xl border border-[#25113A] overflow-hidden hover:border-[#FF1493] hover:shadow-neon transition-all hover:-translate-y-1">
@@ -168,8 +172,8 @@ export default function RecipeDetail() {
                     className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500 opacity-90 group-hover:opacity-100"
                   />
                   {similar.prep_time && (
-                    <div className="absolute bottom-3 right-3 bg-[#FF1493]/90 backdrop-blur-sm text-white text-[11px] font-black px-2.5 py-1.5 rounded-xl shadow-neon">
-                      ⏱ {similar.prep_time} min
+                    <div className="absolute bottom-3 right-3 bg-[#FF1493]/90 backdrop-blur-sm text-white text-[11px] font-black px-2.5 py-1.5 rounded-xl shadow-neon flex items-center gap-1">
+                      <FaClock /> {similar.prep_time} min
                     </div>
                   )}
                 </div>
