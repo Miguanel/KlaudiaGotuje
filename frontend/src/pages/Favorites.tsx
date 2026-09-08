@@ -2,13 +2,13 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../api/client';
 import type { Recipe } from '../types';
+import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
 
 export default function Favorites() {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Pobieramy zapisane ID ulubionych z localStorage
     const savedIds: string[] = JSON.parse(localStorage.getItem('favorite_recipes') || '[]');
 
     if (savedIds.length === 0) {
@@ -16,10 +16,8 @@ export default function Favorites() {
       return;
     }
 
-    // Pobieramy szczegóły przepisów z API dla zapisanych ID
     Promise.all(savedIds.map(id => apiClient.recipes.getById(id).catch(() => null)))
       .then(results => {
-        // Filtrujemy null-y, jeśli jakiś przepis został usunięty z bazy
         setFavoriteRecipes(results.filter((r): r is Recipe => r !== null));
         setLoading(false);
       })
@@ -38,25 +36,25 @@ export default function Favorites() {
     setFavoriteRecipes(prev => prev.filter(recipe => recipe.id !== id));
   };
 
-  if (loading) return <div className="p-10 text-center text-gray-500">Ładowanie ulubionych...</div>;
+  if (loading) return <div className="p-10 text-center text-[#FF1493] font-bold text-glow">Ładowanie ulubionych... ✨</div>;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
-      <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 tracking-tight mb-2">
-        Twoje ulubione przepisy ❤️
+    <div className="max-w-5xl mx-auto px-4 py-12 text-white">
+      <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 text-glow flex items-center gap-2">
+        <span className="text-gold">Twoje ulubione przepisy</span> <FaHeart className="text-[#FF1493]" />
       </h1>
-      <p className="text-gray-500 text-sm md:text-base mb-8">
-        Zapisane potrawy, do których możesz w każdej chwili wrócić.
+      <p className="text-gray-400 text-sm md:text-base mb-8">
+        Zapisane potrawy, do których możesz w każdej chwili wrócić. 💎
       </p>
 
       {favoriteRecipes.length === 0 ? (
-        <div className="bg-white p-12 text-center rounded-2xl border border-gray-100 shadow-sm">
-          <p className="text-gray-500 text-lg mb-4">Nie masz jeszcze żadnych ulubionych przepisów.</p>
+        <div className="bg-[#160A22] p-12 text-center rounded-3xl border border-[#25113A] shadow-neon">
+          <p className="text-gray-400 text-lg mb-4">Nie masz jeszcze żadnych ulubionych przepisów.</p>
           <Link
             to="/"
-            className="inline-block bg-orange-500 text-white font-bold px-6 py-3 rounded-xl hover:bg-orange-600 transition-colors shadow-sm"
+            className="inline-block bg-[#FF1493] text-white font-black px-6 py-3 rounded-xl hover:bg-[#FF007F] transition-all shadow-neon"
           >
-            Przeglądaj przepisy
+            Przeglądaj przepisy ✨
           </Link>
         </div>
       ) : (
@@ -65,39 +63,41 @@ export default function Favorites() {
             <Link
               to={`/przepis/${recipe.id}`}
               key={`fav-${recipe.id}`}
-              className="group block bg-white rounded-2xl overflow-hidden border border-gray-100 shadow-sm hover:shadow-xl transition-all duration-300 relative"
+              className="group block bg-[#160A22] rounded-[2rem] overflow-hidden border border-[#25113A] hover:border-[#FF1493] transition-all duration-300 relative flex flex-col justify-between hover:shadow-neon hover:-translate-y-1"
             >
-              {/* Przycisk usuwania z ulubionych */}
-              <button
-                onClick={(e) => removeFromFavorites(recipe.id, e)}
-                className="absolute top-4 right-4 z-20 w-9 h-9 bg-white/90 backdrop-blur rounded-full flex items-center justify-center text-red-500 shadow-md hover:bg-white transition-transform hover:scale-110"
-                title="Usuń z ulubionych"
-              >
-                ❤️
-              </button>
+              <div>
+                <button
+                  onClick={(e) => removeFromFavorites(recipe.id, e)}
+                  className="absolute top-4 right-4 z-20 w-10 h-10 bg-[#0B0510]/80 backdrop-blur rounded-full flex items-center justify-center shadow-md hover:scale-110 hover:shadow-neon transition-transform"
+                  title="Usuń z ulubionych"
+                >
+                  <FaHeart className="text-[#FF1493] text-lg" />
+                </button>
 
-              <div className="aspect-[4/3] bg-gray-100 overflow-hidden relative">
-                {recipe.category && (
-                  <span className="absolute top-4 left-4 bg-white/90 backdrop-blur text-xs font-bold px-3 py-1.5 rounded-lg text-gray-800 z-10 shadow-sm">
-                    {recipe.category.name}
-                  </span>
-                )}
-                <img
-                  src={apiClient.utils.getImageUrl(recipe.main_image_url)}
-                  alt={recipe.name}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 ease-out"
-                />
-              </div>
-              <div className="p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-3 group-hover:text-orange-500 transition-colors">
-                  {recipe.name}
-                </h2>
-                <div className="flex items-center text-sm font-medium text-gray-500">
-                  <svg className="w-4 h-4 mr-1.5 opacity-70" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                  </svg>
-                  {recipe.prep_time} min
+                <div className="aspect-[4/3] bg-[#0B0510] overflow-hidden relative">
+                  {recipe.category && (
+                    <span className="absolute top-4 left-4 bg-[#FF1493]/90 backdrop-blur text-xs font-black px-3 py-1.5 rounded-xl text-white z-10 shadow-neon">
+                      {recipe.category.name}
+                    </span>
+                  )}
+                  <img
+                    src={apiClient.utils.getImageUrl(recipe.main_image_url)}
+                    alt={recipe.name}
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
+                  />
                 </div>
+
+                <div className="p-6 pb-2">
+                  <h2 className="text-xl font-black text-white group-hover:text-[#FF1493] transition-colors line-clamp-2">
+                    {recipe.name}
+                  </h2>
+                </div>
+              </div>
+
+              <div className="px-6 py-4 bg-[#0B0510]/50 border-t border-[#25113A] flex items-center justify-between text-xs font-bold text-gray-400 mt-2">
+                <span className="flex items-center gap-1.5">
+                  <FaStar className="text-amber-400" /> {recipe.prep_time} min
+                </span>
               </div>
             </Link>
           ))}

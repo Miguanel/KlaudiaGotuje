@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import type { RecipeStep, Ingredient } from '../types';
 import { apiClient } from '../api/client';
+import { FaCrown, FaUtensils, FaGem } from 'react-icons/fa';
 
 interface Props {
   kroki: RecipeStep[];
@@ -44,7 +45,10 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
     <>
       <div className="mt-4 text-white">
         <div className="flex justify-between items-center mb-8 border-b border-[#25113A] pb-4">
-          <h2 className="text-2xl font-black text-glow">👑 Krok po kroku</h2>
+          <h2 className="text-2xl font-black text-white flex items-center gap-2">
+            <FaCrown className="text-amber-400" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} />
+            <span className="text-gold">Krok po kroku</span>
+          </h2>
           <button
             onClick={() => {
               setCurrentStepIndex(0);
@@ -52,7 +56,7 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
             }}
             className="flex items-center gap-2 bg-[#FF1493] text-white px-5 py-2.5 rounded-xl text-sm font-black shadow-neon hover:bg-[#FF007F] transition-all hover:scale-105"
           >
-            <span>👩‍🍳</span> Tryb gotowania (Focus)
+            <FaUtensils className="text-slate-200" /> Tryb gotowania (Focus)
           </button>
         </div>
 
@@ -72,9 +76,9 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
 
                   {relSkładniki.length > 0 && (
                     <div className="flex flex-wrap gap-2 mb-4 bg-[#0B0510] p-3.5 rounded-2xl border border-[#25113A] w-fit">
-                      <span className="text-xs font-black text-[#FF1493] uppercase tracking-wide self-center mr-1">Potrzebne:</span>
+                      <span className="text-xs font-black text-amber-400 uppercase tracking-wide self-center mr-1">Potrzebne:</span>
                       {relSkładniki.map(ing => (
-                        <span key={ing.id} className="bg-[#160A22] px-3 py-1 rounded-xl text-xs font-bold text-gray-200 shadow-sm border border-[#25113A]">
+                        <span key={ing.id} className="bg-[#160A22] px-3 py-1 rounded-xl text-xs font-bold text-gray-200 shadow-sm border border-amber-400/30">
                           {ing.name} ({ing.quantity} {ing.unit})
                         </span>
                       ))}
@@ -101,7 +105,9 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
 
           <div className="flex justify-between items-center max-w-4xl mx-auto w-full">
             <div>
-              <span className="text-xs uppercase font-black text-[#FF1493] tracking-wider text-glow">Tryb Asystenta Księżniczki 👑</span>
+              <span className="text-xs uppercase font-black text-amber-400 tracking-wider flex items-center gap-1.5">
+                <FaCrown className="text-amber-400" /> Tryb Asystenta Księżniczki
+              </span>
               <h3 className="text-lg md:text-xl font-bold text-gray-200">{recipeName}</h3>
             </div>
             <button
@@ -127,8 +133,8 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
               return (
                 <div className="flex flex-wrap justify-center gap-2 mb-6">
                   {relSkładniki.map(ing => (
-                    <span key={ing.id} className="bg-[#160A22] border border-[#FF1493] px-3.5 py-2 rounded-xl text-sm font-black text-[#FF66B2] shadow-neon">
-                      💎 {ing.name}: {ing.quantity} {ing.unit}
+                    <span key={ing.id} className="bg-[#160A22] border border-amber-400/40 px-3.5 py-2 rounded-xl text-sm font-black text-amber-300 shadow-neon">
+                      <FaGem className="inline mr-1 text-slate-300" /> {ing.name}: {ing.quantity} {ing.unit}
                     </span>
                   ))}
                 </div>

@@ -18,13 +18,38 @@ body {
   color: white !important;
 }
 
-/* Własne klasy dla neonowego blasku (Glow Effect) */
+/* Własne klasy dla neonowego blasku i luksusowych akcentów */
 @utility text-glow {
   text-shadow: 0 0 10px rgba(255, 20, 147, 0.8), 0 0 20px rgba(255, 20, 147, 0.4);
 }
 
 @utility shadow-neon {
   box-shadow: 0 0 15px rgba(255, 20, 147, 0.3), 0 0 5px rgba(255, 20, 147, 0.1);
+}
+
+/* Nowe efekty złota i srebra */
+@utility text-gold {
+  background: linear-gradient(135deg, #FFF6BD 0%, #D4AF37 50%, #AA771C 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+}
+
+@utility text-silver {
+  background: linear-gradient(135deg, #FFFFFF 0%, #C0C0C0 50%, #808080 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 8px rgba(192, 192, 192, 0.4));
+}
+
+@utility border-gold {
+  border-color: #D4AF37;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+}
+
+@utility border-silver {
+  border-color: #C0C0C0;
+  box-shadow: 0 0 10px rgba(192, 192, 192, 0.2);
 }
 
 /* Konfiguracja dla drukarek */

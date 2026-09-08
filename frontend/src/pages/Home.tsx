@@ -93,7 +93,7 @@ export default function Home() {
         <div className="flex-1">
           <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 text-glow flex items-center gap-2">
             <MdAutoFixHigh className="text-[#FF1493] text-glow" />
-            {nazwaAktywnejKategorii || (nazwaAktywnegoTagu ? `Przepisy: #${nazwaAktywnegoTagu}` : 'Odkryj przepisy')}
+            <span className="text-gold">Odkryj przepisy</span>
             <RiDiamondFill className="text-[#FF007F] text-glow ml-1" />
           </h1>
           <p className="text-gray-400 text-sm md:text-base mb-6 flex items-center gap-1.5">
@@ -138,20 +138,22 @@ export default function Home() {
         </div>
 
         <div className="flex items-center gap-3">
-          <span className="text-xs font-black text-gray-400 uppercase tracking-wider">Kategoria:</span>
-          <select
-            value={wybranadieta}
-            onChange={(e) => ustawParametr('diet', e.target.value)}
-            className="px-3 py-1.5 bg-[#0B0510] border border-[#25113A] rounded-xl text-sm font-bold text-white outline-none focus:border-[#FF1493]"
+          <span className="text-xs font-black text-gray-400 uppercase tracking-wider">Sortuj:</span>
+          <button
+            onClick={() => ustawParametr('sort', 'date')}
+            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'date' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
           >
-            <option value="dowolna">Dowolna</option>
-            <option value="wege">Makarony</option>
-            <option value="wegańska">Drożdżowe</option>
-            <option value="bezglutenowa">Przetwory</option>
-            <option value="fit">Fit / Lekka</option>
-          </select>
+            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'date' ? 'bg-amber-400 shadow-[0_0_8px_#D4AF37]' : 'bg-[#25113A]'}`}></span>
+            Najnowsze <MdWorkspacePremium className="text-amber-400 inline" />
+          </button>
+          <button
+            onClick={() => ustawParametr('sort', 'popular')}
+            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'popular' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
+          >
+            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'popular' ? 'bg-slate-300 shadow-[0_0_8px_#C0C0C0]' : 'bg-[#25113A]'}`}></span>
+            Bestsellery <RiDiamondFill className="text-slate-300 inline text-xs" />
+          </button>
         </div>
-      </div>
 
       {/* KARUZELA PRZEPISÓW (Miniaturki) */}
       {!loading && recipes.length > 0 && (
@@ -325,9 +327,9 @@ export default function Home() {
                       <MdPhotoCamera className="text-[#FF66B2]" /> {recipe.photos_count}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-[#FFD700] text-glow font-black">
-                    <MdStar className="text-base" />
-                    <span>{recipe.average_rating !== null ? recipe.average_rating.toFixed(2) : 'Brak'}</span>
+                  <div className="flex items-center gap-1 text-amber-400 font-black" style={{ filter: 'drop-shadow(0 0 6px rgba(251, 191, 36, 0.6))' }}>
+                    <MdStar className="text-base text-amber-300" />
+                    <span className="text-gold">{recipe.average_rating !== null ? recipe.average_rating.toFixed(2) : 'Brak'}</span>
                   </div>
                 </div>
 

@@ -43,7 +43,7 @@ export default function RecipeDetail() {
     window.print();
   };
 
-  if (loading) return <div className="p-10 text-center font-black text-[#FF1493] text-glow">Ładowanie przepisu... <FaStar className="inline animate-spin text-[#FF66B2]" /></div>;
+  if (loading) return <div className="p-10 text-center font-black text-[#FF1493] text-glow">Ładowanie przepisu... <FaStar className="inline animate-spin text-amber-400" /></div>;
   if (error || !recipe) return <div className="p-10 text-center font-bold text-red-500">Błąd: {error || 'Nie znaleziono przepisu'}</div>;
 
   return (
@@ -53,7 +53,7 @@ export default function RecipeDetail() {
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-6 print:hidden">
         <nav className="flex flex-wrap items-center gap-y-2 text-[14px] md:text-[15px] text-gray-400 font-bold bg-[#160A22] border border-[#25113A] px-4 py-2.5 rounded-xl shadow-sm w-full md:w-fit">
           <Link to="/" className="text-[#FF1493] hover:text-glow transition-all flex items-center gap-1.5">
-            <FaStar className="text-[#FF66B2]" /> Przepisy
+            <FaStar className="text-amber-400" /> Przepisy
           </Link>
 
           {recipe.category?.parent_category && (
@@ -87,7 +87,7 @@ export default function RecipeDetail() {
             className="flex justify-center items-center gap-2 px-5 py-2.5 rounded-xl font-bold text-sm bg-[#160A22] text-gray-300 border border-[#25113A] hover:border-[#FF1493] hover:text-[#FF1493] transition-all"
             title="Pobierz przepis jako PDF"
           >
-            <FaDownload className="text-[#FF66B2]" /> Pobierz PDF
+            <FaDownload className="text-slate-300" /> Pobierz PDF
           </button>
 
           <button
@@ -106,7 +106,7 @@ export default function RecipeDetail() {
 
       {/* TYTUŁ I GŁÓWNE ZDJĘCIE PRZEPISU */}
       <h1 className="text-3xl md:text-5xl font-black text-white mb-6 text-glow print:text-4xl flex items-center gap-3">
-        <span>{recipe.name}</span>
+        <span className="text-gold">{recipe.name}</span>
         <FaGem className="text-[#FF007F] text-glow inline text-3xl" />
       </h1>
 
@@ -128,7 +128,7 @@ export default function RecipeDetail() {
               <Link
                 key={tag.id}
                 to={`/?tag=${tag.slug}`}
-                className="px-4 py-1.5 bg-[#25113A] text-[#FF1493] text-xs font-black rounded-full hover:bg-[#FF1493] hover:text-white transition-all shadow-sm"
+                className="px-4 py-1.5 bg-[#25113A] text-slate-200 border border-slate-700 text-xs font-black rounded-full hover:bg-[#FF1493] hover:text-white transition-all shadow-sm"
               >
                 #{tag.name}
               </Link>
@@ -160,7 +160,7 @@ export default function RecipeDetail() {
       {similarRecipes && similarRecipes.length > 0 && (
         <div className="mt-16 pt-8 border-t border-[#25113A] print:hidden">
           <h2 className="text-2xl font-black text-white mb-8 text-glow flex items-center gap-2">
-            <FaHeart className="text-[#FF1493]" /> Mogą Ci się spodobać <FaHeart className="text-[#FF1493]" />
+            <FaStar className="text-amber-400" /> <span className="text-gold">Mogą Ci się spodobać</span> <FaStar className="text-amber-400" />
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
             {similarRecipes.map(similar => (

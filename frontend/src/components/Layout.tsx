@@ -7,7 +7,6 @@ export default function Layout() {
   const { isAuthenticated, logout } = useAuth();
   const navigate = useNavigate();
 
-  // Stan kontrolujący otwarcie menu mobilnego
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const handleLogout = () => {
@@ -22,16 +21,20 @@ export default function Layout() {
 
   return (
     <div className="min-h-screen flex flex-col bg-[#0B0510] text-white font-sans">
-      <header className="bg-[#160A22]/80 backdrop-blur-md border-b border-[#25113A] sticky top-0 z-50 shadow-neon">
+      <header className="bg-[#160A22]/90 backdrop-blur-md border-b border-[#25113A] sticky top-0 z-50 shadow-neon">
         <div className="max-w-5xl mx-auto px-4 h-16 flex items-center justify-between">
 
           {/* LOGO */}
           <Link to="/" className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5 hover:scale-105 transition-transform" onClick={closeMenu}>
-            <span><FaCrown className="text-[#FF1493] inline mr-1"/> Diamentowe Smaki <span className="hidden sm:inline">Engibadwoman</span></span>
+            <span>
+              <FaCrown className="text-amber-400 inline mr-1" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} />
+              <span className="text-gold">Diamentowe Smaki</span>
+              <span className="hidden sm:inline text-slate-300 font-bold text-xs uppercase tracking-widest ml-2">Engibadwoman</span>
+            </span>
             <FaGem className="text-[#FF007F] text-glow inline ml-1" />
           </Link>
 
-          {/* PRZYCISK HAMBURGER MENU (WIDOCZNY TYLKO NA URZĄDZENIACH MOBILNYCH) */}
+          {/* PRZYCISK HAMBURGER MENU */}
           <button
             className="md:hidden p-2 text-gray-300 hover:text-[#FF1493] focus:outline-none transition-colors text-glow"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -39,10 +42,8 @@ export default function Layout() {
           >
             <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               {isMobileMenuOpen ? (
-                // Ikonka "X" (Zamknij)
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
               ) : (
-                // Ikonka "Hamburger" (Otwórz)
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
               )}
             </svg>
@@ -51,10 +52,10 @@ export default function Layout() {
           {/* MENU DESKTOPOWE */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-bold text-gray-300">
             <Link to="/" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <FaMagic className="text-[#FF66B2]" /> Przepisy
+              <FaMagic className="text-amber-400" /> Przepisy
             </Link>
             <Link to="/zakupy" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <FaShoppingCart className="text-[#FF66B2]" /> Zakupy
+              <FaShoppingCart className="text-slate-300" /> Zakupy
             </Link>
             <Link to="/ulubione" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
               <FaHeart className="text-[#FF1493]" /> Ulubione
@@ -67,13 +68,13 @@ export default function Layout() {
             )}
 
             <Link to="/o-mnie" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <FaUser className="text-[#FF66B2]" /> O mnie
+              <FaUser className="text-amber-400" /> O mnie
             </Link>
 
             {isAuthenticated ? (
               <button
                 onClick={handleLogout}
-                className="text-red-500 hover:text-red-400 transition font-bold flex items-center gap-1"
+                className="text-red-400 hover:text-red-300 transition font-bold flex items-center gap-1"
               >
                 <FaSignOutAlt /> Wyloguj
               </button>
@@ -85,14 +86,14 @@ export default function Layout() {
           </nav>
         </div>
 
-        {/* MENU MOBILNE (ROZWIJANE POD NAGŁÓWKIEM) */}
+        {/* MENU MOBILNE */}
         {isMobileMenuOpen && (
           <nav className="md:hidden absolute top-16 left-0 w-full bg-[#160A22] border-b border-[#25113A] shadow-neon flex flex-col py-4 px-6 gap-4 font-bold text-gray-200 z-40">
             <Link to="/" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <FaMagic className="text-[#FF66B2]" /> Przepisy
+              <FaMagic className="text-amber-400" /> Przepisy
             </Link>
             <Link to="/zakupy" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <FaShoppingCart className="text-[#FF66B2]" /> Lista zakupów
+              <FaShoppingCart className="text-slate-300" /> Lista zakupów
             </Link>
             <Link to="/ulubione" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
               <FaHeart className="text-[#FF1493]" /> Ulubione przepisy
@@ -105,11 +106,11 @@ export default function Layout() {
             )}
 
             <Link to="/o-mnie" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <FaUser className="text-[#FF66B2]" /> O mnie
+              <FaUser className="text-amber-400" /> O mnie
             </Link>
 
             {isAuthenticated ? (
-              <button onClick={handleLogout} className="py-2 text-left text-red-500 flex items-center gap-2">
+              <button onClick={handleLogout} className="py-2 text-left text-red-400 flex items-center gap-2">
                 <FaSignOutAlt /> Wyloguj administratora
               </button>
             ) : (
@@ -127,9 +128,11 @@ export default function Layout() {
 
       <footer className="bg-[#0B0510] border-t border-[#25113A] py-12 text-center text-sm text-gray-400">
         <p className="font-bold text-white mb-1 flex justify-center items-center gap-2 text-lg">
-          <FaCrown className="text-[#FF1493]" /> Diamentowe Smaki <FaGem className="text-[#FF007F] text-glow" />
+          <FaCrown className="text-amber-400" style={{ filter: 'drop-shadow(0 0 6px rgba(251,191,36,0.6))' }} />
+          <span className="text-gold">Diamentowe Smaki</span>
+          <FaGem className="text-slate-300 text-glow" />
         </p>
-        <p>© {new Date().getFullYear()} Wszystkie prawa zastrzeżone.</p>
+        <p>© {new Date().getFullYear()} Wszystkie prawa zastrzeżone. Stworzone z pasją w stylu glamour ✨</p>
       </footer>
     </div>
   );
