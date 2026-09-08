@@ -7,7 +7,7 @@ import { useDebounce } from '../hooks/useDebounce';
 import { apiClient } from '../api/client';
 import { RecipeGridSkeleton } from '../components/ui/Skeletons';
 import { MdAutoFixHigh, MdFavorite, MdFavoriteBorder, MdWorkspacePremium, MdStar, MdChatBubble, MdPhotoCamera } from 'react-icons/md';
-import { RiDiamondFill, RiSpark2Fill } from 'react-icons/ri';
+import { RiDiamondFill, RiSparklingFill } from 'react-icons/ri';
 
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -271,7 +271,7 @@ export default function Home() {
       ) : recipes.length === 0 ? (
         <div className="bg-[#160A22] p-12 text-center rounded-3xl border border-[#25113A] shadow-neon">
           <p className="text-gray-400 text-lg font-bold flex items-center justify-center gap-2">
-            Brak przepisów spełniających wybrane kryteria. <RiSpark2Fill className="text-[#FF1493]" />
+            Brak przepisów spełniających wybrane kryteria. <RiSparklingFill className="text-[#FF1493]" />
           </p>
           <button onClick={() => setSearchParams({})} className="mt-4 text-[#FF1493] text-glow font-black hover:underline flex items-center justify-center gap-1.5 mx-auto">
             <MdAutoFixHigh /> Wyczyść filtry
