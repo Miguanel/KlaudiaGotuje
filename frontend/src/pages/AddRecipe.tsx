@@ -125,8 +125,10 @@ export default function AddRecipe() {
       <h1 className="text-2xl md:text-3xl font-black mb-2 text-glow flex items-center gap-2">
         <FaCrown className="text-[#FF1493]" /> Dodaj nowy przepis <FaGem className="text-[#FF007F]" />
       </h1>
-      <p className="text-gray-400 mb-8 text-sm md:text-base font-medium">Wypełnij formularz, prześlij zdjęcia i udostępnij nową potrawę. ✨</p>
-
+      <p className="text-gray-400 mb-8 text-sm md:text-base font-medium flex items-center gap-1.5">
+        <span>Wypełnij formularz, prześlij zdjęcia i udostępnij nową potrawę.</span>
+        <FaGem className="text-[#FF66B2] text-xs inline animate-pulse" />
+      </p>
       {error && <div className="bg-red-950/60 border border-red-900 text-red-300 p-4 rounded-xl mb-6 font-bold text-sm">{error}</div>}
 
       <form onSubmit={handleSubmit} className="space-y-8 bg-[#160A22] p-4 sm:p-8 rounded-3xl border border-[#25113A] shadow-neon">
@@ -310,9 +312,9 @@ export default function AddRecipe() {
 
         <button
           type="submit" disabled={loading}
-          className="w-full py-4 bg-[#FF1493] text-white font-black rounded-2xl hover:bg-[#FF007F] transition-all shadow-neon disabled:opacity-50 text-base md:text-lg hover:scale-[1.01]"
+          className="w-full py-4 bg-[#FF1493] text-white font-black rounded-2xl hover:bg-[#FF007F] transition-all shadow-neon disabled:opacity-50 text-base md:text-lg hover:scale-[1.01] flex items-center justify-center gap-2"
         >
-          {loading ? 'Publikowanie... ✨' : 'Opublikuj przepis 🚀'}
+          {loading ? 'Publikowanie... ✨' : <>Opublikuj przepis <FaGem className="text-[#FFFF00] inline text-xl" /></>}
         </button>
 
       </form>
