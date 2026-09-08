@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaCrown, FaGem, FaHeart, FaShoppingCart, FaPlus, FaUser, FaSignOutAlt, FaSparkles } from 'react-icons/fa';
+import { FaCrown, FaGem, FaHeart, FaShoppingCart, FaPlus, FaUser, FaSignOutAlt, FaMagic } from 'react-icons/fa';
 
 export default function Layout() {
   const { isAuthenticated, logout } = useAuth();
@@ -51,7 +51,7 @@ export default function Layout() {
           {/* MENU DESKTOPOWE */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-bold text-gray-300">
             <Link to="/" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <FaSparkles className="text-[#FF66B2]" /> Przepisy
+              <FaMagic className="text-[#FF66B2]" /> Przepisy
             </Link>
             <Link to="/zakupy" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
               <FaShoppingCart className="text-[#FF66B2]" /> Zakupy
@@ -89,7 +89,7 @@ export default function Layout() {
         {isMobileMenuOpen && (
           <nav className="md:hidden absolute top-16 left-0 w-full bg-[#160A22] border-b border-[#25113A] shadow-neon flex flex-col py-4 px-6 gap-4 font-bold text-gray-200 z-40">
             <Link to="/" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <FaSparkles className="text-[#FF66B2]" /> Przepisy
+              <FaMagic className="text-[#FF66B2]" /> Przepisy
             </Link>
             <Link to="/zakupy" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
               <FaShoppingCart className="text-[#FF66B2]" /> Lista zakupów
