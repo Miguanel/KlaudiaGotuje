@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { FaCrown, FaGem, FaHeart, FaShoppingCart, FaPlus, FaUser, FaSignOutAlt } from 'react-icons/fa';
 
 export default function Layout() {
   const { isAuthenticated, logout } = useAuth();
@@ -26,7 +27,7 @@ export default function Layout() {
 
           {/* LOGO */}
           <Link to="/" className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5 hover:scale-105 transition-transform" onClick={closeMenu}>
-            <span>👑 Diamentowe Smaki <span className="hidden sm:inline">Engibadwoman</span></span>
+            <span><FaCrown className="text-[#FF1493] inline"/> Diamentowe Smaki <span className="hidden sm:inline">Engibadwoman</span></span>
             <span className="text-[#FF007F] text-glow">💎</span>
           </Link>
 
@@ -56,7 +57,7 @@ export default function Layout() {
               <span>🛍️</span> Zakupy
             </Link>
             <Link to="/ulubione" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <span>💖</span> Ulubione
+              <span>{isFav ? <FaHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}</span> Ulubione
             </Link>
 
             {isAuthenticated && (
@@ -94,7 +95,7 @@ export default function Layout() {
               <span>🛍️</span> Lista zakupów
             </Link>
             <Link to="/ulubione" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <span>💖</span> Ulubione przepisy
+              <span>{isFav ? <FaHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}</span> Ulubione przepisy
             </Link>
 
             {isAuthenticated && (
@@ -126,7 +127,7 @@ export default function Layout() {
 
       <footer className="bg-[#0B0510] border-t border-[#25113A] py-12 text-center text-sm text-gray-400">
         <p className="font-bold text-white mb-1 flex justify-center items-center gap-2 text-lg">
-          <span>👑</span> Diamentowe Smaki <span>💎</span>
+          <span><FaCrown className="text-[#FF1493] inline"/></span> Diamentowe Smaki <span>💎</span>
         </p>
         <p>© {new Date().getFullYear()} Wszystkie prawa zastrzeżone.</p>
       </footer>

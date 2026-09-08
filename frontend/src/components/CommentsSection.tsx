@@ -79,7 +79,7 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
               value={authorName}
               onChange={(e) => setAuthorName(e.target.value)}
               required
-              placeholder="np. Klaudia"
+              placeholder="Podpis"
               className="w-full px-4 py-2.5 border border-[#25113A] rounded-xl bg-[#160A22] text-white placeholder-gray-500 focus:ring-2 focus:ring-[#FF1493] outline-none"
             />
           </div>
