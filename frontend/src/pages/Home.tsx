@@ -6,6 +6,8 @@ import { useTags } from '../hooks/useTags';
 import { useDebounce } from '../hooks/useDebounce';
 import { apiClient } from '../api/client';
 import { RecipeGridSkeleton } from '../components/ui/Skeletons';
+import { MdAutoFixHigh, MdFavorite, MdFavoriteBorder, MdWorkspacePremium, MdStar, MdChatBubble, MdPhotoCamera } from 'react-icons/md';
+import { RiDiamondFill, RiSpark2Fill } from 'react-icons/ri';
 
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -66,11 +68,11 @@ export default function Home() {
   if (error) return <div className="p-10 text-center text-[#FF1493] text-glow font-medium">Błąd: {error}</div>;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12">
+    <div className="max-w-5xl mx-auto px-4 py-12 text-white">
       {/* OKRUSZKI (BREADCRUMBS) */}
-      <nav className="flex items-center text-[15px] text-gray-400 font-medium mb-6 bg-[#160A22] border border-[#25113A] px-4 py-2.5 rounded-md shadow-sm w-fit">
-        <button onClick={() => setSearchParams({})} className="text-[#FF1493] hover:text-glow transition-all">
-          ✨ Przepisy
+      <nav className="flex items-center text-[15px] text-gray-400 font-medium mb-6 bg-[#160A22] border border-[#25113A] px-4 py-2.5 rounded-xl shadow-sm w-fit">
+        <button onClick={() => setSearchParams({})} className="text-[#FF1493] hover:text-glow transition-all flex items-center gap-1.5">
+          <MdAutoFixHigh className="text-[#FF66B2]" /> Przepisy
         </button>
         {nazwaAktywnejKategorii && (
           <>
@@ -89,10 +91,14 @@ export default function Home() {
       {/* NAGŁÓWEK I WYSZUKIWARKA */}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6 border-b border-[#25113A] pb-8">
         <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 text-glow">
-            {nazwaAktywnejKategorii || (nazwaAktywnegoTagu ? `Przepisy: #${nazwaAktywnegoTagu}` : '✨ Odkryj przepisy 💎')}
+          <h1 className="text-3xl md:text-4xl font-black text-white tracking-tight mb-2 text-glow flex items-center gap-2">
+            <MdAutoFixHigh className="text-[#FF1493] text-glow" />
+            {nazwaAktywnejKategorii || (nazwaAktywnegoTagu ? `Przepisy: #${nazwaAktywnegoTagu}` : 'Odkryj przepisy')}
+            <RiDiamondFill className="text-[#FF007F] text-glow ml-1" />
           </h1>
-          <p className="text-gray-400 text-sm md:text-base mb-6">Co pysznego dzisiaj wyczarujemy? 💖</p>
+          <p className="text-gray-400 text-sm md:text-base mb-6 flex items-center gap-1.5">
+            Co pysznego dzisiaj wyczarujemy? <MdFavorite className="text-[#FF1493] inline" />
+          </p>
 
           <div className="relative max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -120,14 +126,14 @@ export default function Home() {
             className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'date' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
           >
             <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'date' ? 'bg-[#FF007F] shadow-neon' : 'bg-[#25113A]'}`}></span>
-            Najnowsze 👑
+            Najnowsze <MdWorkspacePremium className="text-[#FF1493] inline" />
           </button>
           <button
             onClick={() => ustawParametr('sort', 'popular')}
             className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'popular' ? 'text-white' : 'text-gray-500 hover:text-[#FF1493]'}`}
           >
             <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'popular' ? 'bg-[#FF007F] shadow-neon' : 'bg-[#25113A]'}`}></span>
-            Bestsellery 💎
+            Bestsellery <RiDiamondFill className="text-[#FF007F] inline text-xs" />
           </button>
         </div>
 
@@ -176,7 +182,7 @@ export default function Home() {
                       onClick={(e) => toggleFavorite(recipe.id, e)}
                       className="absolute top-2 right-2 z-20 w-7 h-7 bg-[#0B0510]/80 backdrop-blur rounded-full flex items-center justify-center text-xs shadow hover:scale-110 hover:shadow-neon transition-transform"
                     >
-                      {isFav ? '💖' : '🤍'}
+                      {isFav ? <MdFavorite className="text-[#FF1493]" /> : <MdFavoriteBorder className="text-gray-400" />}
                     </button>
                     <img
                       src={apiClient.utils.getImageUrl(recipe.main_image_url)}
@@ -264,9 +270,11 @@ export default function Home() {
         <RecipeGridSkeleton />
       ) : recipes.length === 0 ? (
         <div className="bg-[#160A22] p-12 text-center rounded-3xl border border-[#25113A] shadow-neon">
-          <p className="text-gray-400 text-lg font-bold">Brak przepisów spełniających wybrane kryteria. 🥺</p>
-          <button onClick={() => setSearchParams({})} className="mt-4 text-[#FF1493] text-glow font-black hover:underline">
-            Wyczyść filtry ✨
+          <p className="text-gray-400 text-lg font-bold flex items-center justify-center gap-2">
+            Brak przepisów spełniających wybrane kryteria. <RiSpark2Fill className="text-[#FF1493]" />
+          </p>
+          <button onClick={() => setSearchParams({})} className="mt-4 text-[#FF1493] text-glow font-black hover:underline flex items-center justify-center gap-1.5 mx-auto">
+            <MdAutoFixHigh /> Wyczyść filtry
           </button>
         </div>
       ) : (
@@ -284,7 +292,7 @@ export default function Home() {
                     onClick={(e) => toggleFavorite(recipe.id, e)}
                     className="absolute top-4 right-4 z-20 w-10 h-10 bg-[#0B0510]/80 backdrop-blur rounded-full flex items-center justify-center shadow-md hover:scale-110 hover:shadow-neon transition-transform"
                   >
-                    {isFav ? '💖' : '🤍'}
+                    {isFav ? <MdFavorite className="text-[#FF1493] text-lg" /> : <MdFavoriteBorder className="text-gray-300 text-lg" />}
                   </button>
 
                   <div className="aspect-[4/3] bg-[#0B0510] overflow-hidden relative">
@@ -311,14 +319,14 @@ export default function Home() {
                 <div className="px-6 py-4 bg-[#0B0510]/50 border-t border-[#25113A] flex items-center justify-between text-xs font-bold text-gray-400 mt-2">
                   <div className="flex items-center gap-4">
                     <span className="flex items-center gap-1.5" title="Liczba komentarzy">
-                      💬 {recipe.comments_count}
+                      <MdChatBubble className="text-[#FF66B2]" /> {recipe.comments_count}
                     </span>
                     <span className="flex items-center gap-1.5" title="Liczba zdjęć">
-                      📸 {recipe.photos_count}
+                      <MdPhotoCamera className="text-[#FF66B2]" /> {recipe.photos_count}
                     </span>
                   </div>
                   <div className="flex items-center gap-1 text-[#FFD700] text-glow font-black">
-                    <span>★</span>
+                    <MdStar className="text-base" />
                     <span>{recipe.average_rating !== null ? recipe.average_rating.toFixed(2) : 'Brak'}</span>
                   </div>
                 </div>
