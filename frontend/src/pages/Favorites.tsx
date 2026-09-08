@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { apiClient } from '../api/client';
 import type { Recipe } from '../types';
-import { FaHeart, FaRegHeart, FaStar } from 'react-icons/fa';
+import { FaHeart, FaStar } from 'react-icons/fa';
 
 export default function Favorites() {
   const [favoriteRecipes, setFavoriteRecipes] = useState<Recipe[]>([]);

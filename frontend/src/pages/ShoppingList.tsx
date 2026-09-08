@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { FaShoppingCart, FaCheck, FaTrash, FaGem } from 'react-icons/fa';
+import { FaShoppingCart, FaCheck, FaTrash } from 'react-icons/fa';
 
 interface ShoppingItem {
   id: string;

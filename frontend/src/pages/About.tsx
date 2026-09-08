@@ -1,4 +1,4 @@
-import { FaCrown, FaGem, FaEnvelope, FaMagic } from 'react-icons/fa';
+import { FaCrown, FaGem, FaEnvelope } from 'react-icons/fa';
 
 export default function About() {
   return (
