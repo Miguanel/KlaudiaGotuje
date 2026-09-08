@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaCrown, FaGem, FaHeart, FaRegHeart, FaShoppingCart, FaPlus, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaCrown, FaGem, FaHeart, FaShoppingCart, FaPlus, FaUser, FaSignOutAlt, FaSparkles } from 'react-icons/fa';
 
 export default function Layout() {
   const { isAuthenticated, logout } = useAuth();
@@ -27,8 +27,8 @@ export default function Layout() {
 
           {/* LOGO */}
           <Link to="/" className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5 hover:scale-105 transition-transform" onClick={closeMenu}>
-            <span><FaCrown className="text-[#FF1493] inline"/> Diamentowe Smaki <span className="hidden sm:inline">Engibadwoman</span></span>
-            <span className="text-[#FF007F] text-glow">💎</span>
+            <span><FaCrown className="text-[#FF1493] inline mr-1"/> Diamentowe Smaki <span className="hidden sm:inline">Engibadwoman</span></span>
+            <FaGem className="text-[#FF007F] text-glow inline ml-1" />
           </Link>
 
           {/* PRZYCISK HAMBURGER MENU (WIDOCZNY TYLKO NA URZĄDZENIACH MOBILNYCH) */}
@@ -51,31 +51,31 @@ export default function Layout() {
           {/* MENU DESKTOPOWE */}
           <nav className="hidden md:flex items-center gap-6 text-sm font-bold text-gray-300">
             <Link to="/" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <span>✨</span> Przepisy
+              <FaSparkles className="text-[#FF66B2]" /> Przepisy
             </Link>
             <Link to="/zakupy" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <span>🛍️</span> Zakupy
+              <FaShoppingCart className="text-[#FF66B2]" /> Zakupy
             </Link>
             <Link to="/ulubione" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <span>{isFav ? <FaRegHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}</span> Ulubione
+              <FaHeart className="text-[#FF1493]" /> Ulubione
             </Link>
 
             {isAuthenticated && (
               <Link to="/dodaj-przepis" className="text-[#FF007F] text-glow hover:text-[#FF66B2] transition flex items-center gap-1">
-                <span>➕</span> Dodaj przepis
+                <FaPlus className="inline" /> Dodaj przepis
               </Link>
             )}
 
             <Link to="/o-mnie" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <span>👸</span> O mnie
+              <FaUser className="text-[#FF66B2]" /> O mnie
             </Link>
 
             {isAuthenticated ? (
               <button
                 onClick={handleLogout}
-                className="text-red-500 hover:text-red-400 transition font-bold"
+                className="text-red-500 hover:text-red-400 transition font-bold flex items-center gap-1"
               >
-                Wyloguj
+                <FaSignOutAlt /> Wyloguj
               </button>
             ) : (
               <Link to="/login" className="text-[#FF1493] text-glow hover:text-[#FF66B2] transition font-black">
@@ -89,28 +89,28 @@ export default function Layout() {
         {isMobileMenuOpen && (
           <nav className="md:hidden absolute top-16 left-0 w-full bg-[#160A22] border-b border-[#25113A] shadow-neon flex flex-col py-4 px-6 gap-4 font-bold text-gray-200 z-40">
             <Link to="/" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <span>✨</span> Przepisy
+              <FaSparkles className="text-[#FF66B2]" /> Przepisy
             </Link>
             <Link to="/zakupy" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <span>🛍️</span> Lista zakupów
+              <FaShoppingCart className="text-[#FF66B2]" /> Lista zakupów
             </Link>
             <Link to="/ulubione" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <span>{isFav ? <FaRegHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}</span> Ulubione przepisy
+              <FaHeart className="text-[#FF1493]" /> Ulubione przepisy
             </Link>
 
             {isAuthenticated && (
               <Link to="/dodaj-przepis" className="py-2 border-b border-[#25113A] text-[#FF007F] text-glow flex items-center gap-2" onClick={closeMenu}>
-                <span>➕</span> Dodaj nowy przepis
+                <FaPlus /> Dodaj nowy przepis
               </Link>
             )}
 
             <Link to="/o-mnie" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <span>👸</span> O mnie
+              <FaUser className="text-[#FF66B2]" /> O mnie
             </Link>
 
             {isAuthenticated ? (
-              <button onClick={handleLogout} className="py-2 text-left text-red-500">
-                Wyloguj administratora
+              <button onClick={handleLogout} className="py-2 text-left text-red-500 flex items-center gap-2">
+                <FaSignOutAlt /> Wyloguj administratora
               </button>
             ) : (
               <Link to="/login" className="py-2 text-[#FF1493] text-glow" onClick={closeMenu}>
@@ -127,7 +127,7 @@ export default function Layout() {
 
       <footer className="bg-[#0B0510] border-t border-[#25113A] py-12 text-center text-sm text-gray-400">
         <p className="font-bold text-white mb-1 flex justify-center items-center gap-2 text-lg">
-          <span><FaCrown className="text-[#FF1493] inline"/></span> Diamentowe Smaki <span>💎</span>
+          <FaCrown className="text-[#FF1493]" /> Diamentowe Smaki <FaGem className="text-[#FF007F] text-glow" />
         </p>
         <p>© {new Date().getFullYear()} Wszystkie prawa zastrzeżone.</p>
       </footer>
