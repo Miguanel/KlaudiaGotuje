@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaCrown, FaGem, FaHeart, FaShoppingCart, FaPlus, FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { FaCrown, FaGem, FaHeart, FaRegHeart, FaShoppingCart, FaPlus, FaUser, FaSignOutAlt } from 'react-icons/fa';
 
 export default function Layout() {
   const { isAuthenticated, logout } = useAuth();
@@ -57,7 +57,7 @@ export default function Layout() {
               <span>🛍️</span> Zakupy
             </Link>
             <Link to="/ulubione" className="hover:text-[#FF1493] hover:text-glow transition flex items-center gap-1.5">
-              <span>{isFav ? <FaHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}</span> Ulubione
+              <span>{isFav ? <FaRegHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}</span> Ulubione
             </Link>
 
             {isAuthenticated && (
@@ -95,7 +95,7 @@ export default function Layout() {
               <span>🛍️</span> Lista zakupów
             </Link>
             <Link to="/ulubione" className="py-2 border-b border-[#25113A] hover:text-[#FF1493] hover:text-glow flex items-center gap-2" onClick={closeMenu}>
-              <span>{isFav ? <FaHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}</span> Ulubione przepisy
+              <span>{isFav ? <FaRegHeart className="text-[#FF1493]" /> : <FaRegHeart className="text-gray-400" />}</span> Ulubione przepisy
             </Link>
 
             {isAuthenticated && (
