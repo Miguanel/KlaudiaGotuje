@@ -2,32 +2,34 @@
 @import "tailwindcss";
 
 @theme {
-  /* Główne kolory w stylu Neon / Księżniczka */
-  --color-pink-400: #FF66B2;
-  --color-pink-500: #FF1493; /* Głębsza Fuksja */
-  --color-pink-600: #FF007F; /* Neonowy Róż */
-
-  /* Ciemne, mroczne tła podbijające neony */
-  --color-dark-900: #0B0510; /* Prawie czarny fiolet */
-  --color-dark-800: #160A22; /* Ciemne tło kart */
-  --color-dark-700: #25113A; /* Obramowania i detale */
+  /* Główne kolory: Śliwka, Atramentowy Granat, Chabrowy, Burgund, Czerwień Chili, Złoto */
+  --color-plum-900: #1A0D16;
+  --color-navy-card: #0D1321;
+  --color-cobalt: #1F51FF;
+  --color-burgundy: #540B0E;
+  --color-chili: #E60026;
+  --color-gold: #D4AF37;
+  --color-ecru: #FDFBF7;
 }
 
 body {
-  background-color: var(--color-dark-900) !important;
-  color: white !important;
+  background-color: #1A0D16 !important;
+  color: #FDFBF7 !important;
 }
 
-/* Własne klasy dla neonowego blasku i luksusowych akcentów */
+/* Własne klasy dla neonowego blasku (Chaber i Czerwień) oraz złota */
 @utility text-glow {
-  text-shadow: 0 0 10px rgba(255, 20, 147, 0.8), 0 0 20px rgba(255, 20, 147, 0.4);
+  text-shadow: 0 0 10px rgba(31, 81, 255, 0.6), 0 0 20px rgba(31, 81, 255, 0.3);
 }
 
 @utility shadow-neon {
-  box-shadow: 0 0 15px rgba(255, 20, 147, 0.3), 0 0 5px rgba(255, 20, 147, 0.1);
+  box-shadow: 0 0 15px rgba(31, 81, 255, 0.35), 0 0 5px rgba(31, 81, 255, 0.15);
 }
 
-/* Nowe efekty złota i srebra */
+@utility shadow-chili {
+  box-shadow: 0 0 15px rgba(230, 0, 38, 0.4), 0 0 5px rgba(230, 0, 38, 0.2);
+}
+
 @utility text-gold {
   background: linear-gradient(135deg, #FFF6BD 0%, #D4AF37 50%, #AA771C 100%);
   -webkit-background-clip: text;
@@ -35,21 +37,9 @@ body {
   filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
 }
 
-@utility text-silver {
-  background: linear-gradient(135deg, #FFFFFF 0%, #C0C0C0 50%, #808080 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 8px rgba(192, 192, 192, 0.4));
-}
-
-@utility border-gold {
-  border-color: #D4AF37;
-  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-}
-
-@utility border-silver {
-  border-color: #C0C0C0;
-  box-shadow: 0 0 10px rgba(192, 192, 192, 0.2);
+@utility border-burgundy {
+  border-color: #540B0E;
+  box-shadow: 0 0 10px rgba(84, 11, 14, 0.3);
 }
 
 /* Konfiguracja dla drukarek */

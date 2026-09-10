@@ -41,41 +41,41 @@ export default function Login() {
   };
 
   return (
-    <div className="max-w-md mx-auto px-4 py-20 text-white">
-      <div className="bg-[#160A22] p-8 rounded-3xl border border-[#25113A] shadow-neon">
+    <div className="max-w-md mx-auto px-4 py-20 text-[#FDFBF7]">
+      <div className="bg-[#0D1321] p-8 rounded-3xl border border-[#540B0E] shadow-neon">
         <div className="text-center mb-6">
-          <FaCrown className="text-amber-400 text-3xl mx-auto mb-2" style={{ filter: 'drop-shadow(0 0 8px rgba(251,191,36,0.6))' }} />
+          <FaCrown className="text-[#D4AF37] text-3xl mx-auto mb-2" style={{ filter: 'drop-shadow(0 0 8px rgba(212,175,35,0.6))' }} />
           <h1 className="text-2xl font-black text-gold">Panel Administratora</h1>
-          <p className="text-gray-400 text-sm mt-1">Zaloguj się, aby zarządzać serwisem.</p>
+          <p className="text-gray-300 text-sm mt-1">Zaloguj się, aby zarządzać serwisem.</p>
         </div>
 
         {error && (
-          <div className="bg-red-950/60 border border-red-900 text-red-300 p-3 rounded-xl text-sm mb-4 text-center font-bold">
+          <div className="bg-red-950/80 border border-red-900 text-red-200 p-3 rounded-xl text-sm mb-4 text-center font-bold">
             {error}
           </div>
         )}
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
-            <label className="block text-xs font-black text-gray-400 uppercase mb-1">Login</label>
+            <label className="block text-xs font-black text-gray-300 uppercase mb-1">Login</label>
             <input
               type="text"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full px-4 py-2.5 bg-[#0B0510] border border-[#25113A] rounded-xl focus:ring-2 focus:ring-[#FF1493] focus:border-[#FF1493] outline-none transition-all text-white"
+              className="w-full px-4 py-2.5 bg-[#1A0D16] border border-[#540B0E] rounded-xl focus:ring-2 focus:ring-[#1F51FF] focus:border-[#1F51FF] outline-none transition-all text-[#FDFBF7]"
               placeholder="Wpisz login..."
             />
           </div>
 
           <div>
-            <label className="block text-xs font-black text-gray-400 uppercase mb-1">Hasło</label>
+            <label className="block text-xs font-black text-gray-300 uppercase mb-1">Hasło</label>
             <input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2.5 bg-[#0B0510] border border-[#25113A] rounded-xl focus:ring-2 focus:ring-[#FF1493] focus:border-[#FF1493] outline-none transition-all text-white"
+              className="w-full px-4 py-2.5 bg-[#1A0D16] border border-[#540B0E] rounded-xl focus:ring-2 focus:ring-[#1F51FF] focus:border-[#1F51FF] outline-none transition-all text-[#FDFBF7]"
               placeholder="••••••••"
             />
           </div>
@@ -83,7 +83,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-[#FF1493] text-white font-black rounded-xl hover:bg-[#FF007F] transition-all shadow-neon disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-[#E60026] text-[#FDFBF7] font-black rounded-xl hover:bg-red-700 transition-all shadow-chili disabled:opacity-50 flex items-center justify-center gap-2"
           >
             <FaLock /> {loading ? 'Logowanie...' : 'Zaloguj się'}
           </button>

@@ -73,18 +73,18 @@ export default function ShoppingList() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12 text-white">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-[#25113A] pb-6">
+    <div className="max-w-3xl mx-auto px-4 py-12 text-[#FDFBF7]">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-[#540B0E] pb-6">
         <div>
-          <h1 className="text-3xl font-black text-white tracking-tight mb-1 flex items-center gap-2">
-            <span className="text-gold">Twoja lista zakupów</span> <FaShoppingCart className="text-[#FF1493]" />
+          <h1 className="text-3xl font-black text-[#FDFBF7] tracking-tight mb-1 flex items-center gap-2">
+            <span className="text-gold">Twoja lista zakupów</span> <FaShoppingCart className="text-[#1F51FF]" style={{ filter: 'drop-shadow(0 0 6px rgba(31,81,255,0.8))' }} />
           </h1>
-          <p className="text-gray-400 text-sm">Składniki z wielu przepisów zostały automatycznie zsumowane. ✨</p>
+          <p className="text-gray-300 text-sm">Składniki z wielu przepisów zostały automatycznie zsumowane. ✨</p>
         </div>
         {items.length > 0 && (
           <button
             onClick={clearList}
-            className="text-sm font-bold text-red-400 hover:text-red-300 bg-red-950/40 border border-red-900/50 hover:bg-red-900/50 px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5"
+            className="text-sm font-bold text-red-400 hover:text-red-300 bg-red-950/50 border border-red-900/50 hover:bg-red-900/50 px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5"
           >
             <FaTrash /> Wyczyść całą listę
           </button>
@@ -92,34 +92,34 @@ export default function ShoppingList() {
       </div>
 
       {items.length === 0 ? (
-        <div className="bg-[#160A22] p-12 text-center rounded-3xl border border-[#25113A] shadow-neon">
-          <p className="text-gray-400 text-lg mb-4">Twoja lista zakupów jest pusta.</p>
+        <div className="bg-[#0D1321] p-12 text-center rounded-3xl border border-[#540B0E] shadow-neon">
+          <p className="text-gray-300 text-lg mb-4">Twoja lista zakupów jest pusta.</p>
           <Link
             to="/"
-            className="inline-block bg-[#FF1493] text-white font-black px-6 py-3 rounded-xl hover:bg-[#FF007F] transition-all shadow-neon"
+            className="inline-block bg-[#E60026] text-[#FDFBF7] font-black px-6 py-3 rounded-xl hover:bg-red-700 transition-all shadow-chili"
           >
             Przeglądaj przepisy ✨
           </Link>
         </div>
       ) : (
-        <div className="bg-[#160A22] rounded-3xl border border-[#25113A] shadow-neon overflow-hidden">
-          <ul className="divide-y divide-[#25113A]">
+        <div className="bg-[#0D1321] rounded-3xl border border-[#540B0E] shadow-neon overflow-hidden">
+          <ul className="divide-y divide-[#540B0E]">
             {items.map(item => (
               <li
                 key={item.id}
                 onClick={() => toggleItem(item.id)}
-                className={`flex items-center justify-between p-4 hover:bg-[#25113A]/30 cursor-pointer transition-colors ${
-                  item.checked ? 'bg-[#0B0510]/50' : ''
+                className={`flex items-center justify-between p-4 hover:bg-[#540B0E]/20 cursor-pointer transition-colors ${
+                  item.checked ? 'bg-[#1A0D16]/50' : ''
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors ${
-                    item.checked ? 'bg-[#FF1493] border-[#FF1493] text-white shadow-neon' : 'border-[#25113A] bg-[#0B0510]'
+                    item.checked ? 'bg-[#1F51FF] border-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'border-[#540B0E] bg-[#1A0D16]'
                   }`}>
                     {item.checked && <FaCheck className="w-3.5 h-3.5" />}
                   </div>
                   <div>
-                    <span className={`text-gray-200 font-bold capitalize block ${item.checked ? 'line-through text-gray-500' : ''}`}>
+                    <span className={`text-[#FDFBF7] font-bold capitalize block ${item.checked ? 'line-through text-gray-500' : ''}`}>
                       {item.name}
                     </span>
                     {item.recipes && item.recipes.length > 0 && (
@@ -131,7 +131,7 @@ export default function ShoppingList() {
                 </div>
 
                 <div className="flex items-center gap-4">
-                  <span className={`font-black text-gray-200 bg-[#0B0510] border border-[#25113A] px-3 py-1.5 rounded-xl text-sm ${item.checked ? 'line-through text-gray-500' : ''}`}>
+                  <span className={`font-black text-[#FDFBF7] bg-[#1A0D16] border border-[#540B0E] px-3 py-1.5 rounded-xl text-sm ${item.checked ? 'line-through text-gray-500' : ''}`}>
                     {typeof item.quantity === 'number' && !Number.isInteger(item.quantity)
                       ? item.quantity.toFixed(1)
                       : item.quantity} {item.unit}
