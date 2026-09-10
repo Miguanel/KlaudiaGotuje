@@ -9,7 +9,7 @@ export default function About() {
         <div className="w-48 h-48 md:w-64 md:h-64 flex-shrink-0 relative">
           <div className="absolute inset-0 rounded-full border-2 border-[#D4AF37]/60 shadow-[0_0_15px_rgba(212,175,35,0.3)] animate-pulse"></div>
           <img
-            src="https://placehold.co/400x400/0D1321/1F51FF?text=Engibadwoman"
+            src="/src/assets/engibadwoman.jpg"
             alt="Engibadwoman"
             className="w-full h-full object-cover rounded-full shadow-neon border-4 border-[#540B0E]"
           />
