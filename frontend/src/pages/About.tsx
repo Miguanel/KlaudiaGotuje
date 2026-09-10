@@ -1,4 +1,5 @@
 import { FaCrown, FaGem, FaEnvelope } from 'react-icons/fa';
+import profileImg from '../assets/engibadwoman.jpg';
 
 export default function About() {
   return (
@@ -9,7 +10,7 @@ export default function About() {
         <div className="w-48 h-48 md:w-64 md:h-64 flex-shrink-0 relative">
           <div className="absolute inset-0 rounded-full border-2 border-[#D4AF37]/60 shadow-[0_0_15px_rgba(212,175,35,0.3)] animate-pulse"></div>
           <img
-            src="/src/assets/engibadwoman.jpg"
+            src={profileImg}
             alt="Engibadwoman"
             className="w-full h-full object-cover rounded-full shadow-neon border-4 border-[#540B0E]"
           />
