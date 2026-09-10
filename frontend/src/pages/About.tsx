@@ -20,13 +20,14 @@ export default function About() {
           <h1 className="text-4xl font-black text-[#FDFBF7] mb-4 flex items-center justify-center md:justify-start gap-2">
             <FaCrown className="text-[#D4AF37]" /> <span className="text-gold">Cześć!</span> 👋
           </h1>
-          <p className="text-lg text-[#FDFBF7] leading-relaxed mb-6 font-medium">
-            Witaj w moim ekskluzywnym kulinarnym świecie. Łączę pasję do wyjątkowych smaków
-            z mroczną, elegancką estetyką glamour. Znajdziesz tu zarówno wykwintne dania, jak
-            i sprawdzone przepisy z charakterem.
+          <p className="text-base md:text-lg text-[#FDFBF7] leading-relaxed mb-4 font-medium">
+            Witaj w moim ekskluzywnym kulinarnym świecie, gdzie zasady dyktuje smak, a kompromisy nie istnieją. Jestem kobietą nadwyraz wybredną – jeśli coś trafia na mój talerz, musi być po prostu perfekcyjne. Mój czarny humor to tylko część mnie, ale to właśnie dzięki temu specyficznemu podejściu do życia tworzę dania zupełnie inne niż wszystkie. Kuchnia to dla mnie sztuka, magia i wolność.
           </p>
-          <p className="text-lg text-[#FDFBF7] leading-relaxed mb-8 font-medium">
-            Wierzę, że gotowanie to prawdziwa sztuka i magia. Rozgość się w mojej księdze przepisów! ✨
+          <p className="text-base md:text-lg text-[#FDFBF7] leading-relaxed mb-4 font-medium">
+            Nie znajdziesz tu nudy. Przełamuję schematy i łączę kuchnię tradycyjną, nowoczesną oraz potrawy na diecie. Sama schudłam prawie 50 kg i chętnie pokażę Ci, jak to zrobiłam! Ale uwaga – nie mam zamiaru ograniczać się do nudnych, „suchych” fit porad czy wyłącznie niskokalorycznych przepisów. Gotuję zdrowo, mądrze i z ogromną pasją, ale przede wszystkim: gotuję z charakterem. Znajdziesz tu zarówno lekkie, wysokobiałkowe posiłki, jak i domowe pieczywo czy rozpustne desery.
+          </p>
+          <p className="text-base md:text-lg text-[#FDFBF7] leading-relaxed mb-8 font-medium">
+            Rozgość się w mojej księdze przepisów i odkryj smaki w wersji premium! ✨
           </p>
 
           {/* Sekcja kontaktowa */}

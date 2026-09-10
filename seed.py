@@ -24,13 +24,51 @@ def run_seed():
     cat_zupy = Category.objects.create(name="Zupy", parent_category=cat_obiady)
     cat_dania = Category.objects.create(name="Dania główne", parent_category=cat_obiady)
 
-    print("Tworzenie tagów (zgodnych z nowym filtrem)...")
-    tag_makarony = Tag.objects.create(name="Makarony")
-    tag_drozdzowe = Tag.objects.create(name="Drożdżowe")
-    tag_przetwory = Tag.objects.create(name="Przetwory")
-    tag_fit = Tag.objects.create(name="Fit / Lekka")
-    tag_szybkie = Tag.objects.create(name="Szybkie")
-    tag_tradycyjne = Tag.objects.create(name="Tradycyjne")
+    print("Tworzenie pełnej listy tagów...")
+
+    tag_names = [
+        # Kategorie posiłków i typy dań
+        "Śniadania", "Obiady", "Kolacje", "Przystawki", "Zupy", "Dania główne",
+        "Desery", "Lunchbox", "Przekąski", "Dania jednogarnkowe", "Sosy i dipy",
+
+        # Diety i preferencje
+        "Fit", "Lekka", "Bez glutenu", "Wysokobiałkowe", "Zamienniki słodyczy fit",
+        "Zamienniki słodyczy z dobrym składem", "Niskokaloryczne (Low Calorie)",
+        "Bez cukru", "Keto / Low Carb", "Zdrowe tłuszcze",
+
+        # Mięso i ryby
+        "Z mięsem", "Dania drobiowe (Kurczak/Indyk)", "Wołowina & Wieprzowina", "Ryby", "Bez mięsa",
+
+        # Mączna magia, pieczywo i tradycja
+        "Mączna Magia, Domowa Piekarnia & Tradycja", "Chleby / pieczywo", "Domowy chleb",
+        "Drożdżowe", "Makarony", "Kluski", "Pierogi", "Naleśniki", "Gofry",
+        "Pączki, oponki", "Rogale i rogaliki", "Bez pieczenia", "Ciasta i ciasteczka",
+        "Wypieki na zakwasie", "Tarty na słodko i słono", "Cieszyńskie ciasteczka",
+
+        # Sezonowe i okazjonalne
+        "Sezonowe", "Wiosna", "Lato", "Jesień", "Zima", "Jesieniara", "Halloween",
+        "Tłusty czwartek", "Wielkanoc", "Boże Narodzenie", "Imprezy", "Grill przystawki",
+        "Walentynki", "Sylwester", "Klimatyczne wieczory",
+
+        # Smaki i składniki wiodące
+        "Na słodko", "Na słono", "Ostre / Pikantne", "Cukinia", "Dynia", "Ziemniaki",
+        "Jabłka", "Cynamon", "Jajka", "Owsianki", "Sałatki", "Owoce leśne",
+        "Czekolada", "Twaróg / Nabiał", "Warzywa korzeniowe", "Grzyby",
+
+        # Spiżarnia
+        "Spiżarnia", "Domowe weki", "Nalewki", "Napoje", "Koktajle",
+        "Koktajle białkowe", "Rozgrzewające napary", "Kawy i herbaty smakowe",
+
+        # Czas, sprzęt i technika
+        "Czas, Sprzęt & Technika", "Szybkie (do 20 minut)", "Na zimno",
+        "Air fryer (Frytkownica beztłuszczowa)", "Tradycyjne", "Tanie gotowanie",
+        "Z kilku składników", "Z piekarnika", "Przetwory"
+    ]
+
+    # Dynamiczne utworzenie słownika tagów w bazie, aby łatwo przypisywać je do przepisów
+    tags_dict = {}
+    for name in tag_names:
+        tags_dict[name] = Tag.objects.create(name=name)
 
     print("Generowanie przepisów dopasowanych do nowych tagów...")
 
@@ -39,7 +77,7 @@ def run_seed():
         {
             "name": "Spaghetti Carbonara z boczkiem",
             "category": cat_dania,
-            "tags": [tag_makarony, tag_tradycyjne],
+            "tags": [tags_dict["Makarony"], tags_dict["Tradycyjne"], tags_dict["Z mięsem"]],
             "description": "Klasyczne włoskie spaghetti z chrupiącym boczkiem, żółtkami i serem Pecorino.",
             "prep_time": 25,
             "ingredients": [
@@ -58,7 +96,7 @@ def run_seed():
         {
             "name": "Domowe tagliatelle w sosie pomidorowym",
             "category": cat_dania,
-            "tags": [tag_makarony, tag_szybkie],
+            "tags": [tags_dict["Makarony"], tags_dict["Szybkie (do 20 minut)"], tags_dict["Bez mięsa"]],
             "description": "Świeży makaron wstążki w lekkim sosie z pomidorów i świeżej bazylii.",
             "prep_time": 20,
             "ingredients": [
@@ -76,7 +114,7 @@ def run_seed():
         {
             "name": "Makaron z sosem szpinakowym i fetą",
             "category": cat_dania,
-            "tags": [tag_makarony, tag_fit],
+            "tags": [tags_dict["Makarony"], tags_dict["Fit"], tags_dict["Lekka"], tags_dict["Bez mięsa"]],
             "description": "Kremowy, zielony sos ze szpinaku i czosnku z dodatkiem słonej fety.",
             "prep_time": 25,
             "ingredients": [
@@ -96,7 +134,7 @@ def run_seed():
         {
             "name": "Domowa pizza na puszystym cieście drożdżowym",
             "category": cat_dania,
-            "tags": [tag_drozdzowe, tag_tradycyjne],
+            "tags": [tags_dict["Drożdżowe"], tags_dict["Tradycyjne"], tags_dict["Imprezy"]],
             "description": "Prawdziwa domowa pizza z ciągnącym się sosem pomidorowym i serem.",
             "prep_time": 90,
             "ingredients": [
@@ -116,7 +154,7 @@ def run_seed():
         {
             "name": "Słodkie bułeczki drożdżowe z kruszonką",
             "category": cat_desery,
-            "tags": [tag_drozdzowe],
+            "tags": [tags_dict["Drożdżowe"], tags_dict["Ciasta i ciasteczka"], tags_dict["Na słodko"]],
             "description": "Mięciutkie, pachnące maślanym aromatem bułeczki z chrupiącą kruszonką.",
             "prep_time": 120,
             "ingredients": [
@@ -136,7 +174,7 @@ def run_seed():
         {
             "name": "Puszyste drożdżówki z jagodami",
             "category": cat_desery,
-            "tags": [tag_drozdzowe],
+            "tags": [tags_dict["Drożdżowe"], tags_dict["Owoce leśne"], tags_dict["Sezonowe"]],
             "description": "Letni klasyk – puszyste ciasto drożdżowe wypełnione po brzegi słodkimi jagodami.",
             "prep_time": 90,
             "ingredients": [
@@ -155,7 +193,7 @@ def run_seed():
         {
             "name": "Domowa konfitura truskawkowa",
             "category": cat_desery,
-            "tags": [tag_przetwory, tag_tradycyjne],
+            "tags": [tags_dict["Przetwory"], tags_dict["Domowe weki"], tags_dict["Spiżarnia"]],
             "description": "Gęsta, aromatyczna konfitura z całymi owocami truskawek na zimowe wieczory.",
             "prep_time": 180,
             "ingredients": [
@@ -172,7 +210,7 @@ def run_seed():
         {
             "name": "Tradycyjne ogórki kiszone",
             "category": cat_dania,
-            "tags": [tag_przetwory, tag_tradycyjne],
+            "tags": [tags_dict["Przetwory"], tags_dict["Domowe weki"], tags_dict["Tradycyjne"]],
             "description": "Chrupiące, idealnie ukiszone ogórki z czosnkiem, chrzanem i koprem.",
             "prep_time": 40,
             "ingredients": [
@@ -191,7 +229,7 @@ def run_seed():
         {
             "name": "Domowy dżem malinowy",
             "category": cat_desery,
-            "tags": [tag_przetwory],
+            "tags": [tags_dict["Przetwory"], tags_dict["Domowe weki"], tags_dict["Spiżarnia"]],
             "description": "Słodko-kwaśny dżem z malin doskonały do naleśników i herbaty.",
             "prep_time": 60,
             "ingredients": [
@@ -209,7 +247,7 @@ def run_seed():
         {
             "name": "Lekka sałatka z kurczakiem i awokado",
             "category": cat_dania,
-            "tags": [tag_fit, tag_szybkie],
+            "tags": [tags_dict["Fit"], tags_dict["Lekka"], tags_dict["Sałatki"], tags_dict["Szybkie (do 20 minut)"]],
             "description": "Orzeźwiająca, pełna białka i zdrowych tłuszczów sałatka obiadowa.",
             "prep_time": 20,
             "ingredients": [
@@ -227,7 +265,7 @@ def run_seed():
         {
             "name": "Fit koktajl szpinakowy z bananem",
             "category": cat_napoje,
-            "tags": [tag_fit, tag_szybkie],
+            "tags": [tags_dict["Fit"], tags_dict["Koktajle"], tags_dict["Napoje"], tags_dict["Szybkie (do 20 minut)"]],
             "description": "Błyskawiczny, witaminowy zastrzyk energii na bazie świeżego szpinaku.",
             "prep_time": 5,
             "ingredients": [
@@ -245,7 +283,7 @@ def run_seed():
         {
             "name": "Kremowa owsianka z masłem orzechowym",
             "category": cat_sniadania,
-            "tags": [tag_fit, tag_szybkie],
+            "tags": [tags_dict["Śniadania"], tags_dict["Owsianki"], tags_dict["Fit"], tags_dict["Wysokobiałkowe"]],
             "description": "Sycące śniadanie bogate w białko i błonnik, idealne przed treningiem.",
             "prep_time": 10,
             "ingredients": [
@@ -261,11 +299,12 @@ def run_seed():
             ]
         },
 
-        # --- SZYBKIE I TRADYCYJNE (Dodatkowe wypełnienie do 15-20 przepisów) ---
+        # --- DODATKOWE ---
         {
             "name": "Klasyczna jajecznica na maśle",
             "category": cat_sniadania,
-            "tags": [tag_szybkie, tag_tradycyjne],
+            "tags": [tags_dict["Śniadania"], tags_dict["Szybkie (do 20 minut)"], tags_dict["Tradycyjne"],
+                     tags_dict["Jajka"]],
             "description": "Prosty, ale idealny przepis na kremową jajecznicę. Doskonały start każdego dnia.",
             "prep_time": 10,
             "ingredients": [
@@ -282,7 +321,7 @@ def run_seed():
         {
             "name": "Tradycyjny Rosół domowy",
             "category": cat_zupy,
-            "tags": [tag_tradycyjne],
+            "tags": [tags_dict["Zupy"], tags_dict["Tradycyjne"], tags_dict["Z mięsem"]],
             "description": "Królowa polskich zup. Niedzielny klasyk na drobiowym mięsie.",
             "prep_time": 180,
             "ingredients": [
@@ -300,7 +339,8 @@ def run_seed():
         {
             "name": "Kotlet schabowy z ziemniakami",
             "category": cat_dania,
-            "tags": [tag_tradycyjne],
+            "tags": [tags_dict["Dania główne"], tags_dict["Tradycyjne"], tags_dict["Ziemniaki"],
+                     tags_dict["Wołowina & Wieprzowina"]],
             "description": "Klasyczny polski obiad – chrupiący schabowy i ziemniaki z koperkiem.",
             "prep_time": 40,
             "ingredients": [
@@ -317,7 +357,7 @@ def run_seed():
         {
             "name": "Domowa szarlotka z kruszonką",
             "category": cat_desery,
-            "tags": [tag_tradycyjne],
+            "tags": [tags_dict["Desery"], tags_dict["Ciasta i ciasteczka"], tags_dict["Jabłka"], tags_dict["Cynamon"]],
             "description": "Kultowe ciasto z mnóstwem jabłek i chrupiącą maślaną kruszonką.",
             "prep_time": 90,
             "ingredients": [
@@ -334,7 +374,7 @@ def run_seed():
         {
             "name": "Domowa lemoniada cytrynowa",
             "category": cat_napoje,
-            "tags": [tag_szybkie, tag_fit],
+            "tags": [tags_dict["Napoje"], tags_dict["Szybkie (do 20 minut)"], tags_dict["Fit"], tags_dict["Na zimno"]],
             "description": "Orzeźwiający, chłodzący napój pełen witaminy C z miętą.",
             "prep_time": 10,
             "ingredients": [
@@ -378,7 +418,7 @@ def run_seed():
                 instruction=step_text
             )
 
-    print(f"Sukces! Baza została zasilona zestawem {len(recipes_data)} przepisów.")
+    print(f"Sukces! Baza została zasilona zestawem {len(recipes_data)} przepisów i pełną listą tagów.")
 
 
 if __name__ == "__main__":
