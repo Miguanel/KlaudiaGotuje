@@ -69,44 +69,44 @@ export default function Home() {
   const nazwaAktywnejKategorii = aktywnaKategoria ? categories.find(c => c.slug === aktywnaKategoria)?.name : null;
   const nazwaAktywnegoTagu = aktywnyTag ? tags.find(t => t.slug === aktywnyTag)?.name : null;
 
-  if (error) return <div className="p-10 text-center text-[#E60026] font-medium">Błąd: {error}</div>;
+  if (error) return <div className="p-4 sm:p-10 text-center text-[#E60026] font-medium break-words">Błąd: {error}</div>;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-12 text-[#FDFBF7]">
+    <div className="max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-12 text-[#FDFBF7] overflow-x-hidden">
       {/* OKRUSZKI (BREADCRUMBS) */}
-      <nav className="flex items-center text-[15px] text-gray-300 font-medium mb-6 bg-[#0D1321] border border-[#540B0E] px-4 py-2.5 rounded-xl shadow-sm w-fit">
-        <button onClick={() => setSearchParams({})} className="text-[#1F51FF] hover:text-[#FDFBF7] transition-all flex items-center gap-1.5 font-bold">
-          <MdAutoFixHigh className="text-[#1F51FF]" /> Przepisy
+      <nav className="flex flex-wrap items-center gap-y-2 gap-x-1 sm:gap-x-2 text-xs sm:text-[15px] text-gray-300 font-medium mb-6 bg-[#0D1321] border border-[#540B0E] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-sm w-full sm:w-fit break-words">
+        <button onClick={() => setSearchParams({})} className="text-[#1F51FF] hover:text-[#FDFBF7] transition-all flex items-center gap-1 sm:gap-1.5 font-bold whitespace-nowrap">
+          <MdAutoFixHigh className="text-[#1F51FF] flex-shrink-0" /> Przepisy
         </button>
         {nazwaAktywnejKategorii && (
           <>
-            <span className="mx-2 text-gray-500 font-black">›</span>
-            <span className="text-[#D4AF37] font-bold">{nazwaAktywnejKategorii}</span>
+            <span className="text-gray-500 font-black flex-shrink-0">›</span>
+            <span className="text-[#D4AF37] font-bold break-words">{nazwaAktywnejKategorii}</span>
           </>
         )}
         {nazwaAktywnegoTagu && (
           <>
-            <span className="mx-2 text-gray-500 font-black">›</span>
-            <span className="text-[#FDFBF7] font-bold">#{nazwaAktywnegoTagu}</span>
+            <span className="text-gray-500 font-black flex-shrink-0">›</span>
+            <span className="text-[#FDFBF7] font-bold break-words">#{nazwaAktywnegoTagu}</span>
           </>
         )}
       </nav>
 
       {/* NAGŁÓWEK I WYSZUKIWARKA */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-6 border-b border-[#540B0E] pb-8">
-        <div className="flex-1">
-          <h1 className="text-3xl md:text-4xl font-black text-[#FDFBF7] tracking-tight mb-2 flex items-center gap-2">
-            <FaCrown className="text-[#D4AF37]" style={{ filter: 'drop-shadow(0 0 8px rgba(212,175,35,0.6))' }} />
-            <span className="text-gold">Odkryj przepisy</span>
-            <RiDiamondFill className="text-[#D4AF37] ml-1" />
+      <div className="flex flex-col mb-6 sm:mb-8 gap-4 sm:gap-6 border-b border-[#540B0E] pb-6 sm:pb-8">
+        <div className="w-full">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-black text-[#FDFBF7] tracking-tight mb-2 flex items-center flex-wrap gap-2">
+            <FaCrown className="text-[#D4AF37] flex-shrink-0" style={{ filter: 'drop-shadow(0 0 8px rgba(212,175,35,0.6))' }} />
+            <span className="text-gold break-words">Odkryj przepisy</span>
+            <RiDiamondFill className="text-[#D4AF37] ml-1 flex-shrink-0" />
           </h1>
-          <p className="text-[#FDFBF7] text-sm md:text-base mb-6 font-medium flex items-center gap-1.5">
-            Co pysznego dzisiaj wyczarujemy? <FaGem className="text-[#D4AF37] inline" />
+          <p className="text-[#FDFBF7] text-xs sm:text-sm md:text-base mb-4 sm:mb-6 font-medium flex items-center flex-wrap gap-1.5">
+            Co pysznego dzisiaj wyczarujemy? <FaGem className="text-[#D4AF37] inline flex-shrink-0" />
           </p>
 
-          <div className="relative max-w-md">
+          <div className="relative w-full max-w-md">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg className="h-5 w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg className="h-4 w-4 sm:h-5 sm:w-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
               </svg>
             </div>
@@ -115,41 +115,41 @@ export default function Home() {
               placeholder="Szukaj przepisu lub składnika..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="block w-full pl-10 pr-3 py-2.5 border border-[#540B0E] rounded-xl leading-5 bg-[#0D1321] text-[#FDFBF7] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1F51FF] focus:border-[#1F51FF] transition-all shadow-sm"
+              className="block w-full pl-9 sm:pl-10 pr-3 py-2 sm:py-2.5 border border-[#540B0E] rounded-xl text-xs sm:text-sm leading-5 bg-[#0D1321] text-[#FDFBF7] placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#1F51FF] focus:border-[#1F51FF] transition-all shadow-sm truncate"
             />
           </div>
         </div>
       </div>
 
       {/* PASEK SORTOWANIA */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8 bg-[#0D1321] p-4 rounded-2xl border border-[#540B0E] shadow-sm">
-        <div className="flex items-center gap-3">
-          <span className="text-xs font-black text-gray-300 uppercase tracking-wider">Sortuj:</span>
+      <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-4 mb-6 sm:mb-8 bg-[#0D1321] p-3 sm:p-4 rounded-2xl border border-[#540B0E] shadow-sm">
+        <div className="flex flex-wrap items-center gap-3 w-full">
+          <span className="text-[10px] sm:text-xs font-black text-gray-300 uppercase tracking-wider flex-shrink-0 w-full sm:w-auto">Sortuj:</span>
           <button
             onClick={() => ustawParametr('sort', 'date')}
-            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'date' ? 'text-[#FDFBF7]' : 'text-gray-400 hover:text-[#1F51FF]'}`}
+            className={`text-xs sm:text-sm font-bold transition-colors flex items-center gap-1 sm:gap-1.5 ${aktualneSortowanie === 'date' ? 'text-[#FDFBF7]' : 'text-gray-400 hover:text-[#1F51FF]'}`}
           >
-            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'date' ? 'bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]' : 'bg-[#540B0E]'}`}></span>
-            Najnowsze <MdWorkspacePremium className="text-[#D4AF37] inline" />
+            <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full flex-shrink-0 ${aktualneSortowanie === 'date' ? 'bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]' : 'bg-[#540B0E]'}`}></span>
+            Najnowsze <MdWorkspacePremium className="text-[#D4AF37] inline flex-shrink-0" />
           </button>
           <button
             onClick={() => ustawParametr('sort', 'popular')}
-            className={`text-sm font-bold transition-colors flex items-center gap-1.5 ${aktualneSortowanie === 'popular' ? 'text-[#FDFBF7]' : 'text-gray-400 hover:text-[#1F51FF]'}`}
+            className={`text-xs sm:text-sm font-bold transition-colors flex items-center gap-1 sm:gap-1.5 ${aktualneSortowanie === 'popular' ? 'text-[#FDFBF7]' : 'text-gray-400 hover:text-[#1F51FF]'}`}
           >
-            <span className={`w-2 h-2 rounded-full ${aktualneSortowanie === 'popular' ? 'bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]' : 'bg-[#540B0E]'}`}></span>
-            Bestsellery <RiDiamondFill className="text-[#D4AF37] inline text-xs" />
+            <span className={`w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full flex-shrink-0 ${aktualneSortowanie === 'popular' ? 'bg-[#D4AF37] shadow-[0_0_8px_#D4AF37]' : 'bg-[#540B0E]'}`}></span>
+            Bestsellery <RiDiamondFill className="text-[#D4AF37] inline text-[10px] sm:text-xs flex-shrink-0" />
           </button>
         </div>
       </div>
 
-      {/* PASEK TAGÓW (Przeniesiony nad kategorie i posortowany alfabetycznie) */}
+      {/* PASEK TAGÓW */}
       {posortowaneTagy.length > 0 && (
-        <section className="mb-6 bg-[#0D1321] p-4 rounded-2xl border border-[#540B0E]">
-          <div className="flex items-center justify-start md:justify-center md:flex-wrap overflow-x-auto py-1 whitespace-nowrap [&::-webkit-scrollbar]:hidden gap-2">
-            <span className="text-xs font-black text-gray-400 uppercase tracking-wider mr-2">Tagi:</span>
+        <section className="mb-6 bg-[#0D1321] p-3 sm:p-4 rounded-2xl border border-[#540B0E]">
+          <div className="flex flex-wrap items-center justify-start gap-2 py-1 w-full">
+            <span className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wider mr-1 sm:mr-2">Tagi:</span>
             <button
               onClick={() => ustawParametr('tag', null)}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+              className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all ${
                 !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
               }`}
             >
@@ -159,7 +159,7 @@ export default function Home() {
               <button
                 key={`tag-pill-${tag.id}`}
                 onClick={() => ustawParametr('tag', tag.slug)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all break-words ${
                   aktywnyTag === tag.slug
                     ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon'
                     : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
@@ -172,13 +172,13 @@ export default function Home() {
         </section>
       )}
 
-      {/* FILTRY KATEGORII (Teraz pod tagami) */}
-      <section className="mb-8">
-        <div className="flex justify-start md:justify-center md:flex-wrap overflow-x-auto py-2 whitespace-nowrap [&::-webkit-scrollbar]:hidden">
+      {/* FILTRY KATEGORII */}
+      <section className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap justify-start sm:justify-center gap-2 py-2">
           <button
             onClick={() => ustawParametr('category', null)}
-            className={`inline-block px-5 py-2.5 mr-2 mb-2 rounded-xl shadow-sm font-black text-sm uppercase transition-all ${
-              !aktywnaKategoria ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili scale-105' : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
+            className={`inline-block px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-xl shadow-sm font-black text-[10px] sm:text-sm uppercase transition-all flex-shrink-0 ${
+              !aktywnaKategoria ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili sm:scale-105' : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
             }`}
           >
             Wszystkie
@@ -188,9 +188,9 @@ export default function Home() {
             <button
               key={`cat-${cat.id}`}
               onClick={() => ustawParametr('category', cat.slug)}
-              className={`inline-block px-5 py-2.5 mr-2 mb-2 rounded-xl shadow-sm font-black text-sm uppercase transition-all ${
+              className={`inline-block px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-xl shadow-sm font-black text-[10px] sm:text-sm uppercase transition-all flex-shrink-0 ${
                 aktywnaKategoria === cat.slug
-                  ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili scale-105'
+                  ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili sm:scale-105'
                   : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
               }`}
             >
@@ -203,10 +203,10 @@ export default function Home() {
       {/* KARUZELA PRZEPISÓW */}
       {!loading && recipes.length > 0 && (
         <section
-          className="relative py-4 flex items-center my-6 group"
+          className="relative py-2 sm:py-4 flex items-center my-4 sm:my-6 group"
           style={{
-            WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent)',
-            maskImage: 'linear-gradient(90deg, transparent, #000 24px, #000 calc(100% - 24px), transparent)'
+            WebkitMaskImage: 'linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent)',
+            maskImage: 'linear-gradient(90deg, transparent, #000 12px, #000 calc(100% - 12px), transparent)'
           }}
         >
           <button
@@ -217,27 +217,27 @@ export default function Home() {
           </button>
 
           <div
-            className="flex flex-nowrap gap-4 overflow-x-auto overflow-y-hidden w-full scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] select-none cursor-grab active:cursor-grabbing"
+            className="flex flex-nowrap gap-3 sm:gap-4 overflow-x-auto overflow-y-hidden w-full scroll-smooth snap-x snap-mandatory [&::-webkit-scrollbar]:hidden [-ms-overflow-style:'none'] [scrollbar-width:'none'] select-none cursor-grab active:cursor-grabbing pb-2"
             ref={carouselRef}
           >
             {recipes.map(recipe => {
               const isFav = favorites.includes(recipe.id);
               return (
-                <Link to={`/przepis/${recipe.id}`} className="flex-none w-[120px] flex flex-col text-center snap-start group/item pointer-events-auto relative" key={`carousel-${recipe.id}`}>
-                  <div className="relative w-full h-[120px] mb-2">
+                <Link to={`/przepis/${recipe.id}`} className="flex-none w-[100px] sm:w-[120px] flex flex-col text-center snap-start group/item pointer-events-auto relative" key={`carousel-${recipe.id}`}>
+                  <div className="relative w-full aspect-square mb-1.5 sm:mb-2">
                     <button
                       onClick={(e) => toggleFavorite(recipe.id, e)}
-                      className="absolute top-2 right-2 z-20 w-7 h-7 bg-[#0D1321]/90 backdrop-blur rounded-full flex items-center justify-center text-xs shadow hover:scale-110 transition-transform border border-[#540B0E]"
+                      className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 w-6 h-6 sm:w-7 sm:h-7 bg-[#0D1321]/90 backdrop-blur rounded-full flex items-center justify-center text-[10px] sm:text-xs shadow hover:scale-110 transition-transform border border-[#540B0E]"
                     >
                       {isFav ? <FaGem className="text-[#D4AF37]" /> : <FaGem className="text-gray-500" />}
                     </button>
                     <img
                       src={apiClient.utils.getImageUrl(recipe.main_image_url)}
                       alt={recipe.name}
-                      className="w-full h-full object-cover rounded-2xl shadow-sm border border-[#540B0E] group-hover/item:border-[#1F51FF] transition-all pointer-events-none"
+                      className="w-full h-full object-cover rounded-xl sm:rounded-2xl shadow-sm border border-[#540B0E] group-hover/item:border-[#1F51FF] transition-all pointer-events-none text-[8px] text-center text-gray-500 break-words"
                     />
                   </div>
-                  <span className="font-bold text-xs text-[#FDFBF7] line-clamp-2 group-hover/item:text-[#1F51FF] transition-colors">
+                  <span className="font-bold text-[10px] sm:text-xs text-[#FDFBF7] line-clamp-2 group-hover/item:text-[#1F51FF] transition-colors px-1">
                     {recipe.name}
                   </span>
                 </Link>
@@ -258,69 +258,68 @@ export default function Home() {
       {loading ? (
         <RecipeGridSkeleton />
       ) : recipes.length === 0 ? (
-        <div className="bg-[#0D1321] p-12 text-center rounded-3xl border border-[#540B0E] shadow-neon">
-          <p className="text-[#FDFBF7] text-lg font-bold flex items-center justify-center gap-2">
-            Brak przepisów spełniających wybrane kryteria. <RiSparklingFill className="text-[#1F51FF]" />
+        <div className="bg-[#0D1321] p-6 sm:p-12 text-center rounded-2xl sm:rounded-3xl border border-[#540B0E] shadow-neon">
+          <p className="text-[#FDFBF7] text-sm sm:text-lg font-bold flex flex-wrap items-center justify-center gap-2">
+            Brak przepisów spełniających wybrane kryteria. <RiSparklingFill className="text-[#1F51FF] flex-shrink-0" />
           </p>
-          <button onClick={() => setSearchParams({})} className="mt-4 text-[#1F51FF] font-black hover:underline flex items-center justify-center gap-1.5 mx-auto">
+          <button onClick={() => setSearchParams({})} className="mt-4 text-[#1F51FF] font-black text-xs sm:text-base hover:underline flex items-center justify-center gap-1.5 mx-auto">
             <MdAutoFixHigh /> Wyczyść filtry
           </button>
         </div>
       ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-8 w-full">
           {recipes.map(recipe => {
             const isFav = favorites.includes(recipe.id);
             return (
               <Link
                 to={`/przepis/${recipe.id}`}
                 key={`grid-${recipe.id}`}
-                className="group block bg-[#0D1321] rounded-[2rem] overflow-hidden border border-[#540B0E] hover:border-[#1F51FF] transition-all duration-300 relative flex flex-col justify-between hover:shadow-neon hover:-translate-y-1"
+                className="group block bg-[#0D1321] rounded-2xl sm:rounded-[2rem] overflow-hidden border border-[#540B0E] hover:border-[#1F51FF] transition-all duration-300 relative flex flex-col justify-between hover:shadow-neon hover:-translate-y-1 w-full"
               >
-                <div>
+                <div className="w-full">
                   <button
                     onClick={(e) => toggleFavorite(recipe.id, e)}
-                    className="absolute top-4 right-4 z-20 w-10 h-10 bg-[#0D1321]/90 backdrop-blur rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform border border-[#540B0E]"
+                    className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 w-8 h-8 sm:w-10 sm:h-10 bg-[#0D1321]/90 backdrop-blur rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform border border-[#540B0E]"
                     title="Polub przepis"
                   >
-                    {isFav ? <FaCrown className="text-[#D4AF37] text-base" /> : <FaGem className="text-gray-400 text-sm" />}
+                    {isFav ? <FaCrown className="text-[#D4AF37] text-sm sm:text-base" /> : <FaGem className="text-gray-400 text-xs sm:text-sm" />}
                   </button>
 
-                  <div className="aspect-[4/3] bg-[#1A0D16] overflow-hidden relative">
+                  <div className="aspect-[4/3] w-full bg-[#1A0D16] overflow-hidden relative">
                     {recipe.category && (
-                      <span className="absolute top-4 left-4 bg-[#1F51FF]/90 backdrop-blur text-xs font-black px-3 py-1.5 rounded-xl text-[#FDFBF7] z-10 shadow-neon">
+                      <span className="absolute top-2 left-2 sm:top-4 sm:left-4 bg-[#1F51FF]/90 backdrop-blur text-[10px] sm:text-xs font-black px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg sm:rounded-xl text-[#FDFBF7] z-10 shadow-neon max-w-[70%] truncate">
                         {recipe.category.name}
                       </span>
                     )}
                     <img
                       src={apiClient.utils.getImageUrl(recipe.main_image_url)}
                       alt={recipe.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100"
+                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out opacity-90 group-hover:opacity-100 text-xs text-center text-gray-500 break-words flex items-center justify-center"
                     />
                   </div>
 
-                  <div className="p-6 pb-4">
-                    <h2 className="text-xl font-black text-[#FDFBF7] group-hover:text-[#1F51FF] transition-colors line-clamp-2">
+                  <div className="p-4 sm:p-6 pb-2 sm:pb-4 w-full">
+                    <h2 className="text-lg sm:text-xl font-black text-[#FDFBF7] group-hover:text-[#1F51FF] transition-colors line-clamp-2 break-words">
                       {recipe.name}
                     </h2>
                   </div>
                 </div>
 
                 {/* DOLNY PASEK STATYSTYK */}
-                <div className="px-6 py-4 bg-[#1A0D16]/60 border-t border-[#540B0E] flex items-center justify-between text-xs font-bold text-gray-300 mt-2">
-                  <div className="flex items-center gap-4">
-                    <span className="flex items-center gap-1.5" title="Liczba komentarzy">
-                      <MdChatBubble className="text-[#1F51FF]" /> {recipe.comments_count}
+                <div className="px-4 py-3 sm:px-6 sm:py-4 bg-[#1A0D16]/60 border-t border-[#540B0E] flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-bold text-gray-300 mt-auto w-full">
+                  <div className="flex flex-wrap items-center gap-3 sm:gap-4">
+                    <span className="flex items-center gap-1 sm:gap-1.5" title="Liczba komentarzy">
+                      <MdChatBubble className="text-[#1F51FF] flex-shrink-0" /> {recipe.comments_count}
                     </span>
-                    <span className="flex items-center gap-1.5" title="Liczba zdjęć">
-                      <MdPhotoCamera className="text-[#1F51FF]" /> {recipe.photos_count}
+                    <span className="flex items-center gap-1 sm:gap-1.5" title="Liczba zdjęć">
+                      <MdPhotoCamera className="text-[#1F51FF] flex-shrink-0" /> {recipe.photos_count}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-[#D4AF37] font-black" style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,35,0.6))' }}>
-                    <MdStar className="text-base text-[#D4AF37]" />
+                  <div className="flex items-center gap-1 text-[#D4AF37] font-black flex-shrink-0" style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,35,0.6))' }}>
+                    <MdStar className="text-sm sm:text-base text-[#D4AF37] flex-shrink-0" />
                     <span className="text-gold">{recipe.average_rating !== null ? recipe.average_rating.toFixed(2) : 'Brak'}</span>
                   </div>
                 </div>
-
               </Link>
             );
           })}
