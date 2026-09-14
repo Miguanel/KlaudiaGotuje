@@ -195,14 +195,21 @@ export default function Home() {
         </div>
       </div>
 
-      {/* PANEL Z KATEGORIAMI TAGÓW (Z PŁYNNĄ ANIMACJĄ ROZWIJANIA) */}
+      {/* PANEL Z KATEGORIAMI TAGÓW (Z NIEZALEŻNYMI, PŁYNNIE ANIMOWANYMI PANELAMI) */}
       {tags.length > 0 && (
         <section className="mb-6 bg-[#0D1321] p-3 sm:p-4 rounded-2xl border border-[#540B0E]">
           <div className="flex flex-col gap-3">
             <div className="flex flex-wrap items-center gap-2 w-full">
               <span className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wider mr-1 sm:mr-2">Grupy tagów:</span>
 
-
+              <button
+                onClick={() => { ustawParametr('tag', null); setExpandedTagGroup(null); }}
+                className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all flex-shrink-0 ${
+                  !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF]'
+                }`}
+              >
+                Dowolne (wszystkie)
+              </button>
 
               {Object.entries(groupedTags).map(([groupName, groupTags]) => {
                 if (groupTags.length === 0) return null;
@@ -226,32 +233,38 @@ export default function Home() {
               })}
             </div>
 
-            {/* Płynnie rozwijany kontener tagów z krzywą cubic-bezier (wolno-szybko-wolno) */}
-            <div
-              className={`grid transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${
-                expandedTagGroup ? 'grid-rows-[1fr] opacity-100 mt-1' : 'grid-rows-[0fr] opacity-0 mt-0'
-              }`}
-            >
-              <div className="overflow-hidden">
-                {expandedTagGroup && groupedTags[expandedTagGroup].length > 0 && (
-                  <div className="p-3 sm:p-4 bg-[#1A0D16] border border-[#540B0E] rounded-xl flex flex-wrap gap-2">
-                    {groupedTags[expandedTagGroup].map(tag => (
-                      <button
-                        key={`tag-pill-${tag.id}`}
-                        onClick={() => ustawParametr('tag', tag.slug)}
-                        className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all break-words flex-shrink-0 ${
-                          aktywnyTag === tag.slug
-                            ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon'
-                            : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF] hover:text-[#1F51FF]'
-                        }`}
-                      >
-                        #{tag.name}
-                      </button>
-                    ))}
+            {/* Płynnie animowane panele dla każdej grupy z osobna */}
+            {Object.entries(groupedTags).map(([groupName, groupTags]) => {
+              if (groupTags.length === 0) return null;
+              const isGroupExpanded = expandedTagGroup === groupName;
+
+              return (
+                <div
+                  key={`panel-${groupName}`}
+                  className={`grid transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${
+                    isGroupExpanded ? 'grid-rows-[1fr] opacity-100 mt-1' : 'grid-rows-[0fr] opacity-0 mt-0'
+                  }`}
+                >
+                  <div className="overflow-hidden">
+                    <div className="p-3 sm:p-4 bg-[#1A0D16] border border-[#540B0E] rounded-xl flex flex-wrap gap-2">
+                      {groupTags.map(tag => (
+                        <button
+                          key={`tag-pill-${tag.id}`}
+                          onClick={() => ustawParametr('tag', tag.slug)}
+                          className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all break-words flex-shrink-0 ${
+                            aktywnyTag === tag.slug
+                              ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon'
+                              : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF] hover:text-[#1F51FF]'
+                          }`}
+                        >
+                          #{tag.name}
+                        </button>
+                      ))}
+                    </div>
                   </div>
-                )}
-              </div>
-            </div>
+                </div>
+              );
+            })}
           </div>
         </section>
       )}
