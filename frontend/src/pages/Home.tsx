@@ -24,6 +24,9 @@ export default function Home() {
   const { categories } = useCategories();
   const { tags } = useTags();
 
+  // Posortowanie tagów alfabetycznie dla lepszego porządku
+  const posortowaneTagy = [...tags].sort((a, b) => a.name.localeCompare(b.name, 'pl'));
+
   const [favorites, setFavorites] = useState<string[]>([]);
 
   useEffect(() => {
@@ -77,13 +80,13 @@ export default function Home() {
         </button>
         {nazwaAktywnejKategorii && (
           <>
-            <span className="mx-2 text-gray-500 font-bold">›</span>
+            <span className="mx-2 text-gray-500 font-black">›</span>
             <span className="text-[#D4AF37] font-bold">{nazwaAktywnejKategorii}</span>
           </>
         )}
         {nazwaAktywnegoTagu && (
           <>
-            <span className="mx-2 text-gray-500 font-bold">›</span>
+            <span className="mx-2 text-gray-500 font-black">›</span>
             <span className="text-[#FDFBF7] font-bold">#{nazwaAktywnegoTagu}</span>
           </>
         )}
@@ -139,6 +142,64 @@ export default function Home() {
         </div>
       </div>
 
+      {/* PASEK TAGÓW (Przeniesiony nad kategorie i posortowany alfabetycznie) */}
+      {posortowaneTagy.length > 0 && (
+        <section className="mb-6 bg-[#0D1321] p-4 rounded-2xl border border-[#540B0E]">
+          <div className="flex items-center justify-start md:justify-center md:flex-wrap overflow-x-auto py-1 whitespace-nowrap [&::-webkit-scrollbar]:hidden gap-2">
+            <span className="text-xs font-black text-gray-400 uppercase tracking-wider mr-2">Tagi:</span>
+            <button
+              onClick={() => ustawParametr('tag', null)}
+              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
+              }`}
+            >
+              Dowolne
+            </button>
+            {posortowaneTagy.map(tag => (
+              <button
+                key={`tag-pill-${tag.id}`}
+                onClick={() => ustawParametr('tag', tag.slug)}
+                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
+                  aktywnyTag === tag.slug
+                    ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon'
+                    : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
+                }`}
+              >
+                #{tag.name}
+              </button>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* FILTRY KATEGORII (Teraz pod tagami) */}
+      <section className="mb-8">
+        <div className="flex justify-start md:justify-center md:flex-wrap overflow-x-auto py-2 whitespace-nowrap [&::-webkit-scrollbar]:hidden">
+          <button
+            onClick={() => ustawParametr('category', null)}
+            className={`inline-block px-5 py-2.5 mr-2 mb-2 rounded-xl shadow-sm font-black text-sm uppercase transition-all ${
+              !aktywnaKategoria ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili scale-105' : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
+            }`}
+          >
+            Wszystkie
+          </button>
+
+          {categories.map(cat => (
+            <button
+              key={`cat-${cat.id}`}
+              onClick={() => ustawParametr('category', cat.slug)}
+              className={`inline-block px-5 py-2.5 mr-2 mb-2 rounded-xl shadow-sm font-black text-sm uppercase transition-all ${
+                aktywnaKategoria === cat.slug
+                  ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili scale-105'
+                  : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
+              }`}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+      </section>
+
       {/* KARUZELA PRZEPISÓW */}
       {!loading && recipes.length > 0 && (
         <section
@@ -190,64 +251,6 @@ export default function Home() {
           >
             ❯
           </button>
-        </section>
-      )}
-
-      {/* FILTRY KATEGORII */}
-      <section className="mb-6">
-        <div className="flex justify-start md:justify-center md:flex-wrap overflow-x-auto py-2 whitespace-nowrap [&::-webkit-scrollbar]:hidden">
-          <button
-            onClick={() => ustawParametr('category', null)}
-            className={`inline-block px-5 py-2.5 mr-2 mb-2 rounded-xl shadow-sm font-black text-sm uppercase transition-all ${
-              !aktywnaKategoria ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili scale-105' : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
-            }`}
-          >
-            Wszystkie
-          </button>
-
-          {categories.map(cat => (
-            <button
-              key={`cat-${cat.id}`}
-              onClick={() => ustawParametr('category', cat.slug)}
-              className={`inline-block px-5 py-2.5 mr-2 mb-2 rounded-xl shadow-sm font-black text-sm uppercase transition-all ${
-                aktywnaKategoria === cat.slug
-                  ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili scale-105'
-                  : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>
-      </section>
-
-      {/* PASEK TAGÓW */}
-      {tags.length > 0 && (
-        <section className="mb-10">
-          <div className="flex items-center justify-start md:justify-center md:flex-wrap overflow-x-auto py-1 whitespace-nowrap [&::-webkit-scrollbar]:hidden gap-2">
-            <span className="text-xs font-black text-gray-400 uppercase tracking-wider mr-2">Tagi:</span>
-            <button
-              onClick={() => ustawParametr('tag', null)}
-              className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
-              }`}
-            >
-              Dowolne
-            </button>
-            {tags.map(tag => (
-              <button
-                key={`tag-pill-${tag.id}`}
-                onClick={() => ustawParametr('tag', tag.slug)}
-                className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all ${
-                  aktywnyTag === tag.slug
-                    ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon'
-                    : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
-                }`}
-              >
-                #{tag.name}
-              </button>
-            ))}
-          </div>
         </section>
       )}
 
