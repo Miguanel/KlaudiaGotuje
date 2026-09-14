@@ -8,7 +8,19 @@ import { apiClient } from '../api/client';
 import { RecipeGridSkeleton } from '../components/ui/Skeletons';
 import { MdAutoFixHigh, MdWorkspacePremium, MdStar, MdChatBubble, MdPhotoCamera } from 'react-icons/md';
 import { RiDiamondFill, RiSparklingFill } from 'react-icons/ri';
-import { FaCrown, FaGem } from 'react-icons/fa';
+import { FaCrown, FaGem, FaChevronDown } from 'react-icons/fa';
+
+// Słownik grupujący tagi na podstawie seed.py
+const TAG_GROUPS_DEF: Record<string, string[]> = {
+  "Kategorie dań": ["Śniadania", "Obiady", "Kolacje", "Przystawki", "Zupy", "Dania główne", "Desery", "Lunchbox", "Przekąski", "Dania jednogarnkowe", "Sosy i dipy"],
+  "Diety i preferencje": ["Fit", "Lekka", "Bez glutenu", "Wysokobiałkowe", "Zamienniki słodyczy fit", "Zamienniki słodyczy z dobrym składem", "Niskokaloryczne (Low Calorie)", "Bez cukru", "Keto / Low Carb", "Zdrowe tłuszcze"],
+  "Mięso i ryby": ["Z mięsem", "Dania drobiowe (Kurczak/Indyk)", "Wołowina & Wieprzowina", "Ryby", "Bez mięsa"],
+  "Mączna magia i tradycja": ["Mączna Magia, Domowa Piekarnia & Tradycja", "Chleby / pieczywo", "Domowy chleb", "Drożdżowe", "Makarony", "Kluski", "Pierogi", "Naleśniki", "Gofry", "Pączki, oponki", "Rogale i rogaliki", "Bez pieczenia", "Ciasta i ciasteczka", "Wypieki na zakwasie", "Tarty na słodko i słono", "Cieszyńskie ciasteczka"],
+  "Sezonowe i okazje": ["Sezonowe", "Wiosna", "Lato", "Jesień", "Zima", "Jesieniara", "Halloween", "Tłusty czwartek", "Wielkanoc", "Boże Narodzenie", "Imprezy", "Grill przystawki", "Walentynki", "Sylwester", "Klimatyczne wieczory"],
+  "Składniki wiodące": ["Na słodko", "Na słono", "Ostre / Pikantne", "Cukinia", "Dynia", "Ziemniaki", "Jabłka", "Cynamon", "Jajka", "Owsianki", "Sałatki", "Owoce leśne", "Czekolada", "Twaróg / Nabiał", "Warzywa korzeniowe", "Grzyby"],
+  "Spiżarnia i napoje": ["Spiżarnia", "Domowe weki", "Nalewki", "Napoje", "Koktajle", "Koktajle białkowe", "Rozgrzewające napary", "Kawy i herbaty smakowe"],
+  "Sprzęt i czas": ["Czas, Sprzęt & Technika", "Szybkie (do 20 minut)", "Na zimno", "Air fryer (Frytkownica beztłuszczowa)", "Tradycyjne", "Tanie gotowanie", "Z kilku składników", "Z piekarnika", "Przetwory"]
+};
 
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -24,15 +36,30 @@ export default function Home() {
   const { categories } = useCategories();
   const { tags } = useTags();
 
-  // Posortowanie tagów alfabetycznie dla lepszego porządku
-  const posortowaneTagy = [...tags].sort((a, b) => a.name.localeCompare(b.name, 'pl'));
-
   const [favorites, setFavorites] = useState<string[]>([]);
+  const [expandedTagGroup, setExpandedTagGroup] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = JSON.parse(localStorage.getItem('favorite_recipes') || '[]');
     setFavorites(saved);
   }, []);
+
+  // Automatyczne rozwijanie grupy, z której pochodzi aktywny tag po załadowaniu
+  useEffect(() => {
+    if (aktywnyTag && tags.length > 0 && !expandedTagGroup) {
+      const activeTagObj = tags.find(t => t.slug === aktywnyTag);
+      if (activeTagObj) {
+        let foundGroup = "Pozostałe";
+        for (const [groupName, tagList] of Object.entries(TAG_GROUPS_DEF)) {
+          if (tagList.includes(activeTagObj.name)) {
+            foundGroup = groupName;
+            break;
+          }
+        }
+        setExpandedTagGroup(foundGroup);
+      }
+    }
+  }, [aktywnyTag, tags, expandedTagGroup]);
 
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
@@ -68,6 +95,32 @@ export default function Home() {
 
   const nazwaAktywnejKategorii = aktywnaKategoria ? categories.find(c => c.slug === aktywnaKategoria)?.name : null;
   const nazwaAktywnegoTagu = aktywnyTag ? tags.find(t => t.slug === aktywnyTag)?.name : null;
+
+  // Funkcja logiczna parsująca pobrane tagi do grup
+  const groupedTags = Object.keys(TAG_GROUPS_DEF).reduce((acc, key) => {
+    acc[key] = [];
+    return acc;
+  }, {} as Record<string, typeof tags>);
+  groupedTags["Pozostałe"] = [];
+
+  tags.forEach(tag => {
+    let assigned = false;
+    for (const [groupName, tagNames] of Object.entries(TAG_GROUPS_DEF)) {
+      if (tagNames.includes(tag.name)) {
+        groupedTags[groupName].push(tag);
+        assigned = true;
+        break;
+      }
+    }
+    if (!assigned) {
+      groupedTags["Pozostałe"].push(tag);
+    }
+  });
+
+  // Sortowanie alfabetyczne wewnątrz utworzonych grup
+  Object.keys(groupedTags).forEach(key => {
+    groupedTags[key].sort((a, b) => a.name.localeCompare(b.name, 'pl'));
+  });
 
   if (error) return <div className="p-4 sm:p-10 text-center text-[#E60026] font-medium break-words">Błąd: {error}</div>;
 
@@ -142,37 +195,67 @@ export default function Home() {
         </div>
       </div>
 
-      {/* PASEK TAGÓW */}
-      {posortowaneTagy.length > 0 && (
+      {/* PANEL Z KATEGORIAMI TAGÓW */}
+      {tags.length > 0 && (
         <section className="mb-6 bg-[#0D1321] p-3 sm:p-4 rounded-2xl border border-[#540B0E]">
-          <div className="flex flex-wrap items-center justify-start gap-2 py-1 w-full">
-            <span className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wider mr-1 sm:mr-2">Tagi:</span>
-            <button
-              onClick={() => ustawParametr('tag', null)}
-              className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all ${
-                !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
-              }`}
-            >
-              Dowolne
-            </button>
-            {posortowaneTagy.map(tag => (
+          <div className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-2 w-full">
+              <span className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wider mr-1 sm:mr-2">Grupy tagów:</span>
+
               <button
-                key={`tag-pill-${tag.id}`}
-                onClick={() => ustawParametr('tag', tag.slug)}
-                className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all break-words ${
-                  aktywnyTag === tag.slug
-                    ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon'
-                    : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
+                onClick={() => { ustawParametr('tag', null); setExpandedTagGroup(null); }}
+                className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all flex-shrink-0 ${
+                  !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF]'
                 }`}
               >
-                #{tag.name}
+                Dowolne (wszystkie)
               </button>
-            ))}
+
+              {Object.entries(groupedTags).map(([groupName, groupTags]) => {
+                if (groupTags.length === 0) return null;
+                const isGroupExpanded = expandedTagGroup === groupName;
+                const hasActiveTag = groupTags.some(t => t.slug === aktywnyTag);
+
+                return (
+                  <button
+                    key={groupName}
+                    onClick={() => setExpandedTagGroup(isGroupExpanded ? null : groupName)}
+                    className={`flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all flex-shrink-0 ${
+                      isGroupExpanded || hasActiveTag
+                        ? 'bg-[#D4AF37] text-[#0D1321] shadow-[0_0_8px_rgba(212,175,35,0.4)]'
+                        : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#D4AF37]'
+                    }`}
+                  >
+                    {groupName}
+                    <FaChevronDown className={`transition-transform duration-300 ${isGroupExpanded ? 'rotate-180' : ''}`} />
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Rozwinięta zawartość grupy */}
+            {expandedTagGroup && groupedTags[expandedTagGroup].length > 0 && (
+              <div className="mt-1 p-3 sm:p-4 bg-[#1A0D16] border border-[#540B0E] rounded-xl flex flex-wrap gap-2 transition-all">
+                {groupedTags[expandedTagGroup].map(tag => (
+                  <button
+                    key={`tag-pill-${tag.id}`}
+                    onClick={() => ustawParametr('tag', tag.slug)}
+                    className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all break-words flex-shrink-0 ${
+                      aktywnyTag === tag.slug
+                        ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon'
+                        : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF] hover:text-[#1F51FF]'
+                    }`}
+                  >
+                    #{tag.name}
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
         </section>
       )}
 
-      {/* FILTRY KATEGORII */}
+      {/* FILTRY KATEGORII GŁÓWNYCH */}
       <section className="mb-6 sm:mb-8">
         <div className="flex flex-wrap justify-start sm:justify-center gap-2 py-2">
           <button
