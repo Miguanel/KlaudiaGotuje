@@ -202,14 +202,7 @@ export default function Home() {
             <div className="flex flex-wrap items-center gap-2 w-full">
               <span className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wider mr-1 sm:mr-2">Grupy tagów:</span>
 
-              <button
-                onClick={() => { ustawParametr('tag', null); setExpandedTagGroup(null); }}
-                className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all flex-shrink-0 ${
-                  !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF]'
-                }`}
-              >
-                Dowolne (wszystkie)
-              </button>
+
 
               {Object.entries(groupedTags).map(([groupName, groupTags]) => {
                 if (groupTags.length === 0) return null;
