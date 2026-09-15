@@ -44,7 +44,7 @@ export default function Home() {
     setFavorites(saved);
   }, []);
 
-  // Automatyczne rozwijanie grupy, z której pochodzi aktywny tag po załadowaniu
+  // Inteligentne rozwijanie grupy po załadowaniu strony
   useEffect(() => {
     if (aktywnyTag && tags.length > 0 && !expandedTagGroup) {
       const activeTagObj = tags.find(t => t.slug === aktywnyTag);
@@ -64,7 +64,6 @@ export default function Home() {
   const toggleFavorite = (id: string, e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
     let updated: string[];
     if (favorites.includes(id)) {
       updated = favorites.filter(favId => favId !== id);
@@ -96,7 +95,7 @@ export default function Home() {
   const nazwaAktywnejKategorii = aktywnaKategoria ? categories.find(c => c.slug === aktywnaKategoria)?.name : null;
   const nazwaAktywnegoTagu = aktywnyTag ? tags.find(t => t.slug === aktywnyTag)?.name : null;
 
-  // Funkcja logiczna parsująca pobrane tagi do grup
+  // Mapowanie dynamicznych tagów z backendu na strukturę grup z fallbackiem
   const groupedTags = Object.keys(TAG_GROUPS_DEF).reduce((acc, key) => {
     acc[key] = [];
     return acc;
@@ -117,7 +116,7 @@ export default function Home() {
     }
   });
 
-  // Sortowanie alfabetyczne wewnątrz utworzonych grup
+  // Gwarancja porządku alfabetycznego
   Object.keys(groupedTags).forEach(key => {
     groupedTags[key].sort((a, b) => a.name.localeCompare(b.name, 'pl'));
   });
@@ -126,6 +125,7 @@ export default function Home() {
 
   return (
     <div className="max-w-5xl mx-auto px-3 sm:px-4 py-6 sm:py-12 text-[#FDFBF7] overflow-x-hidden">
+
       {/* OKRUSZKI (BREADCRUMBS) */}
       <nav className="flex flex-wrap items-center gap-y-2 gap-x-1 sm:gap-x-2 text-xs sm:text-[15px] text-gray-300 font-medium mb-6 bg-[#0D1321] border border-[#540B0E] px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl shadow-sm w-full sm:w-fit break-words">
         <button onClick={() => setSearchParams({})} className="text-[#1F51FF] hover:text-[#FDFBF7] transition-all flex items-center gap-1 sm:gap-1.5 font-bold whitespace-nowrap">
@@ -195,17 +195,47 @@ export default function Home() {
         </div>
       </div>
 
-      {/* PANEL Z KATEGORIAMI TAGÓW (Z NIEZALEŻNYMI, PŁYNNIE ANIMOWANYMI PANELAMI) */}
+      {/* FILTRY KATEGORII GŁÓWNYCH */}
+      <section className="mb-6 sm:mb-8">
+        <div className="flex flex-wrap justify-start sm:justify-start md:justify-center gap-2 py-2">
+          <button
+            onClick={() => ustawParametr('category', null)}
+            className={`inline-block px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-xl shadow-sm font-black text-[10px] sm:text-sm uppercase transition-all duration-300 flex-shrink-0 ${
+              !aktywnaKategoria ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili sm:scale-105' : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
+            }`}
+          >
+            Wszystkie
+          </button>
+
+          {categories.map(cat => (
+            <button
+              key={`cat-${cat.id}`}
+              onClick={() => ustawParametr('category', cat.slug)}
+              className={`inline-block px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-xl shadow-sm font-black text-[10px] sm:text-sm uppercase transition-all duration-300 flex-shrink-0 ${
+                aktywnaKategoria === cat.slug
+                  ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili sm:scale-105'
+                  : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
+              }`}
+            >
+              {cat.name}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* PANEL Z KATEGORIAMI TAGÓW (Z FACHOWĄ ANIMACJĄ GRID-ROWS) */}
       {tags.length > 0 && (
-        <section className="mb-6 bg-[#0D1321] p-3 sm:p-4 rounded-2xl border border-[#540B0E]">
-          <div className="flex flex-col gap-3">
-            <div className="flex flex-wrap items-center gap-2 w-full">
+        <section className="mb-6 bg-[#0D1321] p-3 sm:p-4 rounded-2xl border border-[#540B0E] relative">
+          <div className="flex flex-col">
+
+            {/* PRZYCISKI GRUP */}
+            <div className="flex flex-wrap items-center gap-2 w-full z-10 relative bg-[#0D1321]">
               <span className="text-[10px] sm:text-xs font-black text-gray-400 uppercase tracking-wider mr-1 sm:mr-2">Grupy tagów:</span>
 
               <button
                 onClick={() => { ustawParametr('tag', null); setExpandedTagGroup(null); }}
-                className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all flex-shrink-0 ${
-                  !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF]'
+                className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300 flex-shrink-0 ${
+                  !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon scale-105' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF]'
                 }`}
               >
                 Dowolne (wszystkie)
@@ -218,84 +248,65 @@ export default function Home() {
 
                 return (
                   <button
-                    key={groupName}
+                    key={`group-btn-${groupName}`}
                     onClick={() => setExpandedTagGroup(isGroupExpanded ? null : groupName)}
-                    className={`flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all flex-shrink-0 ${
+                    className={`flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300 flex-shrink-0 ${
                       isGroupExpanded || hasActiveTag
-                        ? 'bg-[#D4AF37] text-[#0D1321] shadow-[0_0_8px_rgba(212,175,35,0.4)]'
+                        ? 'bg-[#D4AF37] text-[#0D1321] shadow-[0_0_8px_rgba(212,175,35,0.4)] scale-105'
                         : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#D4AF37]'
                     }`}
                   >
                     {groupName}
-                    <FaChevronDown className={`transition-transform duration-300 ease-in-out ${isGroupExpanded ? 'rotate-180' : ''}`} />
+                    <FaChevronDown className={`transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isGroupExpanded ? 'rotate-180' : ''}`} />
                   </button>
                 );
               })}
             </div>
 
-            {/* Płynnie animowane panele dla każdej grupy z osobna */}
-            {Object.entries(groupedTags).map(([groupName, groupTags]) => {
-              if (groupTags.length === 0) return null;
-              const isGroupExpanded = expandedTagGroup === groupName;
+            {/* PŁYNNIE ANIMOWANE KONTENERY TAGÓW */}
+            <div className="w-full">
+              {Object.entries(groupedTags).map(([groupName, groupTags]) => {
+                if (groupTags.length === 0) return null;
+                const isGroupExpanded = expandedTagGroup === groupName;
 
-              return (
-                <div
-                  key={`panel-${groupName}`}
-                  className={`grid transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] overflow-hidden ${
-                    isGroupExpanded ? 'grid-rows-[1fr] opacity-100 mt-1' : 'grid-rows-[0fr] opacity-0 mt-0'
-                  }`}
-                >
-                  <div className="overflow-hidden">
-                    <div className="p-3 sm:p-4 bg-[#1A0D16] border border-[#540B0E] rounded-xl flex flex-wrap gap-2">
-                      {groupTags.map(tag => (
-                        <button
-                          key={`tag-pill-${tag.id}`}
-                          onClick={() => ustawParametr('tag', tag.slug)}
-                          className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all break-words flex-shrink-0 ${
-                            aktywnyTag === tag.slug
-                              ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon'
-                              : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF] hover:text-[#1F51FF]'
-                          }`}
-                        >
-                          #{tag.name}
-                        </button>
-                      ))}
+                return (
+                  <div
+                    key={`group-panel-${groupName}`}
+                    className={`grid transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${
+                      isGroupExpanded
+                        ? 'grid-rows-[1fr] opacity-100 translate-y-0'
+                        : 'grid-rows-[0fr] opacity-0 -translate-y-2 pointer-events-none'
+                    }`}
+                  >
+                    {/* Wymóg techniczny dla Tailwind grid-rows: min-h-0 pozwala elementowi skurczyć się do 0px */}
+                    <div className="overflow-hidden min-h-0">
+                      {/* pt-3 zastępuje margin, by nie było skoku wysokości podczas zamykania */}
+                      <div className="pt-3">
+                        <div className="p-3 sm:p-4 bg-[#1A0D16] border border-[#540B0E] rounded-xl flex flex-wrap gap-2 shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
+                          {groupTags.map(tag => (
+                            <button
+                              key={`tag-pill-${tag.id}`}
+                              onClick={() => ustawParametr('tag', tag.slug)}
+                              className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300 break-words flex-shrink-0 ${
+                                aktywnyTag === tag.slug
+                                  ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon scale-105'
+                                  : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF] hover:text-[#1F51FF]'
+                              }`}
+                            >
+                              #{tag.name}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+
           </div>
         </section>
       )}
-
-      {/* FILTRY KATEGORII GŁÓWNYCH */}
-      <section className="mb-6 sm:mb-8">
-        <div className="flex flex-wrap justify-start sm:justify-center gap-2 py-2">
-          <button
-            onClick={() => ustawParametr('category', null)}
-            className={`inline-block px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-xl shadow-sm font-black text-[10px] sm:text-sm uppercase transition-all flex-shrink-0 ${
-              !aktywnaKategoria ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili sm:scale-105' : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
-            }`}
-          >
-            Wszystkie
-          </button>
-
-          {categories.map(cat => (
-            <button
-              key={`cat-${cat.id}`}
-              onClick={() => ustawParametr('category', cat.slug)}
-              className={`inline-block px-3 py-1.5 sm:px-5 sm:py-2.5 rounded-xl shadow-sm font-black text-[10px] sm:text-sm uppercase transition-all flex-shrink-0 ${
-                aktywnaKategoria === cat.slug
-                  ? 'bg-[#E60026] text-[#FDFBF7] shadow-chili sm:scale-105'
-                  : 'bg-[#0D1321] text-gray-300 border border-[#540B0E] hover:text-[#1F51FF]'
-              }`}
-            >
-              {cat.name}
-            </button>
-          ))}
-        </div>
-      </section>
 
       {/* KARUZELA PRZEPISÓW */}
       {!loading && recipes.length > 0 && (
@@ -307,7 +318,7 @@ export default function Home() {
           }}
         >
           <button
-            className="absolute left-0 z-10 hidden md:flex items-center justify-center w-8 h-8 bg-[#0D1321] border border-[#540B0E] rounded-full text-gray-300 hover:text-[#1F51FF] transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+            className="absolute left-0 z-10 hidden md:flex items-center justify-center w-8 h-8 bg-[#0D1321] border border-[#540B0E] rounded-full text-gray-300 hover:text-[#1F51FF] transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer shadow-md hover:scale-110"
             onClick={() => scroll('left')}
           >
             ❮
@@ -324,17 +335,17 @@ export default function Home() {
                   <div className="relative w-full aspect-square mb-1.5 sm:mb-2">
                     <button
                       onClick={(e) => toggleFavorite(recipe.id, e)}
-                      className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 w-6 h-6 sm:w-7 sm:h-7 bg-[#0D1321]/90 backdrop-blur rounded-full flex items-center justify-center text-[10px] sm:text-xs shadow hover:scale-110 transition-transform border border-[#540B0E]"
+                      className="absolute top-1 right-1 sm:top-2 sm:right-2 z-20 w-6 h-6 sm:w-7 sm:h-7 bg-[#0D1321]/90 backdrop-blur rounded-full flex items-center justify-center text-[10px] sm:text-xs shadow hover:scale-110 transition-transform duration-300 border border-[#540B0E]"
                     >
                       {isFav ? <FaGem className="text-[#D4AF37]" /> : <FaGem className="text-gray-500" />}
                     </button>
                     <img
                       src={apiClient.utils.getImageUrl(recipe.main_image_url)}
                       alt={recipe.name}
-                      className="w-full h-full object-cover rounded-xl sm:rounded-2xl shadow-sm border border-[#540B0E] group-hover/item:border-[#1F51FF] transition-all pointer-events-none text-[8px] text-center text-gray-500 break-words"
+                      className="w-full h-full object-cover rounded-xl sm:rounded-2xl shadow-sm border border-[#540B0E] group-hover/item:border-[#1F51FF] transition-all duration-300 pointer-events-none text-[8px] text-center text-gray-500 break-words"
                     />
                   </div>
-                  <span className="font-bold text-[10px] sm:text-xs text-[#FDFBF7] line-clamp-2 group-hover/item:text-[#1F51FF] transition-colors px-1">
+                  <span className="font-bold text-[10px] sm:text-xs text-[#FDFBF7] line-clamp-2 group-hover/item:text-[#1F51FF] transition-colors duration-300 px-1">
                     {recipe.name}
                   </span>
                 </Link>
@@ -343,7 +354,7 @@ export default function Home() {
           </div>
 
           <button
-            className="absolute right-0 z-10 hidden md:flex items-center justify-center w-8 h-8 bg-[#0D1321] border border-[#540B0E] rounded-full text-gray-300 hover:text-[#1F51FF] transition-all opacity-0 group-hover:opacity-100 cursor-pointer"
+            className="absolute right-0 z-10 hidden md:flex items-center justify-center w-8 h-8 bg-[#0D1321] border border-[#540B0E] rounded-full text-gray-300 hover:text-[#1F51FF] transition-all duration-300 opacity-0 group-hover:opacity-100 cursor-pointer shadow-md hover:scale-110"
             onClick={() => scroll('right')}
           >
             ❯
@@ -355,11 +366,11 @@ export default function Home() {
       {loading ? (
         <RecipeGridSkeleton />
       ) : recipes.length === 0 ? (
-        <div className="bg-[#0D1321] p-6 sm:p-12 text-center rounded-2xl sm:rounded-3xl border border-[#540B0E] shadow-neon">
+        <div className="bg-[#0D1321] p-6 sm:p-12 text-center rounded-2xl sm:rounded-3xl border border-[#540B0E] shadow-neon transition-all duration-500">
           <p className="text-[#FDFBF7] text-sm sm:text-lg font-bold flex flex-wrap items-center justify-center gap-2">
             Brak przepisów spełniających wybrane kryteria. <RiSparklingFill className="text-[#1F51FF] flex-shrink-0" />
           </p>
-          <button onClick={() => setSearchParams({})} className="mt-4 text-[#1F51FF] font-black text-xs sm:text-base hover:underline flex items-center justify-center gap-1.5 mx-auto">
+          <button onClick={() => setSearchParams({})} className="mt-4 text-[#1F51FF] font-black text-xs sm:text-base hover:underline flex items-center justify-center gap-1.5 mx-auto transition-transform hover:scale-105">
             <MdAutoFixHigh /> Wyczyść filtry
           </button>
         </div>
@@ -376,7 +387,7 @@ export default function Home() {
                 <div className="w-full">
                   <button
                     onClick={(e) => toggleFavorite(recipe.id, e)}
-                    className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 w-8 h-8 sm:w-10 sm:h-10 bg-[#0D1321]/90 backdrop-blur rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform border border-[#540B0E]"
+                    className="absolute top-2 right-2 sm:top-4 sm:right-4 z-20 w-8 h-8 sm:w-10 sm:h-10 bg-[#0D1321]/90 backdrop-blur rounded-full flex items-center justify-center shadow-md hover:scale-110 transition-transform duration-300 border border-[#540B0E]"
                     title="Polub przepis"
                   >
                     {isFav ? <FaCrown className="text-[#D4AF37] text-sm sm:text-base" /> : <FaGem className="text-gray-400 text-xs sm:text-sm" />}
@@ -396,14 +407,14 @@ export default function Home() {
                   </div>
 
                   <div className="p-4 sm:p-6 pb-2 sm:pb-4 w-full">
-                    <h2 className="text-lg sm:text-xl font-black text-[#FDFBF7] group-hover:text-[#1F51FF] transition-colors line-clamp-2 break-words">
+                    <h2 className="text-lg sm:text-xl font-black text-[#FDFBF7] group-hover:text-[#1F51FF] transition-colors duration-300 line-clamp-2 break-words">
                       {recipe.name}
                     </h2>
                   </div>
                 </div>
 
                 {/* DOLNY PASEK STATYSTYK */}
-                <div className="px-4 py-3 sm:px-6 sm:py-4 bg-[#1A0D16]/60 border-t border-[#540B0E] flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-bold text-gray-300 mt-auto w-full">
+                <div className="px-4 py-3 sm:px-6 sm:py-4 bg-[#1A0D16]/60 border-t border-[#540B0E] flex flex-wrap items-center justify-between gap-2 text-[10px] sm:text-xs font-bold text-gray-300 mt-auto w-full transition-colors duration-300 group-hover:bg-[#1A0D16]">
                   <div className="flex flex-wrap items-center gap-3 sm:gap-4">
                     <span className="flex items-center gap-1 sm:gap-1.5" title="Liczba komentarzy">
                       <MdChatBubble className="text-[#1F51FF] flex-shrink-0" /> {recipe.comments_count}
@@ -412,7 +423,7 @@ export default function Home() {
                       <MdPhotoCamera className="text-[#1F51FF] flex-shrink-0" /> {recipe.photos_count}
                     </span>
                   </div>
-                  <div className="flex items-center gap-1 text-[#D4AF37] font-black flex-shrink-0" style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,35,0.6))' }}>
+                  <div className="flex items-center gap-1 text-[#D4AF37] font-black flex-shrink-0 transition-transform duration-300 group-hover:scale-105" style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,35,0.6))' }}>
                     <MdStar className="text-sm sm:text-base text-[#D4AF37] flex-shrink-0" />
                     <span className="text-gold">{recipe.average_rating !== null ? recipe.average_rating.toFixed(2) : 'Brak'}</span>
                   </div>
