@@ -223,7 +223,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* PANEL Z KATEGORIAMI TAGÓW (Z FACHOWĄ ANIMACJĄ GRID-ROWS) */}
+      {/* PANEL Z KATEGORIAMI TAGÓW (Z FACHOWĄ ANIMACJĄ I NAPRAWIONYM BŁĘDEM KLIKANIA) */}
       {tags.length > 0 && (
         <section className="mb-6 bg-[#0D1321] p-3 sm:p-4 rounded-2xl border border-[#540B0E] relative">
           <div className="flex flex-col">
@@ -235,7 +235,7 @@ export default function Home() {
               <button
                 onClick={() => { ustawParametr('tag', null); setExpandedTagGroup(null); }}
                 className={`px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300 flex-shrink-0 ${
-                  !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon scale-105' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF]'
+                  !aktywnyTag ? 'bg-[#1F51FF] text-[#FDFBF7] shadow-neon scale-105 border border-[#1F51FF]' : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#1F51FF]'
                 }`}
               >
                 Dowolne (wszystkie)
@@ -246,15 +246,22 @@ export default function Home() {
                 const isGroupExpanded = expandedTagGroup === groupName;
                 const hasActiveTag = groupTags.some(t => t.slug === aktywnyTag);
 
+                // --- ROZWIĄZANIE BŁĘDU Z DWOMA ZŁOTYMI KATEGORIAMI ---
+                let btnStyles = 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#D4AF37]';
+
+                if (hasActiveTag) {
+                  // Priorytet 1: Grupa MA aktywny filtr -> Pełne złote tło
+                  btnStyles = 'bg-[#D4AF37] text-[#0D1321] border-[#D4AF37] shadow-[0_0_8px_rgba(212,175,35,0.4)] scale-105';
+                } else if (isGroupExpanded) {
+                  // Priorytet 2: Grupa jest ROZWINIĘTA (ale bez aktywnego filtra) -> Złota ramka i tekst, ciemne tło
+                  btnStyles = 'bg-[#1A0D16] text-[#D4AF37] border-[#D4AF37] shadow-[0_0_8px_rgba(212,175,35,0.2)]';
+                }
+
                 return (
                   <button
                     key={`group-btn-${groupName}`}
                     onClick={() => setExpandedTagGroup(isGroupExpanded ? null : groupName)}
-                    className={`flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-bold transition-all duration-300 flex-shrink-0 ${
-                      isGroupExpanded || hasActiveTag
-                        ? 'bg-[#D4AF37] text-[#0D1321] shadow-[0_0_8px_rgba(212,175,35,0.4)] scale-105'
-                        : 'bg-[#1A0D16] text-gray-300 border border-[#540B0E] hover:border-[#D4AF37]'
-                    }`}
+                    className={`flex items-center gap-1.5 px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border text-[10px] sm:text-xs font-bold transition-all duration-300 flex-shrink-0 ${btnStyles}`}
                   >
                     {groupName}
                     <FaChevronDown className={`transition-transform duration-500 ease-[cubic-bezier(0.4,0,0.2,1)] ${isGroupExpanded ? 'rotate-180' : ''}`} />
