@@ -2,8 +2,16 @@ import uuid
 from django.db import models
 from django.utils.text import slugify
 
+# Django-owy slugify gubi literę "ł" (np. "Składniki" -> "skadniki"), więc zamieniamy ją wcześniej.
+_PL = str.maketrans({"ł": "l", "Ł": "L"})
+
+
+def pl_slugify(value: str) -> str:
+    return slugify(value.translate(_PL))
+
 
 class Category(models.Model):
+    """Rozdział (parent_category = None) albo podrozdział (parent_category = rozdział)."""
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=100, unique=True, verbose_name="Nazwa kategorii")
     # Slug to wersja URL-friendly (np. "Szybkie obiady" -> "szybkie-obiady")
@@ -27,7 +35,7 @@ class Category(models.Model):
     def save(self, *args, **kwargs):
         # Automatyczne generowanie sluga z nazwy, jeśli jest pusty
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = pl_slugify(self.name)
         super().save(*args, **kwargs)
 
     def __str__(self):
@@ -35,25 +43,6 @@ class Category(models.Model):
         if self.parent_category:
             return f"{self.parent_category.name} > {self.name}"
         return self.name
-
-
-class Tag(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=50, unique=True, verbose_name="Nazwa taga (np. Wege)")
-    slug = models.SlugField(max_length=50, unique=True, blank=True)
-
-    class Meta:
-        verbose_name = "Tag"
-        verbose_name_plural = "Tagi"
-        ordering = ['name']
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f"#{self.name}"
 
 
 class Recipe(models.Model):
@@ -66,9 +55,8 @@ class Recipe(models.Model):
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    tags = models.ManyToManyField(Tag, blank=True, related_name='recipes', verbose_name="Tagi")
     category = models.ForeignKey(
-        Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='recipes', verbose_name="Kategoria główna"
+        Category, on_delete=models.SET_NULL, null=True, blank=True, related_name='recipes', verbose_name="Rozdział / podrozdział"
     )
     name = models.CharField(max_length=200, verbose_name="Nazwa przepisu")
     description = models.TextField(verbose_name="Opis / Wstęp")

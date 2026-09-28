@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import type { RecipeStep, Ingredient } from '../types';
 import { apiClient } from '../api/client';
-import { FaCrown, FaUtensils, FaGem } from 'react-icons/fa';
+import { FaCrown, FaPlay, FaTimes, FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 interface Props {
   kroki: RecipeStep[];
@@ -12,6 +12,22 @@ interface Props {
 export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSkladniki = [] }: Props) {
   const [isFocusMode, setIsFocusMode] = useState(false);
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+  // Klawiatura w trybie gotowania: strzałki i Esc
+  useEffect(() => {
+    if (!isFocusMode) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setIsFocusMode(false);
+      if (e.key === 'ArrowRight') setCurrentStepIndex(i => Math.min(kroki.length - 1, i + 1));
+      if (e.key === 'ArrowLeft') setCurrentStepIndex(i => Math.max(0, i - 1));
+    };
+    document.addEventListener('keydown', onKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      document.body.style.overflow = '';
+    };
+  }, [isFocusMode, kroki.length]);
 
   if (!kroki || kroki.length === 0) return null;
 
@@ -29,112 +45,92 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
     });
   };
 
-  const handleNext = () => {
-    if (currentStepIndex < kroki.length - 1) {
-      setCurrentStepIndex(prev => prev + 1);
-    }
-  };
-
-  const handlePrev = () => {
-    if (currentStepIndex > 0) {
-      setCurrentStepIndex(prev => prev - 1);
-    }
-  };
-
   return (
     <>
-      <div className="mt-4 text-[#FDFBF7]">
-        <div className="flex justify-between items-center mb-8 border-b border-[#540B0E] pb-4">
-          <h2 className="text-2xl font-black text-[#FDFBF7] flex items-center gap-2">
-            <FaCrown className="text-[#D4AF37]" style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,35,0.6))' }} />
-            <span className="text-gold">Krok po kroku</span>
-          </h2>
-          <button
-            onClick={() => {
-              setCurrentStepIndex(0);
-              setIsFocusMode(true);
-            }}
-            className="flex items-center gap-2 bg-[#E60026] text-[#FDFBF7] px-5 py-2.5 rounded-xl text-sm font-black shadow-chili hover:bg-red-700 transition-all hover:scale-105"
-          >
-            <FaUtensils className="text-[#FDFBF7]" /> Tryb gotowania (Focus)
-          </button>
-        </div>
-
-        <div className="space-y-10">
-          {kroki.map((krok) => {
-            const relSkładniki = getRelevantIngredients(krok);
-            return (
-              <div key={krok.id} className="flex flex-col md:flex-row gap-6 items-start border-b border-[#540B0E]/50 pb-8 last:border-none">
-                <div className="flex-shrink-0 w-12 h-12 bg-[#1F51FF]/20 border border-[#1F51FF] text-[#1F51FF] rounded-2xl flex items-center justify-center font-black text-xl shadow-neon">
-                  {krok.step_number}
-                </div>
-
-                <div className="flex-grow">
-                  <p className="text-[#FDFBF7] text-lg leading-relaxed mb-4 whitespace-pre-line font-medium">
-                    {krok.instruction}
-                  </p>
-
-                  {relSkładniki.length > 0 && (
-                    <div className="flex flex-wrap gap-2 mb-4 bg-[#1A0D16] p-3.5 rounded-2xl border border-[#540B0E] w-fit">
-                      <span className="text-xs font-black text-[#D4AF37] uppercase tracking-wide self-center mr-1">Potrzebne:</span>
-                      {relSkładniki.map(ing => (
-                        <span key={ing.id} className="bg-[#0D1321] px-3 py-1 rounded-xl text-xs font-bold text-[#FDFBF7] shadow-sm border border-[#D4AF37]/30">
-                          {ing.name} ({ing.quantity} {ing.unit})
-                        </span>
-                      ))}
-                    </div>
-                  )}
-
-                  {krok.image_url && (
-                    <img
-                      src={apiClient.utils.getImageUrl(krok.image_url)}
-                      alt={`Krok ${krok.step_number}`}
-                      className="rounded-2xl shadow-neon w-full max-w-lg object-cover max-h-80 border border-[#540B0E]"
-                    />
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
+      <div className="flex flex-wrap justify-between items-center gap-3 mb-6">
+        <h2 className="label-pill print:hidden">Przygotowanie</h2>
+        <h2 className="hidden print:block text-xl font-bold">Przygotowanie</h2>
+        <button
+          onClick={() => { setCurrentStepIndex(0); setIsFocusMode(true); }}
+          className="inline-flex items-center gap-2 h-10 px-4 rounded-full border border-gold/60 text-gold text-sm font-bold hover:bg-gold/10 transition print:hidden"
+        >
+          <FaPlay className="text-xs" /> Tryb gotowania
+        </button>
       </div>
 
-      {/* MODAL TRYBU SKUPIENIA (FOCUS MODE) */}
-      {isFocusMode && (
-        <div className="fixed inset-0 z-50 bg-[#1A0D16]/98 backdrop-blur-xl flex flex-col justify-between p-6 md:p-12 text-[#FDFBF7]">
-
-          <div className="flex justify-between items-center max-w-4xl mx-auto w-full">
-            <div>
-              <span className="text-xs uppercase font-black text-[#D4AF37] tracking-wider flex items-center gap-1.5">
-                <FaCrown className="text-[#D4AF37]" /> Tryb Asystenta Księżniczki
+      <ol className="space-y-7">
+        {kroki.map((krok) => {
+          const rel = getRelevantIngredients(krok);
+          return (
+            <li key={krok.id} className="flex gap-4 sm:gap-5 print:break-inside-avoid">
+              <span className="shrink-0 w-10 h-10 rounded-full bg-pink text-white font-display text-xl flex items-center justify-center shadow-neon print:shadow-none print:bg-transparent print:text-black print:border print:border-black">
+                {krok.step_number}
               </span>
-              <h3 className="text-lg md:text-xl font-bold text-[#FDFBF7]">{recipeName}</h3>
+
+              <div className="flex-1 pt-1.5 min-w-0">
+                <p className="text-[16px] sm:text-[17px] leading-relaxed text-cream whitespace-pre-line">
+                  {krok.instruction}
+                </p>
+
+                {rel.length > 0 && (
+                  <p className="mt-3 text-sm text-muted print:hidden">
+                    <span className="font-semibold text-gold">Potrzebne: </span>
+                    {rel.map(ing => `${ing.name} (${ing.quantity} ${ing.unit})`).join(', ')}
+                  </p>
+                )}
+
+                {krok.image_url && (
+                  <img
+                    src={apiClient.utils.getImageUrl(krok.image_url)}
+                    alt={`Krok ${krok.step_number}`}
+                    loading="lazy"
+                    className="mt-4 rounded-2xl w-full max-w-lg object-cover max-h-80 border border-line"
+                  />
+                )}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+
+      {/* TRYB GOTOWANIA – jeden krok na ekranie, duży tekst */}
+      {isFocusMode && (
+        <div role="dialog" aria-modal="true" aria-label="Tryb gotowania" className="fixed inset-0 z-[60] bg-ink/98 backdrop-blur-xl flex flex-col p-5 sm:p-10 text-cream">
+          <div className="flex justify-between items-start gap-4 max-w-4xl mx-auto w-full">
+            <div className="min-w-0">
+              <span className="text-xs uppercase font-bold text-gold tracking-widest flex items-center gap-1.5">
+                <FaCrown /> Tryb gotowania
+              </span>
+              <h3 className="font-display uppercase tracking-wide text-xl sm:text-2xl truncate">{recipeName}</h3>
             </div>
             <button
               onClick={() => setIsFocusMode(false)}
-              className="bg-[#0D1321] hover:bg-[#1F51FF] border border-[#540B0E] text-[#FDFBF7] w-10 h-10 rounded-full flex items-center justify-center text-lg font-black transition-all shadow-neon"
+              className="shrink-0 w-11 h-11 rounded-full bg-card border border-line flex items-center justify-center hover:border-pink transition"
+              aria-label="Zamknij tryb gotowania"
             >
-              ✕
+              <FaTimes />
             </button>
           </div>
 
-          <div className="max-w-2xl mx-auto w-full text-center my-auto px-4">
-            <div className="inline-block bg-[#1F51FF] text-[#FDFBF7] font-black text-2xl w-16 h-16 rounded-2xl flex items-center justify-center shadow-neon mx-auto mb-6">
+          {/* pasek postępu */}
+          <div className="max-w-4xl mx-auto w-full mt-5 h-1.5 rounded-full bg-line overflow-hidden">
+            <div className="h-full bg-pink transition-all duration-300" style={{ width: `${((currentStepIndex + 1) / kroki.length) * 100}%` }} />
+          </div>
+
+          <div className="flex-1 overflow-y-auto flex flex-col justify-center max-w-2xl mx-auto w-full text-center py-8">
+            <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-pink text-white font-display text-3xl flex items-center justify-center shadow-neon">
               {currentStep.step_number}
             </div>
-
-            <p className="text-2xl md:text-3xl font-bold leading-relaxed mb-6 text-[#FDFBF7] text-glow">
-              {currentStep.instruction}
-            </p>
+            <p className="text-2xl sm:text-3xl font-semibold leading-relaxed mb-6">{currentStep.instruction}</p>
 
             {(() => {
-              const relSkładniki = getRelevantIngredients(currentStep);
-              if (relSkładniki.length === 0) return null;
+              const rel = getRelevantIngredients(currentStep);
+              if (rel.length === 0) return null;
               return (
                 <div className="flex flex-wrap justify-center gap-2 mb-6">
-                  {relSkładniki.map(ing => (
-                    <span key={ing.id} className="bg-[#0D1321] border border-[#D4AF37]/40 px-3.5 py-2 rounded-xl text-sm font-black text-[#D4AF37] shadow-neon">
-                      <FaGem className="inline mr-1 text-[#FDFBF7]" /> {ing.name}: {ing.quantity} {ing.unit}
+                  {rel.map(ing => (
+                    <span key={ing.id} className="px-3.5 py-2 rounded-full bg-card border border-gold/40 text-sm font-semibold text-gold">
+                      {ing.name}: {ing.quantity} {ing.unit}
                     </span>
                   ))}
                 </div>
@@ -145,34 +141,38 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
               <img
                 src={apiClient.utils.getImageUrl(currentStep.image_url)}
                 alt={`Krok ${currentStep.step_number}`}
-                className="rounded-3xl shadow-neon max-h-60 mx-auto object-cover border border-[#540B0E] mb-4"
+                className="rounded-3xl max-h-60 mx-auto object-cover border border-line"
               />
             )}
           </div>
 
-          <div className="max-w-xl mx-auto w-full flex flex-col items-center gap-4">
-            <div className="text-sm font-black text-gray-300">
-              Krok {currentStepIndex + 1} z {kroki.length}
-            </div>
-
-            <div className="flex justify-between w-full gap-4">
+          <div className="max-w-xl mx-auto w-full">
+            <p className="text-center text-sm font-semibold text-muted mb-3">Krok {currentStepIndex + 1} z {kroki.length}</p>
+            <div className="flex gap-3">
               <button
-                onClick={handlePrev}
+                onClick={() => setCurrentStepIndex(i => Math.max(0, i - 1))}
                 disabled={currentStepIndex === 0}
-                className="flex-1 py-4 bg-[#0D1321] border border-[#540B0E] hover:border-[#1F51FF] disabled:opacity-30 font-black rounded-2xl transition-all text-center text-lg shadow-neon text-[#FDFBF7]"
+                className="flex-1 h-14 rounded-full border border-line font-bold flex items-center justify-center gap-2 hover:border-pink disabled:opacity-30 transition"
               >
-                ← Poprzedni
+                <FaArrowLeft /> Poprzedni
               </button>
-              <button
-                onClick={handleNext}
-                disabled={currentStepIndex === kroki.length - 1}
-                className="flex-1 py-4 bg-[#E60026] hover:bg-red-700 disabled:opacity-30 font-black rounded-2xl transition-all text-center text-lg shadow-chili text-[#FDFBF7]"
-              >
-                Następny →
-              </button>
+              {currentStepIndex < kroki.length - 1 ? (
+                <button
+                  onClick={() => setCurrentStepIndex(i => Math.min(kroki.length - 1, i + 1))}
+                  className="flex-1 h-14 rounded-full bg-pink text-white font-bold flex items-center justify-center gap-2 hover:brightness-110 transition shadow-neon"
+                >
+                  Następny <FaArrowRight />
+                </button>
+              ) : (
+                <button
+                  onClick={() => setIsFocusMode(false)}
+                  className="flex-1 h-14 rounded-full bg-gold text-ink font-bold flex items-center justify-center gap-2 hover:brightness-110 transition"
+                >
+                  <FaCrown /> Gotowe!
+                </button>
+              )}
             </div>
           </div>
-
         </div>
       )}
     </>

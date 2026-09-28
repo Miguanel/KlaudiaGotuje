@@ -1,4 +1,4 @@
-import type { Recipe, Category, Tag } from '../types';
+import type { Recipe, Category } from '../types';
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://127.0.0.1:8000';
 
@@ -24,16 +24,12 @@ export const apiClient = {
   categories: {
     getAll: () => fetchJson<Category[]>('/api/kategorie'),
   },
-  tags: {
-    getAll: () => fetchJson<Tag[]>('/api/tagi'),
-  },
   recipes: {
     // Metoda obsługująca filtry i sortowanie
-    getAll: (categorySlug?: string | null, searchQuery?: string, tagSlug?: string | null, diet?: string, sort?: string) => {
+    getAll: (categorySlug?: string | null, searchQuery?: string, diet?: string, sort?: string) => {
       const params = new URLSearchParams();
       if (categorySlug) params.append('category_slug', categorySlug);
       if (searchQuery) params.append('q', searchQuery);
-      if (tagSlug) params.append('tag_slug', tagSlug);
       if (diet && diet !== 'dowolna') params.append('diet', diet);
       if (sort) params.append('sort', sort);
 
@@ -86,8 +82,8 @@ export const apiClient = {
   },
   utils: {
     getImageUrl: (path: string | null): string => {
-      if (!path) return 'https://placehold.co/1000x400?text=Brak+Zdjecia';
+      if (!path) return 'https://placehold.co/800x600/1D0E17/FF8AC8?text=Brak+zdj%C4%99cia';
       return `${BACKEND_URL}${path}`;
     }
   }
-};
+};

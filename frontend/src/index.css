@@ -1,50 +1,101 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
+/*
+ * Paleta "Królewska" — na podstawie grafik z profilu Engibadwoman:
+ * głęboka czerń, neonowy róż, złoto korony i kremowa biel.
+ */
 @theme {
-  /* Główne kolory: Śliwka, Atramentowy Granat, Chabrowy, Burgund, Czerwień Chili, Złoto */
-  --color-plum-900: #1A0D16;
-  --color-navy-card: #0D1321;
-  --color-cobalt: #1F51FF;
-  --color-burgundy: #540B0E;
-  --color-chili: #E60026;
-  --color-gold: #D4AF37;
-  --color-ecru: #FDFBF7;
+  --color-ink: #0B0609;        /* tło strony */
+  --color-panel: #140A10;      /* nagłówek, stopka, duże sekcje */
+  --color-card: #1D0E17;       /* karty i pola */
+  --color-line: #3A1730;       /* obramowania */
+  --color-pink: #FF2E93;       /* główny akcent (neon róż) */
+  --color-pink-soft: #FF8AC8;  /* akcent na ciemnym tle – tekst */
+  --color-gold: #F4C752;       /* korona / wyróżnienia */
+  --color-gold-deep: #C8952C;
+  --color-cream: #FFF6FA;      /* tekst podstawowy */
+  --color-muted: #C9A8BA;      /* tekst drugorzędny */
+
+  --font-sans: "Inter", system-ui, sans-serif;
+  --font-display: "Anton", "Impact", sans-serif;
+  --font-script: "Dancing Script", cursive;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background-color: #1A0D16 !important;
-  color: #FDFBF7 !important;
+  background-color: var(--color-ink);
+  color: var(--color-cream);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Własne klasy dla neonowego blasku (Chaber i Czerwień) oraz złota */
-@utility text-glow {
-  text-shadow: 0 0 10px rgba(31, 81, 255, 0.6), 0 0 20px rgba(31, 81, 255, 0.3);
+/* Delikatna poświata w tle – jak na grafikach, ale nie przeszkadza w czytaniu */
+.bg-royal {
+  background:
+    radial-gradient(900px 400px at 85% -10%, rgba(255, 46, 147, 0.16), transparent 60%),
+    radial-gradient(700px 380px at 0% 10%, rgba(244, 199, 82, 0.07), transparent 60%),
+    var(--color-ink);
+}
+
+/* Złoty, metaliczny napis */
+@utility text-gold {
+  background: linear-gradient(180deg, #FFF1B8 0%, #F4C752 45%, #C8952C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Neonowy róż */
+@utility text-neon {
+  color: #FF2E93;
+  text-shadow: 0 0 12px rgba(255, 46, 147, 0.55);
 }
 
 @utility shadow-neon {
-  box-shadow: 0 0 15px rgba(31, 81, 255, 0.35), 0 0 5px rgba(31, 81, 255, 0.15);
+  box-shadow: 0 0 0 1px rgba(255, 46, 147, 0.35), 0 8px 30px -8px rgba(255, 46, 147, 0.45);
 }
 
-@utility shadow-chili {
-  box-shadow: 0 0 15px rgba(230, 0, 38, 0.4), 0 0 5px rgba(230, 0, 38, 0.2);
+@utility shadow-gold {
+  box-shadow: 0 0 0 1px rgba(244, 199, 82, 0.35), 0 8px 24px -10px rgba(244, 199, 82, 0.4);
 }
 
-@utility text-gold {
-  background: linear-gradient(135deg, #FFF6BD 0%, #D4AF37 50%, #AA771C 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  filter: drop-shadow(0 0 8px rgba(212, 175, 55, 0.4));
+/* Etykieta sekcji w stylu grafik ("SKŁADNIKI", "PRZYGOTOWANIE") */
+@utility label-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.3rem 0.9rem;
+  border-radius: 9999px;
+  background: #FF2E93;
+  color: #fff;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-size: 1rem;
+  line-height: 1.2;
 }
 
-@utility border-burgundy {
-  border-color: #540B0E;
-  box-shadow: 0 0 10px rgba(84, 11, 14, 0.3);
+/* Ukryty pasek przewijania (poziome listy) */
+@utility no-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid #FF2E93;
+  outline-offset: 2px;
 }
 
 /* Konfiguracja dla drukarek */
 @media print {
-  body { background-color: white !important; color: black !important; text-shadow: none !important; }
-  header, footer, a, button { display: none !important; }
+  body { background: white !important; color: black !important; }
+  header, footer, nav, button { display: none !important; }
+  .text-gold, .text-neon { -webkit-text-fill-color: black !important; color: black !important; text-shadow: none !important; }
   .print\:break-inside-avoid { break-inside: avoid; }
 }

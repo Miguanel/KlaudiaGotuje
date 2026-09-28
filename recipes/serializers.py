@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Recipe, Tag, Ingredient, RecipeStep
+from .models import Category, Recipe, Ingredient, RecipeStep
 
 class CategorySerializer(serializers.ModelSerializer):
     # Serializacja kategorii nadrzędnej

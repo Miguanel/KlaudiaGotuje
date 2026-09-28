@@ -1,6 +1,6 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline, StackedInline
-from .models import Recipe, Ingredient, RecipeStep, Category, Tag
+from .models import Recipe, Ingredient, RecipeStep, Category
 
 
 @admin.register(Category)
@@ -9,12 +9,6 @@ class CategoryAdmin(ModelAdmin):
     list_filter = ('parent_category',)
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
-
-
-@admin.register(Tag)
-class TagAdmin(ModelAdmin):
-    list_display = ('name', 'slug')
-    prepopulated_fields = {'slug': ('name',)}
 
 
 class IngredientInline(TabularInline):
@@ -37,11 +31,11 @@ class RecipeAdmin(ModelAdmin):
     list_display = ('name', 'category', 'prep_time', 'created_at')
     search_fields = ('name', 'description')
     readonly_fields = ('created_at', 'updated_at')
-    list_filter = ('category',)
+    list_filter = ('category__parent_category', 'category')
 
     fieldsets = (
         ('Podstawowe informacje', {
-            'fields': ('category', 'tags', 'name', 'description', 'main_image')
+            'fields': ('category', 'name', 'description', 'main_image')
         }),
         ('Szczegóły przygotowania', {
             'fields': ('prep_time',)
@@ -50,4 +44,4 @@ class RecipeAdmin(ModelAdmin):
             'classes': ('collapse',),
             'fields': ('created_at', 'updated_at'),
         }),
-    )
+    )

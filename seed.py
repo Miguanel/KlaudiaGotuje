@@ -5,68 +5,31 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings')
 django.setup()
 
-from recipes.models import Category, Tag, Recipe, Ingredient, RecipeStep
+from recipes.models import Category, Recipe, Ingredient, RecipeStep
+from recipes.structure import CHAPTERS
 
 def run_seed():
     print("Czyszczenie starej bazy danych...")
     Recipe.objects.all().delete()
     Category.objects.all().delete()
-    Tag.objects.all().delete()
 
-    print("Tworzenie Głównych Folderów (Kategorii)...")
-    # Zgodnie z nową architekturą, to są główne katalogi nawigacyjne
-    cat_kategorie_dan = Category.objects.create(name="Kategorie dań")
-    cat_diety = Category.objects.create(name="Diety i preferencje")
-    cat_mieso_ryby = Category.objects.create(name="Mięso i ryby")
-    cat_maczna_magia = Category.objects.create(name="Mączna magia i tradycja")
-    cat_sezonowe = Category.objects.create(name="Sezonowe i okazje")
-    cat_skladniki = Category.objects.create(name="Składniki wiodące")
-    cat_spizarnia = Category.objects.create(name="Spiżarnia i napoje")
-    cat_sprzet = Category.objects.create(name="Sprzęt i czas")
+    print("Tworzenie rozdziałów i podrozdziałów...")
+    # sub["Nazwa podrozdziału"] -> obiekt Category (podrozdział); chapter["Nazwa rozdziału"] -> rozdział
+    chapter = {}
+    sub = {}
+    for chapter_name, sub_names in CHAPTERS.items():
+        parent = Category.objects.create(name=chapter_name)
+        chapter[chapter_name] = parent
+        for sub_name in sub_names:
+            sub[sub_name] = Category.objects.create(name=sub_name, parent_category=parent)
 
-    print("Tworzenie pełnej listy luźnych tagów...")
-    tag_names = [
-        # Typy posiłków
-        "Śniadania", "Obiady", "Kolacje", "Przystawki", "Zupy", "Dania główne",
-        "Desery", "Lunchbox", "Przekąski", "Dania jednogarnkowe", "Sosy i dipy",
-        # Diety
-        "Fit", "Lekka", "Bez glutenu", "Wysokobiałkowe", "Zamienniki słodyczy fit",
-        "Zamienniki słodyczy z dobrym składem", "Niskokaloryczne (Low Calorie)",
-        "Bez cukru", "Keto / Low Carb", "Zdrowe tłuszcze",
-        # Mięso i ryby (jako tagi doprecyzujące)
-        "Z mięsem", "Dania drobiowe (Kurczak/Indyk)", "Wołowina & Wieprzowina", "Ryby", "Bez mięsa",
-        # Wypieki
-        "Chleby / pieczywo", "Domowy chleb", "Drożdżowe", "Makarony", "Kluski",
-        "Pierogi", "Naleśniki", "Gofry", "Pączki, oponki", "Rogale i rogaliki",
-        "Bez pieczenia", "Ciasta i ciasteczka", "Wypieki na zakwasie", "Tarty", "Cieszyńskie ciasteczka",
-        # Sezony
-        "Sezonowe", "Wiosna", "Lato", "Jesień", "Zima", "Jesieniara", "Halloween",
-        "Tłusty czwartek", "Wielkanoc", "Boże Narodzenie", "Imprezy", "Grill przystawki",
-        "Walentynki", "Sylwester", "Klimatyczne wieczory",
-        # Składniki
-        "Na słodko", "Na słono", "Ostre / Pikantne", "Cukinia", "Dynia", "Ziemniaki",
-        "Jabłka", "Cynamon", "Jajka", "Owsianki", "Sałatki", "Owoce leśne",
-        "Czekolada", "Twaróg / Nabiał", "Warzywa korzeniowe", "Grzyby",
-        # Inne
-        "Domowe weki", "Nalewki", "Napoje", "Koktajle", "Koktajle białkowe",
-        "Rozgrzewające napary", "Kawy i herbaty smakowe", "Szybkie (do 20 minut)",
-        "Na zimno", "Air fryer (Frytkownica beztłuszczowa)", "Tradycyjne",
-        "Tanie gotowanie", "Z kilku składników", "Z piekarnika", "Przetwory"
-    ]
-
-    # Dynamiczne utworzenie słownika tagów w bazie
-    tags_dict = {}
-    for name in tag_names:
-        tags_dict[name] = Tag.objects.create(name=name)
-
-    print("Generowanie przepisów dopasowanych do folderów i tagów...")
+    print("Generowanie przepisów w podrozdziałach...")
 
     recipes_data = [
         # --- MAKARONY ---
         {
             "name": "Spaghetti Carbonara z boczkiem",
-            "category": cat_kategorie_dan,
-            "tags": [tags_dict["Makarony"], tags_dict["Tradycyjne"], tags_dict["Z mięsem"], tags_dict["Obiady"]],
+            "category": sub["Obiady"],
             "description": "Klasyczne włoskie spaghetti z chrupiącym boczkiem, żółtkami i serem Pecorino.",
             "prep_time": 25,
             "ingredients": [
@@ -84,8 +47,7 @@ def run_seed():
         },
         {
             "name": "Domowe tagliatelle w sosie pomidorowym",
-            "category": cat_maczna_magia,
-            "tags": [tags_dict["Makarony"], tags_dict["Szybkie (do 20 minut)"], tags_dict["Bez mięsa"], tags_dict["Lekka"]],
+            "category": sub["Makarony"],
             "description": "Świeży makaron wstążki w lekkim sosie z pomidorów i świeżej bazylii.",
             "prep_time": 20,
             "ingredients": [
@@ -102,8 +64,7 @@ def run_seed():
         },
         {
             "name": "Makaron z sosem szpinakowym i fetą",
-            "category": cat_kategorie_dan,
-            "tags": [tags_dict["Makarony"], tags_dict["Fit"], tags_dict["Lekka"], tags_dict["Bez mięsa"]],
+            "category": sub["Obiady"],
             "description": "Kremowy, zielony sos ze szpinaku i czosnku z dodatkiem słonej fety.",
             "prep_time": 25,
             "ingredients": [
@@ -122,8 +83,7 @@ def run_seed():
         # --- DROŻDŻOWE ---
         {
             "name": "Domowa pizza na puszystym cieście drożdżowym",
-            "category": cat_maczna_magia,
-            "tags": [tags_dict["Drożdżowe"], tags_dict["Tradycyjne"], tags_dict["Imprezy"], tags_dict["Z piekarnika"]],
+            "category": sub["Drożdżowe"],
             "description": "Prawdziwa domowa pizza z ciągnącym się sosem pomidorowym i serem.",
             "prep_time": 90,
             "ingredients": [
@@ -142,8 +102,7 @@ def run_seed():
         },
         {
             "name": "Słodkie bułeczki drożdżowe z kruszonką",
-            "category": cat_maczna_magia,
-            "tags": [tags_dict["Drożdżowe"], tags_dict["Ciasta i ciasteczka"], tags_dict["Na słodko"], tags_dict["Desery"]],
+            "category": sub["Drożdżowe"],
             "description": "Mięciutkie, pachnące maślanym aromatem bułeczki z chrupiącą kruszonką.",
             "prep_time": 120,
             "ingredients": [
@@ -164,8 +123,7 @@ def run_seed():
         # --- PRZETWORY ---
         {
             "name": "Domowa konfitura truskawkowa",
-            "category": cat_spizarnia,
-            "tags": [tags_dict["Przetwory"], tags_dict["Domowe weki"], tags_dict["Na słodko"]],
+            "category": sub["Przetwory"],
             "description": "Gęsta, aromatyczna konfitura z całymi owocami truskawek na zimowe wieczory.",
             "prep_time": 180,
             "ingredients": [
@@ -181,8 +139,7 @@ def run_seed():
         },
         {
             "name": "Tradycyjny Rosół domowy",
-            "category": cat_kategorie_dan,
-            "tags": [tags_dict["Zupy"], tags_dict["Tradycyjne"], tags_dict["Z mięsem"], tags_dict["Obiady"]],
+            "category": sub["Zupy"],
             "description": "Królowa polskich zup. Niedzielny klasyk na drobiowym mięsie.",
             "prep_time": 180,
             "ingredients": [
@@ -199,8 +156,7 @@ def run_seed():
         },
         {
             "name": "Kotlet schabowy z ziemniakami",
-            "category": cat_mieso_ryby,
-            "tags": [tags_dict["Dania główne"], tags_dict["Tradycyjne"], tags_dict["Ziemniaki"], tags_dict["Wołowina & Wieprzowina"], tags_dict["Obiady"]],
+            "category": sub["Wołowina & Wieprzowina"],
             "description": "Klasyczny polski obiad – chrupiący schabowy i ziemniaki z koperkiem.",
             "prep_time": 40,
             "ingredients": [
@@ -216,8 +172,7 @@ def run_seed():
         },
         {
             "name": "Domowa szarlotka z kruszonką",
-            "category": cat_maczna_magia,
-            "tags": [tags_dict["Desery"], tags_dict["Ciasta i ciasteczka"], tags_dict["Jabłka"], tags_dict["Cynamon"]],
+            "category": sub["Ciasta i ciasteczka"],
             "description": "Kultowe ciasto z mnóstwem jabłek i chrupiącą maślaną kruszonką.",
             "prep_time": 90,
             "ingredients": [
@@ -233,8 +188,7 @@ def run_seed():
         },
         {
             "name": "Domowa lemoniada cytrynowa",
-            "category": cat_spizarnia,
-            "tags": [tags_dict["Napoje"], tags_dict["Szybkie (do 20 minut)"], tags_dict["Fit"], tags_dict["Na zimno"]],
+            "category": sub["Napoje"],
             "description": "Orzeźwiający, chłodzący napój pełen witaminy C z miętą.",
             "prep_time": 10,
             "ingredients": [
@@ -258,9 +212,6 @@ def run_seed():
             prep_time=item["prep_time"]
         )
 
-        # Przypisanie tagów
-        recipe.tags.set(item["tags"])
-
         # Tworzenie składników
         for ing in item["ingredients"]:
             Ingredient.objects.create(
@@ -278,7 +229,7 @@ def run_seed():
                 instruction=step_text
             )
 
-    print(f"Sukces! Baza została zasilona zestawem {len(recipes_data)} przepisów, ułożonych w nowych folderach (kategoriach) z dynamicznymi tagami.")
+    print(f"Sukces! Baza została zasilona zestawem {len(recipes_data)} przepisów, ułożonych w rozdziałach i podrozdziałach.")
 
 if __name__ == "__main__":
-    run_seed()
+    run_seed()

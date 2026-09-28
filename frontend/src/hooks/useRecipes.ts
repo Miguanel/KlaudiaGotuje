@@ -5,7 +5,7 @@ import type { Recipe } from '../types';
 
 
 
-export function useRecipes(categorySlug?: string | null, searchQuery?: string, tagSlug?: string | null, diet?: string, sort?: string) {
+export function useRecipes(categorySlug?: string | null, searchQuery?: string, diet?: string, sort?: string) {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -13,7 +13,7 @@ export function useRecipes(categorySlug?: string | null, searchQuery?: string, t
   useEffect(() => {
     let isMounted = true;
     setLoading(true);
-    apiClient.recipes.getAll(categorySlug, searchQuery, tagSlug, diet, sort)
+    apiClient.recipes.getAll(categorySlug, searchQuery, diet, sort)
       .then(data => {
         if (isMounted) {
           setRecipes(Array.isArray(data) ? data : []);
@@ -28,7 +28,7 @@ export function useRecipes(categorySlug?: string | null, searchQuery?: string, t
       });
 
     return () => { isMounted = false; };
-  }, [categorySlug, searchQuery, tagSlug, diet, sort]);
+  }, [categorySlug, searchQuery, diet, sort]);
 
   return { recipes, loading, error };
 }
@@ -91,4 +91,4 @@ export function useSimilarRecipes(id: string | undefined) {
   }, [id]);
 
   return { recipes, loading };
-}
+}

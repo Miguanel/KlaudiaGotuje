@@ -1,10 +1,9 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCategories } from '../hooks/useCategories';
-import { useTags } from '../hooks/useTags';
 import { useAuth } from '../context/AuthContext';
 import { apiClient } from '../api/client';
-import { FaCrown, FaGem, FaPlus, FaCamera, FaCheck, FaLock } from 'react-icons/fa';
+import { FaCrown, FaPlus, FaCamera, FaCheck, FaLock } from 'react-icons/fa';
 
 interface StepData {
   step_number: number;
@@ -15,8 +14,7 @@ interface StepData {
 
 export default function AddRecipe() {
   const { token, isAuthenticated } = useAuth();
-  const { categories } = useCategories();
-  const { tags } = useTags();
+  const { chapters } = useCategories();
   const navigate = useNavigate();
 
   const [name, setName] = useState('');
@@ -24,7 +22,6 @@ export default function AddRecipe() {
   const [prepTime, setPrepTime] = useState(30);
   const [categoryId, setCategoryId] = useState('');
 
-  const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [mainImage, setMainImage] = useState<File | null>(null);
   const [mainImagePreview, setMainImagePreview] = useState<string | null>(null);
 
@@ -36,12 +33,12 @@ export default function AddRecipe() {
 
   if (!isAuthenticated) {
     return (
-      <div className="max-w-md mx-auto px-4 py-20 text-center text-[#FDFBF7]">
-        <div className="bg-[#0D1321] p-8 rounded-3xl border border-[#540B0E] shadow-neon">
-          <FaLock className="text-[#1F51FF] text-4xl mx-auto mb-4" />
-          <h1 className="text-2xl font-black mb-2 text-glow">Brak dostępu</h1>
-          <p className="text-gray-300 mb-6 text-sm">Musisz się zalogować jako administrator, aby dodawać przepisy.</p>
-          <button onClick={() => navigate('/login')} className="bg-[#E60026] text-[#FDFBF7] px-6 py-3 rounded-xl font-black shadow-chili hover:bg-red-700 transition-all">
+      <div className="max-w-md mx-auto px-4 py-20 text-center text-cream">
+        <div className="bg-card p-8 rounded-3xl border border-line shadow-neon">
+          <FaLock className="text-pink text-4xl mx-auto mb-4" />
+          <h1 className="text-2xl font-bold mb-2">Brak dostępu</h1>
+          <p className="text-muted mb-6 text-sm">Musisz się zalogować jako administrator, aby dodawać przepisy.</p>
+          <button onClick={() => navigate('/login')} className="bg-pink text-cream px-6 py-3 rounded-xl font-bold shadow-neon hover:brightness-110 transition-all">
             Przejdź do logowania
           </button>
         </div>
@@ -55,12 +52,6 @@ export default function AddRecipe() {
       setMainImage(file);
       setMainImagePreview(URL.createObjectURL(file));
     }
-  };
-
-  const toggleTag = (tagId: string) => {
-    setSelectedTags(prev =>
-      prev.includes(tagId) ? prev.filter(id => id !== tagId) : [...prev, tagId]
-    );
   };
 
   const addIngredientField = () => setIngredients([...ingredients, { name: '', quantity: 1, unit: 'g' }]);
@@ -89,7 +80,6 @@ export default function AddRecipe() {
         description,
         prep_time: Number(prepTime),
         category_id: categoryId || null,
-        tag_ids: selectedTags,
         ingredients,
         steps: steps.map(s => ({
           step_number: s.step_number,
@@ -121,34 +111,33 @@ export default function AddRecipe() {
   };
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 md:py-12 text-[#FDFBF7]">
-      <h1 className="text-2xl md:text-3xl font-black mb-2 text-glow flex items-center gap-2">
-        <FaCrown className="text-[#D4AF37]" /> Dodaj nowy przepis <FaGem className="text-[#D4AF37]" />
+    <div className="max-w-4xl mx-auto px-4 py-8 md:py-12 text-cream">
+      <h1 className="font-display uppercase tracking-wide text-3xl sm:text-4xl text-gold mb-2 flex items-center gap-3">
+        <FaCrown className="text-gold" /> Dodaj nowy przepis
       </h1>
-      <p className="text-gray-300 mb-8 text-sm md:text-base font-medium flex items-center gap-1.5">
+      <p className="text-muted mb-8 text-sm md:text-base font-medium flex items-center gap-1.5">
         <span>Wypełnij formularz, prześlij zdjęcia i udostępnij nową potrawę.</span>
-        <FaGem className="text-[#1F51FF] text-xs inline animate-pulse" />
       </p>
-      {error && <div className="bg-red-950/80 border border-red-900 text-red-200 p-4 rounded-xl mb-6 font-bold text-sm">{error}</div>}
+      {error && <div className="bg-pink/10 border border-pink/50 text-pink-soft p-4 rounded-xl mb-6 font-bold text-sm">{error}</div>}
 
-      <form onSubmit={handleSubmit} className="space-y-8 bg-[#0D1321] p-4 sm:p-8 rounded-3xl border border-[#540B0E] shadow-neon">
+      <form onSubmit={handleSubmit} className="space-y-8 bg-card p-4 sm:p-8 rounded-3xl border border-line shadow-neon">
 
         {/* Informacje podstawowe */}
         <div className="space-y-6">
-          <h2 className="text-lg md:text-xl font-black text-[#FDFBF7] border-b border-[#540B0E] pb-3 flex items-center gap-2">
-            <span className="text-gold">💎 Informacje podstawowe</span>
+          <h2 className="font-display uppercase tracking-wide text-xl text-gold border-b border-line pb-3 flex items-center gap-2">
+            <span className="text-gold">Informacje podstawowe</span>
           </h2>
 
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="w-full md:w-1/3 flex flex-col items-center gap-3">
-              <label className="block text-xs font-black text-gray-300 uppercase w-full text-left">Zdjęcie główne</label>
-              <div className="w-full aspect-video bg-[#1A0D16] border-2 border-dashed border-[#540B0E] rounded-2xl overflow-hidden relative flex flex-col items-center justify-center hover:border-[#1F51FF] transition-colors">
+              <label className="block text-xs font-bold text-muted uppercase w-full text-left">Zdjęcie główne</label>
+              <div className="w-full aspect-video bg-ink border-2 border-dashed border-line rounded-2xl overflow-hidden relative flex flex-col items-center justify-center hover:border-pink transition-colors">
                 {mainImagePreview ? (
                   <img src={mainImagePreview} alt="Podgląd" className="w-full h-full object-cover" />
                 ) : (
                   <div className="text-center p-4">
-                    <FaCamera className="text-[#1F51FF] text-2xl mx-auto mb-2" />
-                    <span className="text-gray-400 text-xs font-bold">Brak zdjęcia</span>
+                    <FaCamera className="text-pink text-2xl mx-auto mb-2" />
+                    <span className="text-muted text-xs font-bold">Brak zdjęcia</span>
                   </div>
                 )}
                 <input
@@ -157,70 +146,56 @@ export default function AddRecipe() {
                   className="absolute inset-0 opacity-0 cursor-pointer"
                 />
               </div>
-              <p className="text-xs text-gray-400 text-center font-medium">Kliknij na obszar, aby dodać plik (JPG, PNG).</p>
+              <p className="text-xs text-muted text-center font-medium">Kliknij na obszar, aby dodać plik (JPG, PNG).</p>
             </div>
 
             <div className="w-full md:w-2/3 space-y-4">
               <div>
-                <label className="block text-xs font-black text-gray-300 uppercase mb-1">Nazwa przepisu</label>
+                <label className="block text-xs font-bold text-muted uppercase mb-1">Nazwa przepisu</label>
                 <input
                   type="text" value={name} onChange={e => setName(e.target.value)} required
-                  className="w-full px-4 py-2.5 border border-[#540B0E] rounded-xl outline-none bg-[#1A0D16] text-[#FDFBF7] focus:border-[#1F51FF]"
+                  className="w-full px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream focus:border-pink"
                   placeholder="np. Domowe spaghetti"
                 />
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-black text-gray-300 uppercase mb-1">Kategoria</label>
+                  <label className="block text-xs font-bold text-muted uppercase mb-1">Rozdział / podrozdział</label>
                   <select
                     value={categoryId} onChange={e => setCategoryId(e.target.value)}
-                    className="w-full px-4 py-2.5 border border-[#540B0E] rounded-xl outline-none bg-[#1A0D16] text-[#FDFBF7] font-bold"
+                    className="w-full px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream font-bold"
                   >
-                    <option value="">Wybierz kategorię...</option>
-                    {categories.map(c => <option key={c.id} value={c.id}>{c.name}</option>)}
+                    <option value="">Wybierz rozdział / podrozdział…</option>
+                    {chapters.map(ch => (
+                      <optgroup key={ch.id} label={ch.name}>
+                        <option value={ch.id}>{ch.name} (cały rozdział)</option>
+                        {ch.children.map(sub => <option key={sub.id} value={sub.id}>{sub.name}</option>)}
+                      </optgroup>
+                    ))}
                   </select>
                 </div>
                 <div>
-                  <label className="block text-xs font-black text-gray-300 uppercase mb-1">Czas (min)</label>
+                  <label className="block text-xs font-bold text-muted uppercase mb-1">Czas (min)</label>
                   <input
                     type="number" value={prepTime} onChange={e => setPrepTime(Number(e.target.value))} required min={1}
-                    className="w-full px-4 py-2.5 border border-[#540B0E] rounded-xl outline-none bg-[#1A0D16] text-[#FDFBF7]"
+                    className="w-full px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream"
                   />
                 </div>
               </div>
               <div>
-                <label className="block text-xs font-black text-gray-300 uppercase mb-1">Opis / Wstęp</label>
+                <label className="block text-xs font-bold text-muted uppercase mb-1">Opis / Wstęp</label>
                 <textarea
                   value={description} onChange={e => setDescription(e.target.value)} rows={3} required
-                  className="w-full px-4 py-2.5 border border-[#540B0E] rounded-xl outline-none bg-[#1A0D16] text-[#FDFBF7]"
+                  className="w-full px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream"
                 />
               </div>
             </div>
           </div>
         </div>
 
-        {/* Sekcja Tagów */}
-        <div className="space-y-4">
-          <h2 className="text-lg md:text-xl font-black text-[#FDFBF7] border-b border-[#540B0E] pb-3">Tagi</h2>
-          <div className="flex flex-wrap gap-2">
-            {tags.map(tag => (
-              <button
-                key={tag.id} type="button" onClick={() => toggleTag(tag.id)}
-                className={`px-4 py-2 rounded-full text-xs font-black transition-all border ${
-                  selectedTags.includes(tag.id)
-                    ? 'bg-[#1F51FF] text-[#FDFBF7] border-[#1F51FF] shadow-neon'
-                    : 'bg-[#1A0D16] text-gray-300 border-[#540B0E] hover:border-[#1F51FF]'
-                }`}
-              >
-                #{tag.name}
-              </button>
-            ))}
-          </div>
-        </div>
-
         {/* Składniki */}
         <div className="space-y-4">
-          <h2 className="text-lg md:text-xl font-black text-[#FDFBF7] border-b border-[#540B0E] pb-3">Składniki</h2>
+          <h2 className="font-display uppercase tracking-wide text-xl text-gold border-b border-line pb-3">Składniki</h2>
           {ingredients.map((ing, idx) => (
             <div key={idx} className="flex flex-col sm:flex-row gap-3 items-start sm:items-center">
               <input
@@ -230,7 +205,7 @@ export default function AddRecipe() {
                   updated[idx].name = e.target.value;
                   setIngredients(updated);
                 }} required
-                className="w-full sm:flex-grow px-4 py-2.5 border border-[#540B0E] rounded-xl outline-none bg-[#1A0D16] text-[#FDFBF7]"
+                className="w-full sm:flex-grow px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream"
               />
               <div className="flex gap-3 w-full sm:w-auto">
                 <input
@@ -240,7 +215,7 @@ export default function AddRecipe() {
                     updated[idx].quantity = Number(e.target.value);
                     setIngredients(updated);
                   }} required
-                  className="w-1/2 sm:w-24 px-4 py-2.5 border border-[#540B0E] rounded-xl outline-none bg-[#1A0D16] text-[#FDFBF7]"
+                  className="w-1/2 sm:w-24 px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream"
                 />
                 <input
                   type="text" placeholder="Jednostka" value={ing.unit}
@@ -249,22 +224,22 @@ export default function AddRecipe() {
                     updated[idx].unit = e.target.value;
                     setIngredients(updated);
                   }} required
-                  className="w-1/2 sm:w-28 px-4 py-2.5 border border-[#540B0E] rounded-xl outline-none bg-[#1A0D16] text-[#FDFBF7]"
+                  className="w-1/2 sm:w-28 px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream"
                 />
               </div>
             </div>
           ))}
-          <button type="button" onClick={addIngredientField} className="text-sm font-black text-[#1F51FF] hover:underline flex items-center gap-1">
+          <button type="button" onClick={addIngredientField} className="text-sm font-bold text-pink hover:underline flex items-center gap-1">
             <FaPlus /> Dodaj kolejny składnik
           </button>
         </div>
 
         {/* Kroki */}
         <div className="space-y-6">
-          <h2 className="text-lg md:text-xl font-black text-[#FDFBF7] border-b border-[#540B0E] pb-3">Kroki przygotowania</h2>
+          <h2 className="font-display uppercase tracking-wide text-xl text-gold border-b border-line pb-3">Kroki przygotowania</h2>
           {steps.map((step, idx) => (
-            <div key={idx} className="flex flex-col sm:flex-row gap-4 items-start bg-[#1A0D16] p-4 rounded-2xl border border-[#540B0E]">
-              <div className="w-8 h-8 rounded-xl bg-[#1F51FF]/20 border border-[#1F51FF] text-[#1F51FF] flex items-center justify-center font-black flex-shrink-0 mt-1 shadow-neon">
+            <div key={idx} className="flex flex-col sm:flex-row gap-4 items-start bg-ink p-4 rounded-2xl border border-line">
+              <div className="w-8 h-8 rounded-xl bg-pink/15 border border-pink text-pink flex items-center justify-center font-bold flex-shrink-0 mt-1 shadow-neon">
                 {idx + 1}
               </div>
 
@@ -277,17 +252,17 @@ export default function AddRecipe() {
                     updated[idx].instruction = e.target.value;
                     setSteps(updated);
                   }} required rows={3}
-                  className="w-full px-4 py-2.5 border border-[#540B0E] rounded-xl outline-none bg-[#0D1321] text-[#FDFBF7]"
+                  className="w-full px-4 py-2.5 border border-line rounded-xl outline-none bg-card text-cream"
                 />
 
                 <div className="flex items-center gap-4">
-                  <div className="relative overflow-hidden w-28 h-16 bg-[#0D1321] border border-[#540B0E] rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-[#1F51FF] transition-colors">
+                  <div className="relative overflow-hidden w-28 h-16 bg-card border border-line rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-pink transition-colors">
                     {step.imagePreview ? (
                       <img src={step.imagePreview} alt="Podgląd kroku" className="w-full h-full object-cover" />
                     ) : (
                       <div className="text-center p-1">
-                        <FaCamera className="text-[#1F51FF] text-sm mx-auto mb-1" />
-                        <span className="text-[10px] font-black text-gray-400">Zdjęcie kroku</span>
+                        <FaCamera className="text-pink text-sm mx-auto mb-1" />
+                        <span className="text-[10px] font-bold text-muted">Zdjęcie kroku</span>
                       </div>
                     )}
                     <input
@@ -305,19 +280,19 @@ export default function AddRecipe() {
               </div>
             </div>
           ))}
-          <button type="button" onClick={addStepField} className="text-sm font-black text-[#1F51FF] hover:underline flex items-center gap-1">
+          <button type="button" onClick={addStepField} className="text-sm font-bold text-pink hover:underline flex items-center gap-1">
             <FaPlus /> Dodaj kolejny krok
           </button>
         </div>
 
         <button
           type="submit" disabled={loading}
-          className="w-full py-4 bg-[#E60026] text-[#FDFBF7] font-black rounded-2xl hover:bg-red-700 transition-all shadow-chili disabled:opacity-50 text-base md:text-lg hover:scale-[1.01] flex items-center justify-center gap-2"
+          className="w-full py-4 bg-pink text-cream font-bold rounded-2xl hover:brightness-110 transition-all shadow-neon disabled:opacity-50 text-base md:text-lg hover:scale-[1.01] flex items-center justify-center gap-2"
         >
-          {loading ? 'Publikowanie... ✨' : <>Opublikuj przepis <FaGem className="text-[#D4AF37] inline text-xl" /></>}
+          {loading ? 'Publikowanie...' : 'Opublikuj przepis'}
         </button>
 
       </form>
     </div>
   );
-}
+}

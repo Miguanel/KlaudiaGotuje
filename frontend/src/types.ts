@@ -1,9 +1,3 @@
-export interface Tag {
-  id: string;
-  name: string;
-  slug: string;
-}
-
 export interface Category {
   id: string;
   name: string;
@@ -30,7 +24,6 @@ export interface Recipe {
   id: string;
   name: string;
   description: string;
-  tags: Tag[];
   prep_time: number;
   created_at: string;
   category: Category | null;

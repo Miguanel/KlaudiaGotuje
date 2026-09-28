@@ -3,8 +3,8 @@ from ninja.files import UploadedFile
 from typing import List, Optional
 import json
 from django.shortcuts import get_object_or_404
-from .models import Recipe, Category, Tag, Comment, RecipeStep, Ingredient
-from .schemas import RecipeSchema, CategorySchema, TagSchema, CommentSchema, CommentCreateSchema, RecipeCreateSchema
+from .models import Recipe, Category, Comment, RecipeStep, Ingredient
+from .schemas import RecipeSchema, CategorySchema, CommentSchema, CommentCreateSchema, RecipeCreateSchema
 from django.db.models import Q
 from ninja.security import HttpBearer
 from rest_framework_simplejwt.tokens import AccessToken
@@ -28,14 +28,10 @@ class JWTAuth(HttpBearer):
             return None
 
 
-@api.get("/tagi", response=List[TagSchema])
-def list_tags(request):
-    return Tag.objects.all()
-
-
 @api.get("/kategorie", response=List[CategorySchema])
 def list_categories(request):
-    return Category.objects.all()
+    # Rozdziały i podrozdziały (frontend buduje z nich drzewo po polu parent_category)
+    return Category.objects.select_related('parent_category').all()
 
 
 @api.get("/przepisy", response=List[RecipeSchema])
@@ -43,16 +39,15 @@ def list_recipes(
         request,
         category_slug: Optional[str] = None,
         q: Optional[str] = None,
-        tag_slug: Optional[str] = None,
         diet: Optional[str] = None,
         sort: Optional[str] = 'date'
 ):
-    qs = Recipe.objects.select_related('category').prefetch_related('ingredients', 'steps', 'tags', 'comments').all()
+    qs = Recipe.objects.select_related('category', 'category__parent_category') \
+        .prefetch_related('ingredients', 'steps', 'comments').all()
 
     if category_slug:
-        qs = qs.filter(category__slug=category_slug)
-    if tag_slug:
-        qs = qs.filter(tags__slug=tag_slug)
+        # Rozdział pokazuje także przepisy ze wszystkich swoich podrozdziałów
+        qs = qs.filter(Q(category__slug=category_slug) | Q(category__parent_category__slug=category_slug))
     if diet and diet != 'dowolna':
         qs = qs.filter(diet=diet)
 
@@ -75,7 +70,8 @@ def list_recipes(
 
 @api.get("/przepisy/{recipe_id}", response=RecipeSchema)
 def get_recipe(request, recipe_id: str):
-    qs = Recipe.objects.select_related('category').prefetch_related('ingredients', 'steps', 'tags')
+    qs = Recipe.objects.select_related('category', 'category__parent_category') \
+        .prefetch_related('ingredients', 'steps', 'comments')
     return get_object_or_404(qs, id=recipe_id)
 
 
@@ -118,11 +114,6 @@ def create_recipe(
     if main_image:
         recipe.main_image.save(main_image.name, main_image)
 
-    # Zapis tagów
-    if payload.tag_ids:
-        tags = Tag.objects.filter(id__in=payload.tag_ids)
-        recipe.tags.set(tags)
-
     # Zapis składników
     for ing in payload.ingredients:
         Ingredient.objects.create(
@@ -156,25 +147,26 @@ def create_recipe(
 
 @api.get("/przepisy/{recipe_id}/podobne", response=List[RecipeSchema])
 def get_similar_recipes(request, recipe_id: str):
-    recipe = get_object_or_404(Recipe, id=recipe_id)
-    tag_ids = recipe.tags.values_list('id', flat=True)
-
-    # Jeśli przepis nie ma tagów, nie zwracamy rekomendacji
-    if not tag_ids:
+    """Podobne przepisy: najpierw z tego samego podrozdziału, potem z tego samego rozdziału."""
+    recipe = get_object_or_404(Recipe.objects.select_related('category'), id=recipe_id)
+    if not recipe.category:
         return []
 
-    # Szukamy przepisów ze wspólnymi tagami, wykluczamy obecny,
-    # sortujemy malejąco po liczbie wspólnych tagów i ograniczamy do 3 wyników
-    qs = Recipe.objects.select_related('category').prefetch_related('ingredients', 'steps', 'tags')
-    similar = qs.filter(tags__id__in=tag_ids) \
-                  .exclude(id=recipe_id) \
-                  .annotate(same_tags=Count('tags')) \
-                  .order_by('-same_tags', '-created_at')[:3]
+    chapter_id = recipe.category.parent_category_id or recipe.category_id
+    qs = Recipe.objects.select_related('category', 'category__parent_category') \
+        .prefetch_related('ingredients', 'steps', 'comments') \
+        .exclude(id=recipe.id)
 
-    return similar
+    same_sub = list(qs.filter(category_id=recipe.category_id).order_by('-created_at')[:3])
+    if len(same_sub) < 3:
+        same_chapter = qs.filter(Q(category_id=chapter_id) | Q(category__parent_category_id=chapter_id)) \
+            .exclude(id__in=[r.id for r in same_sub]) \
+            .order_by('-created_at')[:3 - len(same_sub)]
+        same_sub += list(same_chapter)
+    return same_sub
 
 @api.delete("/komentarze/{comment_id}", auth=JWTAuth())
 def delete_comment(request, comment_id: str):
     comment = get_object_or_404(Comment, id=comment_id)
     comment.delete()
-    return {"success": True}
+    return {"success": True}

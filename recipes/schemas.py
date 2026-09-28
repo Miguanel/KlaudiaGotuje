@@ -1,6 +1,6 @@
 from ninja import ModelSchema
 from typing import List, Optional
-from .models import Recipe, Ingredient, RecipeStep, Category, Tag, Comment
+from .models import Recipe, Ingredient, RecipeStep, Category, Comment
 from ninja import Schema
 
 class IngredientCreateSchema(Schema):
@@ -20,7 +20,6 @@ class RecipeCreateSchema(Schema):
     category_id: Optional[str] = None
     ingredients: List[IngredientCreateSchema] = []
     steps: List[RecipeStepCreateSchema] = []
-    tag_ids: List[str] = []
 # Nowy schemat dla komentarza
 class CommentSchema(ModelSchema):
     class Meta:
@@ -70,15 +69,8 @@ class RecipeStepSchema(ModelSchema):
         return None
 
 
-class TagSchema(ModelSchema):
-    class Meta:
-        model = Tag
-        fields = ['id', 'name', 'slug']
-
-
 class RecipeSchema(ModelSchema):
     category: Optional[CategorySchema] = None
-    tags: List[TagSchema]
     ingredients: List[IngredientSchema]
     steps: List[RecipeStepSchema]
     comments: List[CommentSchema] = []
@@ -114,4 +106,4 @@ class RecipeSchema(ModelSchema):
         # Liczymy zdjęcie główne (jeśli istnieje) + zdjęcia kroków posiadające plik
         count = 1 if obj.main_image else 0
         count += sum(1 for step in obj.steps.all() if step.image)
-        return count
+        return count

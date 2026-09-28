@@ -1,138 +1,304 @@
-import { useState } from 'react';
-import { Link, Outlet, useNavigate } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { FaCrown, FaGem, FaShoppingCart, FaPlus, FaUser, FaSignOutAlt, FaMagic } from 'react-icons/fa';
+import { useCategories } from '../hooks/useCategories';
+import { chapterIcon } from '../utils/chapterIcons';
+import {
+  FaCrown, FaHeart, FaShoppingBasket, FaPlus, FaSignOutAlt, FaSearch, FaChevronDown, FaBars, FaTimes,
+  FaInstagram, FaTiktok, FaEnvelope,
+} from 'react-icons/fa';
 
-export default function Layout() {
-  const { isAuthenticated, logout } = useAuth();
+export function Logo({ onClick }: { onClick?: () => void }) {
+  return (
+    <Link to="/" onClick={onClick} className="flex items-center gap-2 min-w-0 shrink-0" aria-label="Diamentowe Smaki – strona główna">
+      <FaCrown className="text-gold text-2xl sm:text-3xl shrink-0 drop-shadow-[0_0_8px_rgba(244,199,82,0.55)]" />
+      <span className="flex flex-col leading-none">
+        <span className="font-display text-xl sm:text-2xl tracking-wide uppercase text-gold">Diamentowe Smaki</span>
+        <span className="font-script text-pink-soft text-sm sm:text-base -mt-0.5">by Engibadwoman</span>
+      </span>
+    </Link>
+  );
+}
+
+function SearchBox({ onDone, autoFocus = false }: { onDone?: () => void; autoFocus?: boolean }) {
   const navigate = useNavigate();
+  const [params] = useSearchParams();
+  const [term, setTerm] = useState(params.get('q') ?? '');
 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  useEffect(() => { setTerm(params.get('q') ?? ''); }, [params]);
 
-  const handleLogout = () => {
-    logout();
-    setIsMobileMenuOpen(false);
-    navigate('/');
-  };
-
-  const closeMenu = () => {
-    setIsMobileMenuOpen(false);
+  const submit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = term.trim();
+    navigate(q ? `/?q=${encodeURIComponent(q)}` : '/');
+    onDone?.();
   };
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#1A0D16] text-[#FDFBF7] font-sans overflow-x-hidden">
-      <header className="bg-[#0D1321]/90 backdrop-blur-md border-b border-[#540B0E] sticky top-0 z-50 shadow-neon">
-        <div className="max-w-5xl mx-auto px-3 sm:px-4 h-auto min-h-[4rem] py-2 flex items-center justify-between gap-2">
+    <form onSubmit={submit} role="search" className="relative w-full">
+      <FaSearch className="absolute left-3.5 top-1/2 -translate-y-1/2 text-muted text-sm pointer-events-none" />
+      <input
+        type="search"
+        value={term}
+        autoFocus={autoFocus}
+        onChange={(e) => setTerm(e.target.value)}
+        placeholder="Szukaj przepisu lub składnika…"
+        aria-label="Szukaj przepisu"
+        className="w-full h-11 pl-10 pr-24 rounded-full bg-card border border-line text-sm text-cream placeholder:text-muted focus:outline-none focus:border-pink focus:ring-2 focus:ring-pink/30 transition"
+      />
+      <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 px-4 rounded-full bg-pink text-white text-xs font-bold uppercase tracking-wide hover:brightness-110 transition">
+        Szukaj
+      </button>
+    </form>
+  );
+}
 
-          {/* LOGO */}
-          <Link to="/" className="text-[17px] leading-tight sm:text-2xl font-black tracking-tight text-[#FDFBF7] flex items-center flex-wrap sm:flex-nowrap gap-1 sm:gap-1.5 hover:scale-105 transition-transform min-w-0" onClick={closeMenu}>
-            <span className="flex items-center gap-1 whitespace-normal sm:whitespace-nowrap break-words">
-              <FaCrown className="text-[#D4AF37] flex-shrink-0" style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,35,0.6))' }} />
-              <span className="text-gold">Diamentowe Smaki</span>
-              <span className="hidden sm:inline text-gray-400 font-bold text-xs uppercase tracking-widest ml-2">Engibadwoman</span>
-            </span>
-            <FaGem className="text-[#D4AF37] text-glow flex-shrink-0 text-sm sm:text-base" />
-          </Link>
+export default function Layout() {
+  const { isAuthenticated, logout } = useAuth();
+  const { chapters } = useCategories();
+  const navigate = useNavigate();
+  const location = useLocation();
 
-          {/* PRZYCISK HAMBURGER MENU */}
-          <button
-            className="md:hidden p-1.5 sm:p-2 text-gray-300 hover:text-[#1F51FF] focus:outline-none transition-colors flex-shrink-0"
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Otwórz menu"
-          >
-            <svg className="w-6 h-6 sm:w-7 sm:h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              {isMobileMenuOpen ? (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
+  const [megaOpen, setMegaOpen] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [openChapter, setOpenChapter] = useState<string | null>(null);
+  const megaRef = useRef<HTMLDivElement>(null);
 
-          {/* MENU DESKTOPOWE */}
-          <nav className="hidden md:flex items-center gap-6 text-sm font-bold text-gray-300">
-            <Link to="/" className="hover:text-[#FDFBF7] hover:text-glow transition flex items-center gap-1.5">
-              <FaMagic className="text-[#1F51FF]" /> Przepisy
+  // Zamykanie menu przy zmianie strony
+  useEffect(() => {
+    setMegaOpen(false);
+    setMobileOpen(false);
+  }, [location.pathname, location.search]);
+
+  // Zamykanie mega-menu kliknięciem poza nim lub klawiszem Esc
+  useEffect(() => {
+    if (!megaOpen) return;
+    const onClick = (e: MouseEvent) => {
+      if (megaRef.current && !megaRef.current.contains(e.target as Node)) setMegaOpen(false);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMegaOpen(false); };
+    document.addEventListener('mousedown', onClick);
+    document.addEventListener('keydown', onKey);
+    return () => {
+      document.removeEventListener('mousedown', onClick);
+      document.removeEventListener('keydown', onKey);
+    };
+  }, [megaOpen]);
+
+  const handleLogout = () => {
+    logout();
+    navigate('/');
+  };
+
+  const activeCategory = new URLSearchParams(location.search).get('category');
+  const navLinkCls = ({ isActive }: { isActive: boolean }) =>
+    `flex items-center gap-2 h-full px-1 border-b-2 transition-colors ${
+      isActive ? 'border-pink text-cream' : 'border-transparent text-muted hover:text-cream'
+    }`;
+
+  return (
+    <div className="min-h-screen flex flex-col bg-royal text-cream overflow-x-hidden">
+      <header className="sticky top-0 z-50 bg-panel/95 backdrop-blur-md border-b border-line">
+        {/* GÓRNY PASEK: logo · wyszukiwarka · skróty */}
+        <div className="max-w-6xl mx-auto px-4 h-16 sm:h-[72px] flex items-center gap-4">
+          <Logo />
+
+          <div className="hidden md:block flex-1 max-w-md mx-auto">
+            <SearchBox />
+          </div>
+
+          <div className="ml-auto flex items-center gap-1 sm:gap-2">
+            <Link to="/ulubione" className="hidden md:flex items-center gap-2 px-3 h-10 rounded-full text-sm font-semibold text-muted hover:text-cream hover:bg-card transition" title="Ulubione">
+              <FaHeart className="text-pink" /> <span className="hidden lg:inline">Ulubione</span>
             </Link>
-            <Link to="/zakupy" className="hover:text-[#FDFBF7] hover:text-glow transition flex items-center gap-1.5">
-              <FaShoppingCart className="text-[#1F51FF]" style={{ filter: 'drop-shadow(0 0 6px rgba(31,81,255,0.8))' }} /> Zakupy
+            <Link to="/zakupy" className="hidden md:flex items-center gap-2 px-3 h-10 rounded-full text-sm font-semibold text-muted hover:text-cream hover:bg-card transition" title="Lista zakupów">
+              <FaShoppingBasket className="text-gold" /> <span className="hidden lg:inline">Zakupy</span>
             </Link>
-            <Link to="/ulubione" className="hover:text-[#FDFBF7] hover:text-glow transition flex items-center gap-1.5">
-              <FaGem className="text-[#D4AF37]" /> Ulubione
-            </Link>
-
             {isAuthenticated && (
-              <Link to="/dodaj-przepis" className="bg-[#E60026] text-[#FDFBF7] px-4 py-2 rounded-xl shadow-chili hover:bg-red-700 transition flex items-center gap-1">
-                <FaPlus className="inline" /> Dodaj przepis
-              </Link>
+              <>
+                <Link to="/dodaj-przepis" className="hidden md:flex items-center gap-2 px-4 h-10 rounded-full bg-pink text-white text-sm font-bold hover:brightness-110 transition shadow-neon">
+                  <FaPlus /> Dodaj
+                </Link>
+                <button onClick={handleLogout} className="hidden md:flex items-center justify-center w-10 h-10 rounded-full text-muted hover:text-cream hover:bg-card transition" title="Wyloguj">
+                  <FaSignOutAlt />
+                </button>
+              </>
             )}
+            <button
+              className="md:hidden w-10 h-10 flex items-center justify-center rounded-full text-cream hover:bg-card transition"
+              onClick={() => setMobileOpen(o => !o)}
+              aria-label={mobileOpen ? 'Zamknij menu' : 'Otwórz menu'}
+              aria-expanded={mobileOpen}
+            >
+              {mobileOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
+            </button>
+          </div>
+        </div>
 
-            <Link to="/o-mnie" className="hover:text-[#FDFBF7] hover:text-glow transition flex items-center gap-1.5">
-              <FaUser className="text-[#D4AF37]" /> O mnie
-            </Link>
-
-            {isAuthenticated ? (
-              <button
-                onClick={handleLogout}
-                className="text-red-400 hover:text-red-300 transition font-bold flex items-center gap-1"
-              >
-                <FaSignOutAlt /> Wyloguj
-              </button>
-            ) : (
-              <Link to="/login" className="text-[#E60026] hover:text-red-400 transition font-black">
-                Logowanie
-              </Link>
-            )}
+        {/* DOLNY PASEK NAWIGACJI (desktop) */}
+        <div ref={megaRef} className="hidden md:block border-t border-line/60">
+          <nav className="max-w-6xl mx-auto px-4 h-12 flex items-stretch gap-7 text-sm font-semibold">
+            <button
+              onClick={() => setMegaOpen(o => !o)}
+              aria-expanded={megaOpen}
+              className={`flex items-center gap-2 border-b-2 transition-colors ${megaOpen ? 'border-pink text-cream' : 'border-transparent text-cream hover:text-pink-soft'}`}
+            >
+              <FaCrown className="text-gold" /> Przepisy
+              <FaChevronDown className={`text-xs transition-transform duration-300 ${megaOpen ? 'rotate-180' : ''}`} />
+            </button>
+            <NavLink to="/" end className={({ isActive }) => navLinkCls({ isActive: isActive && !location.search })}>Najnowsze</NavLink>
+            <NavLink to="/?sort=popular" className={() => navLinkCls({ isActive: location.search.includes('sort=popular') && !activeCategory })}>Najpopularniejsze</NavLink>
+            <NavLink to="/ulubione" className={navLinkCls}>Ulubione</NavLink>
+            <NavLink to="/zakupy" className={navLinkCls}>Lista zakupów</NavLink>
+            <NavLink to="/o-mnie" className={navLinkCls}>O mnie</NavLink>
           </nav>
+
+          {/* MEGA-MENU: wszystkie rozdziały i podrozdziały w jednym miejscu */}
+          <div
+            className={`absolute left-0 right-0 top-full bg-panel border-b border-line shadow-2xl shadow-black/60 transition-all duration-300 origin-top ${
+              megaOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
+            }`}
+          >
+            <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-8 max-h-[70vh] overflow-y-auto">
+              {chapters.map(ch => {
+                const Icon = chapterIcon(ch.name);
+                return (
+                  <div key={ch.id}>
+                    <Link
+                      to={`/?category=${ch.slug}`}
+                      className="flex items-center gap-2 font-display uppercase tracking-wide text-lg text-gold hover:text-pink-soft transition-colors mb-3"
+                    >
+                      <Icon className="text-pink shrink-0" /> {ch.name}
+                    </Link>
+                    <ul className="space-y-1.5 border-l border-line pl-3">
+                      {ch.children.map(sub => (
+                        <li key={sub.id}>
+                          <Link
+                            to={`/?category=${sub.slug}`}
+                            className={`text-sm transition-colors ${activeCategory === sub.slug ? 'text-pink font-semibold' : 'text-muted hover:text-cream'}`}
+                          >
+                            {sub.name}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
         </div>
 
         {/* MENU MOBILNE */}
-        {isMobileMenuOpen && (
-          <nav className="md:hidden absolute top-full left-0 w-full bg-[#0D1321] border-b border-[#540B0E] shadow-neon flex flex-col py-4 px-4 sm:px-6 gap-3 font-bold text-gray-200 z-40 max-h-[80vh] overflow-y-auto">
-            <Link to="/" className="py-2 border-b border-[#540B0E] hover:text-[#1F51FF] flex items-center gap-2" onClick={closeMenu}>
-              <FaMagic className="text-[#1F51FF] flex-shrink-0" /> Przepisy
-            </Link>
-            <Link to="/zakupy" className="py-2 border-b border-[#540B0E] hover:text-[#1F51FF] flex items-center gap-2" onClick={closeMenu}>
-              <FaShoppingCart className="text-[#1F51FF] flex-shrink-0" /> Lista zakupów
-            </Link>
-            <Link to="/ulubione" className="py-2 border-b border-[#540B0E] hover:text-[#1F51FF] flex items-center gap-2" onClick={closeMenu}>
-              <FaGem className="text-[#D4AF37] flex-shrink-0" /> Ulubione przepisy
-            </Link>
+        {mobileOpen && (
+          <div className="md:hidden absolute top-full inset-x-0 bg-panel border-b border-line shadow-2xl shadow-black/70 max-h-[calc(100vh-4rem)] overflow-y-auto">
+            <div className="px-4 py-4 space-y-5">
+              <SearchBox onDone={() => setMobileOpen(false)} />
 
-            {isAuthenticated && (
-              <Link to="/dodaj-przepis" className="py-2 border-b border-[#540B0E] text-[#E60026] flex items-center gap-2" onClick={closeMenu}>
-                <FaPlus className="flex-shrink-0" /> Dodaj nowy przepis
-              </Link>
-            )}
+              <div className="grid grid-cols-3 gap-2 text-xs font-semibold">
+                <Link to="/ulubione" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card border border-line">
+                  <FaHeart className="text-pink text-lg" /> Ulubione
+                </Link>
+                <Link to="/zakupy" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card border border-line">
+                  <FaShoppingBasket className="text-gold text-lg" /> Zakupy
+                </Link>
+                <Link to="/o-mnie" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card border border-line">
+                  <FaCrown className="text-gold text-lg" /> O mnie
+                </Link>
+              </div>
 
-            <Link to="/o-mnie" className="py-2 border-b border-[#540B0E] hover:text-[#1F51FF] flex items-center gap-2" onClick={closeMenu}>
-              <FaUser className="text-[#D4AF37] flex-shrink-0" /> O mnie
-            </Link>
+              <div>
+                <p className="label-pill mb-3">Rozdziały</p>
+                <ul className="divide-y divide-line border-y border-line">
+                  {chapters.map(ch => {
+                    const Icon = chapterIcon(ch.name);
+                    const open = openChapter === ch.id;
+                    return (
+                      <li key={ch.id}>
+                        <div className="flex items-center">
+                          <Link to={`/?category=${ch.slug}`} className="flex-1 flex items-center gap-3 py-3 font-semibold">
+                            <Icon className="text-pink text-lg shrink-0" /> {ch.name}
+                          </Link>
+                          {ch.children.length > 0 && (
+                            <button
+                              onClick={() => setOpenChapter(open ? null : ch.id)}
+                              className="w-11 h-11 flex items-center justify-center text-muted"
+                              aria-label={`Podrozdziały: ${ch.name}`}
+                              aria-expanded={open}
+                            >
+                              <FaChevronDown className={`transition-transform ${open ? 'rotate-180' : ''}`} />
+                            </button>
+                          )}
+                        </div>
+                        {open && (
+                          <div className="flex flex-wrap gap-2 pb-4 pl-8">
+                            {ch.children.map(sub => (
+                              <Link key={sub.id} to={`/?category=${sub.slug}`} className="px-3 py-1.5 rounded-full bg-card border border-line text-xs text-cream">
+                                {sub.name}
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </div>
 
-            {isAuthenticated ? (
-              <button onClick={handleLogout} className="py-2 text-left text-red-400 flex items-center gap-2 break-words">
-                <FaSignOutAlt className="flex-shrink-0" /> Wyloguj administratora
-              </button>
-            ) : (
-              <Link to="/login" className="py-2 text-[#E60026] break-words" onClick={closeMenu}>
-                Logowanie do panelu
-              </Link>
-            )}
-          </nav>
+              {isAuthenticated && (
+                <div className="flex gap-2">
+                  <Link to="/dodaj-przepis" className="flex-1 flex items-center justify-center gap-2 h-11 rounded-full bg-pink text-white font-bold text-sm">
+                    <FaPlus /> Dodaj przepis
+                  </Link>
+                  <button onClick={handleLogout} className="flex items-center justify-center gap-2 h-11 px-4 rounded-full border border-line text-muted text-sm font-semibold">
+                    <FaSignOutAlt /> Wyloguj
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
         )}
       </header>
 
-      <main className="flex-grow w-full max-w-full overflow-x-hidden">
+      <main className="flex-grow w-full">
         <Outlet />
       </main>
 
-      <footer className="bg-[#0D1321] border-t border-[#540B0E] py-8 sm:py-12 px-4 text-center text-xs sm:text-sm text-gray-300">
-        <p className="font-bold text-[#FDFBF7] mb-2 flex justify-center items-center gap-1.5 sm:gap-2 text-base sm:text-lg flex-wrap">
-          <FaCrown className="text-[#D4AF37]" style={{ filter: 'drop-shadow(0 0 6px rgba(212,175,35,0.6))' }} />
-          <span className="text-gold">Diamentowe Smaki</span>
-          <FaGem className="text-[#D4AF37]" />
-        </p>
-        <p className="text-[#FDFBF7]/80 break-words">© {new Date().getFullYear()} Wszystkie prawa zastrzeżone. Luksusowy świat kulinarny glamour ✨</p>
+      <footer className="bg-panel border-t border-line mt-16">
+        <div className="max-w-6xl mx-auto px-4 py-10 grid gap-10 md:grid-cols-[1.2fr_2fr_1fr]">
+          <div className="space-y-3">
+            <Logo />
+            <p className="text-sm text-muted leading-relaxed max-w-xs">
+              Królewskie przepisy na co dzień – lekko, sycąco i z charakterem.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="font-display uppercase tracking-wide text-gold mb-3">Rozdziały</h4>
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+              {chapters.map(ch => (
+                <li key={ch.id}>
+                  <Link to={`/?category=${ch.slug}`} className="text-muted hover:text-pink-soft transition-colors">{ch.name}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="font-display uppercase tracking-wide text-gold mb-3">Obserwuj</h4>
+            <div className="flex gap-3 mb-4">
+              <a href="https://www.instagram.com/engibadwoman" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-pink hover:text-pink transition"><FaInstagram /></a>
+              <a href="https://www.tiktok.com/@engibadwoman" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-pink hover:text-pink transition"><FaTiktok /></a>
+              <a href="mailto:engibadwoman@gmail.com" aria-label="E-mail" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-pink hover:text-pink transition"><FaEnvelope /></a>
+            </div>
+            {!isAuthenticated && (
+              <Link to="/login" className="text-xs text-muted/70 hover:text-muted transition-colors">Panel administratora</Link>
+            )}
+          </div>
+        </div>
+        <div className="border-t border-line/60 py-5 text-center text-xs text-muted">
+          © {new Date().getFullYear()} Diamentowe Smaki · Engibadwoman. Wszystkie prawa zastrzeżone.
+        </div>
       </footer>
     </div>
   );
