@@ -1,4 +1,5 @@
-import { Link, useSearchParams } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { useRecipes } from '../hooks/useRecipes';
 import { useCategories } from '../hooks/useCategories';
 import { useFavorites } from '../hooks/useFavorites';
@@ -13,6 +14,7 @@ type Sort = 'date' | 'popular';
 
 export default function Home() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
   const categorySlug = searchParams.get('category');
   const query = searchParams.get('q') ?? '';
   const sort: Sort = searchParams.get('sort') === 'popular' ? 'popular' : 'date';
@@ -30,11 +32,20 @@ export default function Home() {
 
   const isStart = !categorySlug && !query;
 
-  const setParam = (key: string, value: string | null) => {
+  const setParam = (key: string, value: string | null, scroll = false) => {
     const params = new URLSearchParams(searchParams);
     if (value) params.set(key, value); else params.delete(key);
-    setSearchParams(params);
+    setSearchParams(params, scroll ? { state: { scrollToRecipes: true } } : undefined);
   };
+
+  // „Najnowsze” / „Najpopularniejsze” – płynne przewinięcie do listy przepisów
+  useEffect(() => {
+    if (!(location.state as { scrollToRecipes?: boolean } | null)?.scrollToRecipes) return;
+    const id = requestAnimationFrame(() => {
+      document.getElementById('lista-przepisow')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    });
+    return () => cancelAnimationFrame(id);
+  }, [location.key, location.state]);
 
   const sectionTitle = query
     ? <>Wyniki dla „<span className="text-chaber-soft">{query}</span>”</>
@@ -143,7 +154,7 @@ export default function Home() {
       )}
 
       {/* ===== LISTA PRZEPISÓW ===== */}
-      <section className={isStart ? 'mt-14 sm:mt-16' : 'mt-8'} aria-live="polite">
+      <section id="lista-przepisow" className={`scroll-mt-32 ${isStart ? 'mt-14 sm:mt-16' : 'mt-8'}`} aria-live="polite">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 border-b border-line pb-4">
           <div>
             <h2 className="font-display uppercase text-2xl sm:text-3xl tracking-wide text-cream">{sectionTitle}</h2>
@@ -164,7 +175,7 @@ export default function Home() {
                   key={value}
                   role="tab"
                   aria-selected={sort === value}
-                  onClick={() => setParam('sort', value === 'date' ? null : value)}
+                  onClick={() => setParam('sort', value === 'date' ? null : value, true)}
                   className={`px-4 h-9 rounded-full transition ${sort === value ? 'bg-chaber text-white' : 'text-muted hover:text-cream'}`}
                 >
                   {label}

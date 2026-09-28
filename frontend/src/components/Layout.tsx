@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCategories } from '../hooks/useCategories';
-import { chapterIcon } from '../utils/chapterIcons';
+import ChapterAccordion from './ChapterAccordion';
 import {
   FaCrown, FaHeart, FaShoppingBasket, FaPlus, FaSignOutAlt, FaSearch, FaChevronDown, FaBars, FaTimes,
   FaInstagram, FaTiktok, FaEnvelope,
@@ -61,7 +61,6 @@ export default function Layout() {
 
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [openChapter, setOpenChapter] = useState<string | null>(null);
   const megaRef = useRef<HTMLDivElement>(null);
 
   // Zamykanie menu przy zmianie strony
@@ -146,8 +145,8 @@ export default function Layout() {
               <FaCrown className="text-gold" /> Przepisy
               <FaChevronDown className={`text-xs transition-transform duration-300 ${megaOpen ? 'rotate-180' : ''}`} />
             </button>
-            <NavLink to="/" end className={({ isActive }) => navLinkCls({ isActive: isActive && !location.search })}>Najnowsze</NavLink>
-            <NavLink to="/?sort=popular" className={() => navLinkCls({ isActive: location.search.includes('sort=popular') && !activeCategory })}>Najpopularniejsze</NavLink>
+            <NavLink to="/" end state={{ scrollToRecipes: true }} className={({ isActive }) => navLinkCls({ isActive: isActive && !location.search })}>Najnowsze</NavLink>
+            <NavLink to="/?sort=popular" state={{ scrollToRecipes: true }} className={() => navLinkCls({ isActive: location.search.includes('sort=popular') && !activeCategory })}>Najpopularniejsze</NavLink>
             <NavLink to="/ulubione" className={navLinkCls}>Ulubione</NavLink>
             <NavLink to="/zakupy" className={navLinkCls}>Lista zakupów</NavLink>
             <NavLink to="/o-mnie" className={navLinkCls}>O mnie</NavLink>
@@ -159,32 +158,9 @@ export default function Layout() {
               megaOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
             }`}
           >
-            <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-8 max-h-[70vh] overflow-y-auto">
-              {chapters.map(ch => {
-                const Icon = chapterIcon(ch.name);
-                return (
-                  <div key={ch.id}>
-                    <Link
-                      to={`/?category=${ch.slug}`}
-                      className="flex items-center gap-2 font-display uppercase tracking-wide text-lg text-gold hover:text-chaber-soft transition-colors mb-3"
-                    >
-                      <Icon className="text-chaber shrink-0" /> {ch.name}
-                    </Link>
-                    <ul className="space-y-1.5 border-l border-line pl-3">
-                      {ch.children.map(sub => (
-                        <li key={sub.id}>
-                          <Link
-                            to={`/?category=${sub.slug}`}
-                            className={`text-sm transition-colors ${activeCategory === sub.slug ? 'text-chaber font-semibold' : 'text-muted hover:text-cream'}`}
-                          >
-                            {sub.name}
-                          </Link>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                );
-              })}
+            <div className="max-w-6xl mx-auto px-4 py-6 max-h-[70vh] overflow-y-auto">
+              <p className="text-xs font-bold uppercase tracking-widest text-muted mb-4">Wybierz rozdział, aby zobaczyć podrozdziały</p>
+              <ChapterAccordion chapters={chapters} activeSlug={activeCategory} twoColumns />
             </div>
           </div>
         </div>
@@ -209,40 +185,7 @@ export default function Layout() {
 
               <div>
                 <p className="label-pill mb-3">Rozdziały</p>
-                <ul className="divide-y divide-line border-y border-line">
-                  {chapters.map(ch => {
-                    const Icon = chapterIcon(ch.name);
-                    const open = openChapter === ch.id;
-                    return (
-                      <li key={ch.id}>
-                        <div className="flex items-center">
-                          <Link to={`/?category=${ch.slug}`} className="flex-1 flex items-center gap-3 py-3 font-semibold">
-                            <Icon className="text-chaber text-lg shrink-0" /> {ch.name}
-                          </Link>
-                          {ch.children.length > 0 && (
-                            <button
-                              onClick={() => setOpenChapter(open ? null : ch.id)}
-                              className="w-11 h-11 flex items-center justify-center text-muted"
-                              aria-label={`Podrozdziały: ${ch.name}`}
-                              aria-expanded={open}
-                            >
-                              <FaChevronDown className={`transition-transform ${open ? 'rotate-180' : ''}`} />
-                            </button>
-                          )}
-                        </div>
-                        {open && (
-                          <div className="flex flex-wrap gap-2 pb-4 pl-8">
-                            {ch.children.map(sub => (
-                              <Link key={sub.id} to={`/?category=${sub.slug}`} className="px-3 py-1.5 rounded-full bg-card border border-line text-xs text-cream">
-                                {sub.name}
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </li>
-                    );
-                  })}
-                </ul>
+                <ChapterAccordion chapters={chapters} activeSlug={activeCategory} />
               </div>
 
               {isAuthenticated && (
