@@ -87,7 +87,7 @@ export default function Home() {
                     <ul className="flex flex-wrap gap-1.5">
                       {ch.children.slice(0, 5).map(sub => (
                         <li key={sub.id}>
-                          <Link to={`/?category=${sub.slug}`} className="inline-block px-2.5 py-1 rounded-full text-xs text-muted bg-field border border-line hover:text-cream hover:border-gold/60 transition">
+                          <Link to={`/?category=${sub.slug}`} className="inline-block px-2.5 py-1 rounded-full text-xs border bg-burgundy/80 border-gold/25 text-cream hover:bg-burgundy hover:border-gold hover:text-gold transition">
                             {sub.name}
                           </Link>
                         </li>
@@ -217,7 +217,7 @@ function Chip({ to, active, children }: { to: string; active: boolean; children:
       to={to}
       aria-current={active ? 'page' : undefined}
       className={`whitespace-nowrap px-4 h-9 inline-flex items-center rounded-full text-sm font-semibold border transition ${
-        active ? 'bg-chili border-chili text-white shadow-chili' : 'bg-card border-line text-muted hover:text-cream hover:border-gold/60'
+        active ? 'bg-chili border-chili text-white shadow-chili' : 'bg-burgundy/80 border-gold/25 text-cream hover:bg-burgundy hover:border-gold hover:text-gold'
       }`}
     >
       {children}

@@ -75,7 +75,7 @@ export default function ChapterAccordion({ chapters, activeSlug, twoColumns = fa
                       className={`px-3 py-1.5 rounded-full text-xs border transition ${
                         activeSlug === sub.slug
                           ? 'bg-chili border-chili text-white font-semibold'
-                          : 'bg-field border-line text-muted hover:text-cream hover:border-gold/60'
+                          : 'bg-burgundy/80 border-gold/25 text-cream hover:bg-burgundy hover:border-gold hover:text-gold'
                       }`}
                     >
                       {sub.name}
