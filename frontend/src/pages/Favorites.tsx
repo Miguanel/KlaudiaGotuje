@@ -29,7 +29,7 @@ export default function Favorites() {
 
   return (
     <div className="max-w-6xl mx-auto px-4 py-8 sm:py-12">
-      <p className="font-script text-chaber text-3xl">Twoje</p>
+      <p className="font-script text-gold text-3xl">Twoje</p>
       <h1 className="font-display uppercase tracking-wide text-4xl sm:text-5xl text-gold leading-none mb-2">Ulubione przepisy</h1>
       <p className="text-muted mb-8">{loading ? 'Wczytywanie…' : `${przepisy(visible.length)} zapisanych na później`}</p>
 
@@ -37,10 +37,10 @@ export default function Favorites() {
         <RecipeGridSkeleton />
       ) : visible.length === 0 ? (
         <div className="py-16 text-center bg-card border border-line rounded-2xl">
-          <FaHeart className="text-chaber text-3xl mx-auto mb-3" />
+          <FaHeart className="text-gold text-3xl mx-auto mb-3" />
           <p className="text-lg font-semibold">Nie masz jeszcze ulubionych przepisów.</p>
           <p className="text-muted text-sm mt-1 mb-5">Kliknij serduszko na zdjęciu przepisu, aby go tu zapisać.</p>
-          <Link to="/" className="inline-flex items-center h-11 px-6 rounded-full bg-chaber text-white font-bold text-sm hover:brightness-110">
+          <Link to="/" className="inline-flex items-center h-11 px-6 rounded-full bg-chili text-white font-bold text-sm hover:brightness-110">
             Przeglądaj przepisy
           </Link>
         </div>

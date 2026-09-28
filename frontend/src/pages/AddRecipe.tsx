@@ -34,11 +34,11 @@ export default function AddRecipe() {
   if (!isAuthenticated) {
     return (
       <div className="max-w-md mx-auto px-4 py-20 text-center text-cream">
-        <div className="bg-card p-8 rounded-3xl border border-line shadow-neon">
-          <FaLock className="text-chaber text-4xl mx-auto mb-4" />
+        <div className="bg-card p-8 rounded-3xl border border-line shadow-glow">
+          <FaLock className="text-gold text-4xl mx-auto mb-4" />
           <h1 className="text-2xl font-bold mb-2">Brak dostępu</h1>
           <p className="text-muted mb-6 text-sm">Musisz się zalogować jako administrator, aby dodawać przepisy.</p>
-          <button onClick={() => navigate('/login')} className="bg-chaber text-cream px-6 py-3 rounded-xl font-bold shadow-neon hover:brightness-110 transition-all">
+          <button onClick={() => navigate('/login')} className="bg-chili text-cream px-6 py-3 rounded-xl font-bold shadow-chili hover:brightness-110 transition-all">
             Przejdź do logowania
           </button>
         </div>
@@ -118,9 +118,9 @@ export default function AddRecipe() {
       <p className="text-muted mb-8 text-sm md:text-base font-medium flex items-center gap-1.5">
         <span>Wypełnij formularz, prześlij zdjęcia i udostępnij nową potrawę.</span>
       </p>
-      {error && <div className="bg-chaber/10 border border-chaber/50 text-chaber-soft p-4 rounded-xl mb-6 font-bold text-sm">{error}</div>}
+      {error && <div className="bg-burgundy/60 border border-burgundy text-cream p-4 rounded-xl mb-6 font-bold text-sm">{error}</div>}
 
-      <form onSubmit={handleSubmit} className="space-y-8 bg-card p-4 sm:p-8 rounded-3xl border border-line shadow-neon">
+      <form onSubmit={handleSubmit} className="space-y-8 bg-card p-4 sm:p-8 rounded-3xl border border-line shadow-glow">
 
         {/* Informacje podstawowe */}
         <div className="space-y-6">
@@ -131,12 +131,12 @@ export default function AddRecipe() {
           <div className="flex flex-col md:flex-row gap-6 items-start">
             <div className="w-full md:w-1/3 flex flex-col items-center gap-3">
               <label className="block text-xs font-bold text-muted uppercase w-full text-left">Zdjęcie główne</label>
-              <div className="w-full aspect-video bg-ink border-2 border-dashed border-line rounded-2xl overflow-hidden relative flex flex-col items-center justify-center hover:border-chaber transition-colors">
+              <div className="w-full aspect-video bg-ink border-2 border-dashed border-line rounded-2xl overflow-hidden relative flex flex-col items-center justify-center hover:border-gold/60 transition-colors">
                 {mainImagePreview ? (
                   <img src={mainImagePreview} alt="Podgląd" className="w-full h-full object-cover" />
                 ) : (
                   <div className="text-center p-4">
-                    <FaCamera className="text-chaber text-2xl mx-auto mb-2" />
+                    <FaCamera className="text-gold text-2xl mx-auto mb-2" />
                     <span className="text-muted text-xs font-bold">Brak zdjęcia</span>
                   </div>
                 )}
@@ -154,7 +154,7 @@ export default function AddRecipe() {
                 <label className="block text-xs font-bold text-muted uppercase mb-1">Nazwa przepisu</label>
                 <input
                   type="text" value={name} onChange={e => setName(e.target.value)} required
-                  className="w-full px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream focus:border-chaber"
+                  className="w-full px-4 py-2.5 border border-line rounded-xl outline-none bg-ink text-cream focus:border-gold/60"
                   placeholder="np. Domowe spaghetti"
                 />
               </div>
@@ -229,7 +229,7 @@ export default function AddRecipe() {
               </div>
             </div>
           ))}
-          <button type="button" onClick={addIngredientField} className="text-sm font-bold text-chaber hover:underline flex items-center gap-1">
+          <button type="button" onClick={addIngredientField} className="text-sm font-bold text-gold hover:underline flex items-center gap-1">
             <FaPlus /> Dodaj kolejny składnik
           </button>
         </div>
@@ -239,7 +239,7 @@ export default function AddRecipe() {
           <h2 className="font-display uppercase tracking-wide text-xl text-gold border-b border-line pb-3">Kroki przygotowania</h2>
           {steps.map((step, idx) => (
             <div key={idx} className="flex flex-col sm:flex-row gap-4 items-start bg-ink p-4 rounded-2xl border border-line">
-              <div className="w-8 h-8 rounded-xl bg-chaber/15 border border-chaber text-chaber flex items-center justify-center font-bold flex-shrink-0 mt-1 shadow-neon">
+              <div className="w-8 h-8 rounded-xl bg-burgundy border border-gold/40 text-gold flex items-center justify-center font-bold flex-shrink-0 mt-1">
                 {idx + 1}
               </div>
 
@@ -256,12 +256,12 @@ export default function AddRecipe() {
                 />
 
                 <div className="flex items-center gap-4">
-                  <div className="relative overflow-hidden w-28 h-16 bg-card border border-line rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-chaber transition-colors">
+                  <div className="relative overflow-hidden w-28 h-16 bg-card border border-line rounded-xl flex flex-col items-center justify-center cursor-pointer hover:border-gold/60 transition-colors">
                     {step.imagePreview ? (
                       <img src={step.imagePreview} alt="Podgląd kroku" className="w-full h-full object-cover" />
                     ) : (
                       <div className="text-center p-1">
-                        <FaCamera className="text-chaber text-sm mx-auto mb-1" />
+                        <FaCamera className="text-gold text-sm mx-auto mb-1" />
                         <span className="text-[10px] font-bold text-muted">Zdjęcie kroku</span>
                       </div>
                     )}
@@ -280,14 +280,14 @@ export default function AddRecipe() {
               </div>
             </div>
           ))}
-          <button type="button" onClick={addStepField} className="text-sm font-bold text-chaber hover:underline flex items-center gap-1">
+          <button type="button" onClick={addStepField} className="text-sm font-bold text-gold hover:underline flex items-center gap-1">
             <FaPlus /> Dodaj kolejny krok
           </button>
         </div>
 
         <button
           type="submit" disabled={loading}
-          className="w-full py-4 bg-chaber text-cream font-bold rounded-2xl hover:brightness-110 transition-all shadow-neon disabled:opacity-50 text-base md:text-lg hover:scale-[1.01] flex items-center justify-center gap-2"
+          className="w-full py-4 bg-chili text-cream font-bold rounded-2xl hover:brightness-110 transition-all shadow-chili disabled:opacity-50 text-base md:text-lg hover:scale-[1.01] flex items-center justify-center gap-2"
         >
           {loading ? 'Publikowanie...' : 'Opublikuj przepis'}
         </button>

@@ -57,7 +57,7 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
   };
 
   return (
-    <aside className="lg:sticky lg:top-36 bg-card border border-line rounded-3xl p-5 sm:p-6 print:border-none print:p-0 print:static">
+    <aside className="lg:sticky lg:top-36 bg-card border border-line rounded-3xl p-5 sm:p-6 shadow-glow print:border-none print:p-0 print:static">
       <h2 className="label-pill mb-5 print:hidden">Składniki</h2>
       <h2 className="hidden print:block text-xl font-bold mb-3">Składniki ({porcje} porcji)</h2>
 
@@ -65,16 +65,16 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
         {/* PORCJE */}
         <div className="flex items-center justify-between gap-3">
           <span className="text-sm font-semibold text-muted">Porcje</span>
-          <div className="flex items-center gap-1 bg-ink/60 border border-line rounded-full p-1">
+          <div className="flex items-center gap-1 bg-field border border-line rounded-full p-1">
             <button
               onClick={() => setPorcje(p => Math.max(1, p - 1))}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-cream hover:bg-chaber hover:text-white transition"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-cream hover:bg-burgundy hover:text-gold transition"
               aria-label="Mniej porcji"
             ><FaMinus className="text-xs" /></button>
             <span className="font-display text-xl w-8 text-center" aria-live="polite">{porcje}</span>
             <button
               onClick={() => setPorcje(p => p + 1)}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-cream hover:bg-chaber hover:text-white transition"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-cream hover:bg-burgundy hover:text-gold transition"
               aria-label="Więcej porcji"
             ><FaPlus className="text-xs" /></button>
           </div>
@@ -83,13 +83,13 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
         {/* MIARY */}
         <div className="flex items-center justify-between gap-3">
           <span className="text-sm font-semibold text-muted">Miary</span>
-          <div className="inline-flex p-1 bg-ink/60 border border-line rounded-full text-xs font-semibold">
+          <div className="inline-flex p-1 bg-field border border-line rounded-full text-xs font-semibold">
             {([['default', 'Domowe'], ['grams', 'W gramach']] as const).map(([value, label]) => (
               <button
                 key={value}
                 onClick={() => setWeightMode(value)}
                 aria-pressed={weightMode === value}
-                className={`px-3 h-7 rounded-full transition ${weightMode === value ? 'bg-chaber text-white' : 'text-muted hover:text-cream'}`}
+                className={`px-3 h-7 rounded-full transition ${weightMode === value ? 'bg-chili text-white' : 'text-muted hover:text-cream'}`}
               >
                 {label}
               </button>
@@ -112,13 +112,13 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
                 className="w-full flex items-center gap-3 py-3 text-left group"
               >
                 <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition print:hidden ${
-                  isChecked ? 'bg-chaber border-chaber text-white' : 'border-line group-hover:border-chaber'
+                  isChecked ? 'bg-gold border-gold text-ink' : 'border-line group-hover:border-gold/60'
                 }`}>
                   {isChecked && <FaCheck className="text-[10px]" />}
                 </span>
                 <span className={`flex-1 flex justify-between gap-3 transition ${isChecked ? 'opacity-40 line-through' : ''} print:opacity-100 print:no-underline`}>
                   <span className="text-[15px] text-cream">{skladnik.name}</span>
-                  <span className="text-[15px] font-bold text-chaber-soft whitespace-nowrap">{calc.quantity} {calc.unit}</span>
+                  <span className="text-[15px] font-bold text-gold whitespace-nowrap">{calc.quantity} {calc.unit}</span>
                 </span>
               </button>
             </li>

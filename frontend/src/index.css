@@ -2,20 +2,25 @@
 @import "tailwindcss";
 
 /*
- * Paleta "Królewska" — na podstawie grafik z profilu Engibadwoman:
- * głęboka czerń, neonowy chaber, złoto korony i kremowa biel.
+ * Paleta "Diamentowe Smaki" (wytyczne klientki, zasada 60 / 30 / 10):
+ *  60% baza      – śliwka (tło) + atramentowy granat (karty, stopka)
+ *  30% akcenty   – chabrowy kobalt (tylko poświata!) + głęboki burgund (ramki, sekcje specjalne)
+ *  10% biżuteria – czerwień chili (przyciski CTA, aktywne filtry) + szczotkowane złoto (detale premium)
+ * Zasada: chaber nigdy nie jest tłem pod czerwienią i odwrotnie – chaber to wyłącznie światło (box-shadow).
  */
 @theme {
-  --color-ink: #070912;        /* tło strony (granatowa czerń) */
-  --color-panel: #0C1020;      /* nagłówek, stopka, duże sekcje */
-  --color-card: #121831;       /* karty i pola */
-  --color-line: #25305A;       /* obramowania */
-  --color-chaber: #4A7DFF;     /* główny akcent (neonowy chaber) */
-  --color-chaber-soft: #9EBBFF; /* chaber na ciemnym tle – tekst */
-  --color-gold: #F4C752;       /* korona / wyróżnienia */
-  --color-gold-deep: #C8952C;
-  --color-cream: #F4F6FF;      /* tekst podstawowy */
-  --color-muted: #A7B0D2;      /* tekst drugorzędny */
+  --color-ink: #1A0D16;        /* śliwka – główne tło strony */
+  --color-panel: #0D1321;      /* atramentowy granat – nagłówek, stopka */
+  --color-card: #0D1321;       /* atramentowy granat – karty przepisów */
+  --color-field: #151C2E;      /* pola formularzy wewnątrz kart */
+  --color-line: #232C45;       /* delikatne obramowania i separatory */
+  --color-cobalt: #1F51FF;     /* chabrowy kobalt – TYLKO poświata / ikona koszyka */
+  --color-burgundy: #540B0E;   /* głęboki burgund – ramka wyszukiwarki, sekcje specjalne */
+  --color-chili: #E60026;      /* czerwień chili – przyciski CTA, aktywne filtry */
+  --color-gold: #D4AF37;       /* szczotkowane złoto – logo, korona, gwiazdki, wskaźniki */
+  --color-gold-deep: #A8862A;
+  --color-cream: #FDFBF7;      /* tekst podstawowy */
+  --color-muted: #C3B6BF;      /* tekst drugorzędny */
 
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Anton", "Impact", sans-serif;
@@ -33,45 +38,54 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Delikatna poświata w tle – jak na grafikach, ale nie przeszkadza w czytaniu */
+/* Śliwkowe tło z delikatnym światłem kobaltu (góra) i burgundu (dół) */
 .bg-royal {
   background:
-    radial-gradient(900px 400px at 85% -10%, rgba(74, 125, 255, 0.18), transparent 60%),
-    radial-gradient(700px 380px at 0% 10%, rgba(244, 199, 82, 0.07), transparent 60%),
+    radial-gradient(900px 420px at 85% -10%, rgba(31, 81, 255, 0.10), transparent 60%),
+    radial-gradient(800px 420px at 0% 100%, rgba(84, 11, 14, 0.35), transparent 60%),
     var(--color-ink);
 }
 
-/* Złoty, metaliczny napis */
-@utility text-gold {
-  background: linear-gradient(180deg, #FFF1B8 0%, #F4C752 45%, #C8952C 100%);
+/* Metaliczne, szczotkowane złoto – logotyp i duże nagłówki */
+@utility text-gold-shine {
+  color: #D4AF37;
+  background: linear-gradient(180deg, #F3E3A3 0%, #D4AF37 50%, #A8862A 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Neonowy chaber */
-@utility text-neon {
-  color: #4A7DFF;
-  text-shadow: 0 0 12px rgba(74, 125, 255, 0.55);
+/* Chabrowa poświata wokół granatowych kart (efekt 3D na śliwkowym tle) */
+@utility shadow-glow {
+  box-shadow:
+    0 0 0 1px rgba(31, 81, 255, 0.18),
+    0 10px 30px -12px rgba(0, 0, 0, 0.7),
+    0 0 22px -6px rgba(31, 81, 255, 0.35);
 }
 
-@utility shadow-neon {
-  box-shadow: 0 0 0 1px rgba(74, 125, 255, 0.35), 0 8px 30px -8px rgba(74, 125, 255, 0.45);
+/* Wzmocniona łuna po najechaniu */
+@utility shadow-glow-strong {
+  box-shadow:
+    0 0 0 1px rgba(31, 81, 255, 0.45),
+    0 16px 40px -14px rgba(0, 0, 0, 0.75),
+    0 0 36px -2px rgba(31, 81, 255, 0.6);
 }
 
-@utility shadow-gold {
-  box-shadow: 0 0 0 1px rgba(244, 199, 82, 0.35), 0 8px 24px -10px rgba(244, 199, 82, 0.4);
+/* Ciepły blask pod czerwonymi przyciskami CTA (bez chabru!) */
+@utility shadow-chili {
+  box-shadow: 0 8px 22px -8px rgba(230, 0, 38, 0.6);
 }
 
-/* Etykieta sekcji w stylu grafik ("SKŁADNIKI", "PRZYGOTOWANIE") */
+/* Etykieta sekcji ("SKŁADNIKI", "PRZYGOTOWANIE") – burgund + złoto */
 @utility label-pill {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  padding: 0.3rem 0.9rem;
+  padding: 0.3rem 0.95rem;
   border-radius: 9999px;
-  background: #4A7DFF;
-  color: #fff;
+  background: #540B0E;
+  border: 1px solid rgba(212, 175, 55, 0.35);
+  color: #D4AF37;
   font-family: var(--font-display);
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -88,7 +102,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid #4A7DFF;
+  outline: 2px solid #D4AF37;
   outline-offset: 2px;
 }
 
@@ -96,6 +110,6 @@ body {
 @media print {
   body { background: white !important; color: black !important; }
   header, footer, nav, button { display: none !important; }
-  .text-gold, .text-neon { -webkit-text-fill-color: black !important; color: black !important; text-shadow: none !important; }
+  .text-gold-shine { -webkit-text-fill-color: black !important; color: black !important; }
   .print\:break-inside-avoid { break-inside: avoid; }
 }

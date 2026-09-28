@@ -17,7 +17,7 @@ export default function RecipeCard({ recipe, isFavorite = false, onToggleFavorit
   return (
     <Link
       to={`/przepis/${recipe.id}`}
-      className="group flex flex-col bg-card rounded-2xl overflow-hidden border border-line hover:border-chaber transition-all duration-300 hover:shadow-neon hover:-translate-y-0.5"
+      className="group flex flex-col bg-card rounded-2xl overflow-hidden border border-line shadow-glow hover:shadow-glow-strong hover:border-cobalt/40 transition-all duration-500 ease-out hover:-translate-y-1"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-panel">
         <img
@@ -30,28 +30,28 @@ export default function RecipeCard({ recipe, isFavorite = false, onToggleFavorit
           <button
             type="button"
             onClick={(e) => { e.preventDefault(); e.stopPropagation(); onToggleFavorite(recipe.id); }}
-            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-ink/80 backdrop-blur flex items-center justify-center border border-line hover:border-chaber hover:scale-110 transition"
+            className="absolute top-3 right-3 w-9 h-9 rounded-full bg-ink/80 backdrop-blur flex items-center justify-center border border-line hover:border-gold/60 hover:scale-110 transition"
             title={isFavorite ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}
             aria-label={isFavorite ? 'Usuń z ulubionych' : 'Dodaj do ulubionych'}
           >
-            {isFavorite ? <FaHeart className="text-chaber" /> : <FaRegHeart className="text-cream" />}
+            {isFavorite ? <FaHeart className="text-chili" /> : <FaRegHeart className="text-cream" />}
           </button>
         )}
       </div>
 
       <div className="flex flex-col flex-1 p-4 sm:p-5">
         {label && (
-          <span className="text-[11px] font-bold uppercase tracking-wider text-chaber-soft mb-1.5 truncate">
+          <span className="text-[11px] font-bold uppercase tracking-wider text-gold mb-1.5 truncate">
             {label}
           </span>
         )}
-        <h3 className="text-base sm:text-lg font-bold leading-snug text-cream group-hover:text-chaber-soft transition-colors line-clamp-2">
+        <h3 className="text-base sm:text-lg font-bold leading-snug text-cream group-hover:text-gold transition-colors line-clamp-2">
           {recipe.name}
         </h3>
 
         <div className="mt-auto pt-4 flex items-center gap-4 text-xs font-semibold text-muted">
           <span className="flex items-center gap-1.5" title="Czas przygotowania">
-            <FaRegClock className="text-chaber-soft" /> {recipe.prep_time} min
+            <FaRegClock className="text-gold" /> {recipe.prep_time} min
           </span>
           <span className="flex items-center gap-1.5" title="Średnia ocena">
             <FaStar className="text-gold" />

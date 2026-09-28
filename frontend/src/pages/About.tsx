@@ -16,7 +16,7 @@ export default function About() {
         <div className="flex justify-center md:sticky md:top-36">
           <div className="relative w-56 h-56 sm:w-72 sm:h-72 mt-8">
             <FaCrown className="absolute -top-10 left-1/2 -translate-x-1/2 text-gold text-5xl z-10 drop-shadow-[0_0_14px_rgba(244,199,82,0.7)]" />
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-chaber via-chaber/40 to-gold p-[3px] shadow-neon">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold via-burgundy to-gold-deep p-[3px] shadow-glow">
               <img src={profileImg} alt="Engibadwoman" className="w-full h-full rounded-full object-cover bg-ink" />
             </div>
           </div>
@@ -24,7 +24,7 @@ export default function About() {
 
         {/* TEKST */}
         <div>
-          <p className="font-script text-chaber text-4xl">Cześć!</p>
+          <p className="font-script text-gold text-4xl">Cześć!</p>
           <h1 className="font-display uppercase tracking-wide text-4xl sm:text-5xl leading-none mb-6">
             <span className="text-cream">Tu </span><span className="text-gold">Engibadwoman</span>
           </h1>
@@ -34,7 +34,7 @@ export default function About() {
               Witaj w moim ekskluzywnym kulinarnym świecie, gdzie zasady dyktuje smak, a kompromisy nie istnieją. Jestem kobietą nadwyraz wybredną – jeśli coś trafia na mój talerz, musi być po prostu perfekcyjne. Mój czarny humor to tylko część mnie, ale to właśnie dzięki temu specyficznemu podejściu do życia tworzę dania zupełnie inne niż wszystkie. Kuchnia to dla mnie sztuka, magia i wolność.
             </p>
             <p>
-              Nie znajdziesz tu nudy. Przełamuję schematy i łączę kuchnię tradycyjną, nowoczesną oraz potrawy na diecie. <strong className="text-chaber-soft">Sama schudłam prawie 50 kg</strong> i chętnie pokażę Ci, jak to zrobiłam! Ale uwaga – nie mam zamiaru ograniczać się do nudnych, „suchych” fit porad czy wyłącznie niskokalorycznych przepisów. Gotuję zdrowo, mądrze i z ogromną pasją, ale przede wszystkim: gotuję z charakterem. Znajdziesz tu zarówno lekkie, wysokobiałkowe posiłki, jak i domowe pieczywo czy rozpustne desery.
+              Nie znajdziesz tu nudy. Przełamuję schematy i łączę kuchnię tradycyjną, nowoczesną oraz potrawy na diecie. <strong className="text-gold">Sama schudłam prawie 50 kg</strong> i chętnie pokażę Ci, jak to zrobiłam! Ale uwaga – nie mam zamiaru ograniczać się do nudnych, „suchych” fit porad czy wyłącznie niskokalorycznych przepisów. Gotuję zdrowo, mądrze i z ogromną pasją, ale przede wszystkim: gotuję z charakterem. Znajdziesz tu zarówno lekkie, wysokobiałkowe posiłki, jak i domowe pieczywo czy rozpustne desery.
             </p>
             <p>Rozgość się w mojej księdze przepisów i odkryj smaki w wersji premium!</p>
           </div>
@@ -48,10 +48,10 @@ export default function About() {
                   key={label}
                   href={href}
                   {...(external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  className="group flex items-center gap-3 p-3 rounded-2xl bg-ink/60 border border-line hover:border-chaber hover:shadow-neon transition"
+                  className="group flex items-center gap-3 p-3 rounded-2xl bg-field border border-line hover:border-gold/60 hover:shadow-glow-strong transition"
                 >
-                  <span className="w-10 h-10 shrink-0 rounded-full bg-chaber/15 flex items-center justify-center">
-                    <Icon className="text-chaber text-lg" />
+                  <span className="w-10 h-10 shrink-0 rounded-full bg-burgundy/60 flex items-center justify-center">
+                    <Icon className="text-gold text-lg" />
                   </span>
                   <span className="min-w-0">
                     <span className="block text-xs text-muted">{label}</span>

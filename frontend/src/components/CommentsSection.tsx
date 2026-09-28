@@ -64,10 +64,10 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
     }
   };
 
-  const inputCls = 'w-full px-4 h-11 rounded-xl bg-ink/60 border border-line text-cream placeholder:text-muted focus:outline-none focus:border-chaber focus:ring-2 focus:ring-chaber/30 transition';
+  const inputCls = 'w-full px-4 h-11 rounded-xl bg-field border border-line text-cream placeholder:text-muted focus:outline-none focus:border-gold/60 focus:ring-2 focus:ring-burgundy/60 transition';
 
   return (
-    <section className="mt-12 bg-card border border-line rounded-3xl p-5 sm:p-8" aria-labelledby="opinie">
+    <section className="mt-12 bg-card border border-line rounded-3xl p-5 sm:p-8 shadow-glow" aria-labelledby="opinie">
       <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
         <h2 id="opinie" className="label-pill">Opinie</h2>
         {averageRating !== null && (
@@ -81,10 +81,10 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
 
       <div className="grid lg:grid-cols-[1fr_1.2fr] gap-8">
         {/* FORMULARZ */}
-        <form onSubmit={handleSubmit} className="space-y-4 bg-ink/40 border border-line rounded-2xl p-5 self-start">
+        <form onSubmit={handleSubmit} className="space-y-4 bg-burgundy/35 border border-burgundy rounded-2xl p-5 self-start">
           <h3 className="font-display uppercase tracking-wide text-lg text-gold">Jak Ci wyszło?</h3>
 
-          {error && <p className="text-chaber-soft text-sm font-semibold">{error}</p>}
+          {error && <p className="text-gold text-sm font-semibold">{error}</p>}
 
           <div>
             <span className="block text-xs font-semibold text-muted mb-1.5">Twoja ocena</span>
@@ -125,7 +125,7 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
           <button
             type="submit"
             disabled={submitting}
-            className="w-full h-11 rounded-full bg-chaber text-white font-bold hover:brightness-110 transition disabled:opacity-50"
+            className="w-full h-11 rounded-full bg-chili text-white font-bold hover:brightness-110 transition disabled:opacity-50"
           >
             {submitting ? 'Wysyłanie…' : 'Opublikuj opinię'}
           </button>
@@ -149,7 +149,7 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
                   {isAuthenticated && (
                     <button
                       onClick={() => handleDelete(comment.id)}
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-muted hover:text-chaber hover:bg-chaber/10 transition"
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-muted hover:text-chili hover:bg-burgundy/40 transition"
                       title="Usuń komentarz"
                       aria-label="Usuń komentarz"
                     >

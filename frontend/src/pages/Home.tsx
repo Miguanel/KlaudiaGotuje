@@ -48,7 +48,7 @@ export default function Home() {
   }, [location.key, location.state]);
 
   const sectionTitle = query
-    ? <>Wyniki dla „<span className="text-chaber-soft">{query}</span>”</>
+    ? <>Wyniki dla „<span className="text-gold">{query}</span>”</>
     : activeCategory
       ? activeCategory.name
       : sort === 'popular' ? 'Najpopularniejsze przepisy' : 'Najnowsze przepisy';
@@ -67,7 +67,7 @@ export default function Home() {
           <section id="rozdzialy-sekcja" className="mt-12 sm:mt-16 scroll-mt-36" aria-labelledby="rozdzialy">
             <div className="flex items-end justify-between gap-4 mb-6">
               <h2 id="rozdzialy" className="font-display uppercase text-3xl sm:text-4xl tracking-wide">
-                <span className="text-cream">Rozdziały</span> <span className="font-script normal-case text-chaber text-3xl sm:text-4xl">przepisów</span>
+                <span className="text-cream">Rozdziały</span> <span className="font-script normal-case text-gold text-3xl sm:text-4xl">przepisów</span>
               </h2>
             </div>
 
@@ -75,26 +75,26 @@ export default function Home() {
               {chapters.map(ch => {
                 const Icon = chapterIcon(ch.name);
                 return (
-                  <div key={ch.id} className="group relative bg-card border border-line rounded-2xl p-5 hover:border-chaber hover:shadow-neon transition-all">
+                  <div key={ch.id} className="group relative bg-card border border-line rounded-2xl p-5 shadow-glow hover:shadow-glow-strong hover:border-cobalt/40 transition-all duration-500">
                     <Link to={`/?category=${ch.slug}`} className="flex items-center gap-3 mb-3">
-                      <span className="w-11 h-11 shrink-0 rounded-xl bg-chaber/15 border border-chaber/40 flex items-center justify-center">
-                        <Icon className="text-chaber text-2xl" />
+                      <span className="w-11 h-11 shrink-0 rounded-xl bg-burgundy/60 border border-burgundy flex items-center justify-center">
+                        <Icon className="text-gold text-2xl" />
                       </span>
-                      <span className="font-display uppercase tracking-wide text-lg leading-tight text-gold group-hover:text-chaber-soft transition-colors">
+                      <span className="font-display uppercase tracking-wide text-lg leading-tight text-gold group-hover:text-gold transition-colors">
                         {ch.name}
                       </span>
                     </Link>
                     <ul className="flex flex-wrap gap-1.5">
                       {ch.children.slice(0, 5).map(sub => (
                         <li key={sub.id}>
-                          <Link to={`/?category=${sub.slug}`} className="inline-block px-2.5 py-1 rounded-full text-xs text-muted bg-ink/60 border border-line hover:text-cream hover:border-chaber transition">
+                          <Link to={`/?category=${sub.slug}`} className="inline-block px-2.5 py-1 rounded-full text-xs text-muted bg-field border border-line hover:text-cream hover:border-gold/60 transition">
                             {sub.name}
                           </Link>
                         </li>
                       ))}
                       {ch.children.length > 5 && (
                         <li>
-                          <Link to={`/?category=${ch.slug}`} className="inline-block px-2.5 py-1 text-xs font-semibold text-chaber-soft hover:text-chaber">
+                          <Link to={`/?category=${ch.slug}`} className="inline-block px-2.5 py-1 text-xs font-semibold text-gold hover:text-cream">
                             +{ch.children.length - 5} więcej
                           </Link>
                         </li>
@@ -129,13 +129,13 @@ export default function Home() {
             {(() => {
               const Icon = chapterIcon(activeChapter.name);
               return (
-                <span className="w-14 h-14 shrink-0 rounded-2xl bg-chaber/15 border border-chaber/40 flex items-center justify-center">
-                  <Icon className="text-chaber text-3xl" />
+                <span className="w-14 h-14 shrink-0 rounded-2xl bg-burgundy/60 border border-burgundy flex items-center justify-center">
+                  <Icon className="text-gold text-3xl" />
                 </span>
               );
             })()}
             <div>
-              <p className="text-xs font-bold uppercase tracking-widest text-chaber-soft">Rozdział</p>
+              <p className="text-xs font-bold uppercase tracking-widest text-gold">Rozdział</p>
               <h1 className="font-display uppercase text-3xl sm:text-5xl tracking-wide text-gold leading-none">{activeChapter.name}</h1>
             </div>
           </div>
@@ -176,8 +176,9 @@ export default function Home() {
                   role="tab"
                   aria-selected={sort === value}
                   onClick={() => setParam('sort', value === 'date' ? null : value, true)}
-                  className={`px-4 h-9 rounded-full transition ${sort === value ? 'bg-chaber text-white' : 'text-muted hover:text-cream'}`}
+                  className={`flex items-center gap-2 px-4 h-9 rounded-full transition ${sort === value ? 'text-cream bg-field' : 'text-muted hover:text-cream'}`}
                 >
+                  <span className={`w-2 h-2 rounded-full transition ${sort === value ? 'bg-gold shadow-[0_0_8px_#D4AF37]' : 'bg-line'}`} aria-hidden="true" />
                   {label}
                 </button>
               ))}
@@ -186,7 +187,7 @@ export default function Home() {
         </div>
 
         {error ? (
-          <p className="py-16 text-center text-chaber-soft font-semibold">Nie udało się wczytać przepisów: {error}</p>
+          <p className="py-16 text-center text-cream font-semibold">Nie udało się wczytać przepisów: {error}</p>
         ) : loading ? (
           <RecipeGridSkeleton />
         ) : recipes.length === 0 ? (
@@ -194,7 +195,7 @@ export default function Home() {
             <FaCrown className="text-gold text-3xl mx-auto mb-3" />
             <p className="text-lg font-semibold">Brak przepisów w tym miejscu.</p>
             <p className="text-muted text-sm mt-1 mb-5">Spróbuj innego rozdziału albo wyszukaj po składniku.</p>
-            <Link to="/" className="inline-flex items-center h-11 px-6 rounded-full bg-chaber text-white font-bold text-sm hover:brightness-110">
+            <Link to="/" className="inline-flex items-center h-11 px-6 rounded-full bg-chili text-white font-bold text-sm hover:brightness-110">
               Wszystkie przepisy
             </Link>
           </div>
@@ -216,7 +217,7 @@ function Chip({ to, active, children }: { to: string; active: boolean; children:
       to={to}
       aria-current={active ? 'page' : undefined}
       className={`whitespace-nowrap px-4 h-9 inline-flex items-center rounded-full text-sm font-semibold border transition ${
-        active ? 'bg-chaber border-chaber text-white shadow-neon' : 'bg-card border-line text-muted hover:text-cream hover:border-chaber'
+        active ? 'bg-chili border-chili text-white shadow-chili' : 'bg-card border-line text-muted hover:text-cream hover:border-gold/60'
       }`}
     >
       {children}
@@ -243,7 +244,7 @@ function MobileSearch({ initial, onSearch }: { initial: string; onSearch: (q: st
         defaultValue={initial}
         placeholder="Szukaj przepisu lub składnika…"
         aria-label="Szukaj przepisu"
-        className="w-full h-11 pl-10 pr-4 rounded-full bg-card border border-line text-sm placeholder:text-muted focus:outline-none focus:border-chaber"
+        className="w-full h-11 pl-10 pr-4 rounded-full bg-card border border-burgundy text-sm placeholder:text-muted focus:outline-none focus:border-gold/60"
       />
     </form>
   );
@@ -251,24 +252,24 @@ function MobileSearch({ initial, onSearch }: { initial: string; onSearch: (q: st
 
 function Hero() {
   return (
-    <section className="relative mt-4 sm:mt-8 overflow-hidden rounded-3xl border border-line bg-panel">
+    <section className="relative mt-4 sm:mt-8 overflow-hidden rounded-3xl border border-burgundy bg-gradient-to-br from-burgundy via-[#2A0E17] to-card shadow-glow">
       {/* dekoracyjna poświata */}
-      <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-chaber/25 blur-3xl pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-80 h-80 rounded-full bg-cobalt/20 blur-3xl pointer-events-none" />
       <div className="absolute -bottom-32 left-10 w-72 h-72 rounded-full bg-gold/10 blur-3xl pointer-events-none" />
 
       <div className="relative grid md:grid-cols-[1.4fr_1fr] items-center gap-8 p-6 sm:p-10 lg:p-14">
         <div>
-          <p className="font-script text-chaber text-3xl sm:text-4xl mb-1">Witaj w</p>
+          <p className="font-script text-gold text-3xl sm:text-4xl mb-1">Witaj w</p>
           <h1 className="font-display uppercase leading-[0.95] tracking-wide text-5xl sm:text-6xl lg:text-7xl">
-            <span className="text-gold block">Królewskiej</span>
+            <span className="text-gold-shine block">Królewskiej</span>
             <span className="text-cream block">kuchni</span>
           </h1>
           <p className="mt-5 text-base sm:text-lg text-muted max-w-md leading-relaxed">
             Rozpieszczaj swoje zmysły i twórz magię we własnej kuchni. Poznaj ekskluzywne przepisy zrodzone z czystej pasji do jedzenia – podane z elegancją, na jaką zasługujesz każdego dnia!
           </p>
           <div className="mt-7 flex flex-wrap gap-3">
-            <a href="#rozdzialy-sekcja" className="inline-flex items-center h-12 px-6 rounded-full bg-chaber text-white font-bold hover:brightness-110 transition shadow-neon">
-              Przeglądaj rozdziały
+            <a href="#rozdzialy-sekcja" className="inline-flex items-center h-12 px-6 rounded-full bg-chili text-white font-bold hover:brightness-110 transition shadow-chili">
+              Odkryj przepisy
             </a>
             <Link to="/o-mnie" className="inline-flex items-center h-12 px-6 rounded-full border border-gold/60 text-gold font-bold hover:bg-gold/10 transition">
               Poznaj mnie
@@ -279,7 +280,7 @@ function Hero() {
         <div className="hidden md:flex justify-center">
           <div className="relative w-64 h-64 lg:w-80 lg:h-80">
             <FaCrown className="absolute -top-9 left-1/2 -translate-x-1/2 text-gold text-5xl z-10 drop-shadow-[0_0_14px_rgba(244,199,82,0.7)]" />
-            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-chaber via-chaber/40 to-gold p-[3px] shadow-neon">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold via-burgundy to-gold-deep p-[3px] shadow-glow">
               <img src={profileImg} alt="Engibadwoman" className="w-full h-full rounded-full object-cover bg-ink" />
             </div>
           </div>

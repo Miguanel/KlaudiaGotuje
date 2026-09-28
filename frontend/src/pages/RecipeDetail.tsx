@@ -24,8 +24,8 @@ export default function RecipeDetail() {
   if (error || !recipe) {
     return (
       <div className="max-w-xl mx-auto px-4 py-20 text-center">
-        <p className="text-lg font-semibold text-chaber-soft mb-4">{error || 'Nie znaleziono przepisu'}</p>
-        <Link to="/" className="inline-flex items-center h-11 px-6 rounded-full bg-chaber text-white font-bold">Wróć do przepisów</Link>
+        <p className="text-lg font-semibold text-gold mb-4">{error || 'Nie znaleziono przepisu'}</p>
+        <Link to="/" className="inline-flex items-center h-11 px-6 rounded-full bg-chili text-white font-bold">Wróć do przepisów</Link>
       </div>
     );
   }
@@ -64,7 +64,7 @@ export default function RecipeDetail() {
 
       {/* NAGŁÓWEK PRZEPISU */}
       <header className="grid md:grid-cols-2 gap-6 md:gap-10 items-start mb-10">
-        <div className="relative rounded-3xl overflow-hidden border border-line bg-panel aspect-[4/3] shadow-neon print:shadow-none print:aspect-auto">
+        <div className="relative rounded-3xl overflow-hidden border border-line bg-panel aspect-[4/3] shadow-glow print:shadow-none print:aspect-auto">
           <img
             src={apiClient.utils.getImageUrl(recipe.main_image_url)}
             alt={recipe.name}
@@ -90,7 +90,7 @@ export default function RecipeDetail() {
             {stats.map(s => (
               <div key={s.label} className="bg-card border border-line rounded-2xl py-3 px-1 text-center">
                 <dt className="sr-only">{s.label}</dt>
-                <div className="flex justify-center text-chaber-soft text-lg mb-1">{s.icon}</div>
+                <div className="flex justify-center text-gold text-lg mb-1">{s.icon}</div>
                 <dd className="font-display text-xl sm:text-2xl leading-none text-cream">{s.value}</dd>
                 <div className="text-[10px] sm:text-[11px] uppercase tracking-wider text-muted mt-1" aria-hidden="true">{s.label}</div>
               </div>
@@ -98,14 +98,14 @@ export default function RecipeDetail() {
           </dl>
 
           <div className="flex flex-wrap gap-3 print:hidden">
-            <a href="#przygotowanie" className="inline-flex items-center h-11 px-6 rounded-full bg-chaber text-white font-bold hover:brightness-110 transition shadow-neon">
+            <a href="#przygotowanie" className="inline-flex items-center h-11 px-6 rounded-full bg-chili text-white font-bold hover:brightness-110 transition shadow-chili">
               Przejdź do przepisu
             </a>
             <button
               onClick={() => toggle(recipe.id)}
               aria-pressed={fav}
               className={`inline-flex items-center gap-2 h-11 px-5 rounded-full font-semibold border transition ${
-                fav ? 'border-chaber text-chaber bg-chaber/10' : 'border-line text-cream hover:border-chaber'
+                fav ? 'border-chili text-cream bg-chili/15' : 'border-line text-cream hover:border-gold/60'
               }`}
             >
               {fav ? <FaHeart /> : <FaRegHeart />} {fav ? 'W ulubionych' : 'Do ulubionych'}
@@ -124,7 +124,7 @@ export default function RecipeDetail() {
       {/* SKŁADNIKI + PRZYGOTOWANIE */}
       <div id="przygotowanie" className="grid grid-cols-1 lg:grid-cols-[360px_1fr] gap-6 lg:gap-8 items-start scroll-mt-36 print:block">
         <IngredientsPanel skladniki={recipe.ingredients} bazowePorcje={4} recipeName={recipe.name} />
-        <div className="bg-card border border-line rounded-3xl p-5 sm:p-8 print:border-none print:p-0 print:mt-6">
+        <div className="bg-card border border-line rounded-3xl p-5 sm:p-8 shadow-glow print:shadow-none print:border-none print:p-0 print:mt-6">
           <RecipeSteps kroki={recipe.steps} recipeName={recipe.name} wszystkieSkladniki={recipe.ingredients} />
         </div>
       </div>
@@ -142,7 +142,7 @@ export default function RecipeDetail() {
       {similarRecipes.length > 0 && (
         <section className="mt-14 print:hidden">
           <h2 className="font-display uppercase text-2xl sm:text-3xl tracking-wide mb-6">
-            <span className="text-cream">Może Ci</span> <span className="font-script normal-case text-chaber text-3xl">zasmakować</span>
+            <span className="text-cream">Może Ci</span> <span className="font-script normal-case text-gold text-3xl">zasmakować</span>
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {similarRecipes.map(r => (
