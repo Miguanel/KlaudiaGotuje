@@ -50,7 +50,7 @@ export default function Login() {
         </div>
 
         {error && (
-          <div className="bg-pink/10 border border-pink/50 text-pink-soft p-3 rounded-xl text-sm mb-4 text-center font-bold">
+          <div className="bg-chaber/10 border border-chaber/50 text-chaber-soft p-3 rounded-xl text-sm mb-4 text-center font-bold">
             {error}
           </div>
         )}
@@ -63,7 +63,7 @@ export default function Login() {
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               required
-              className="w-full px-4 py-2.5 bg-ink border border-line rounded-xl focus:ring-2 focus:ring-pink focus:border-pink outline-none transition-all text-cream"
+              className="w-full px-4 py-2.5 bg-ink border border-line rounded-xl focus:ring-2 focus:ring-chaber focus:border-chaber outline-none transition-all text-cream"
               placeholder="Wpisz login..."
             />
           </div>
@@ -75,7 +75,7 @@ export default function Login() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2.5 bg-ink border border-line rounded-xl focus:ring-2 focus:ring-pink focus:border-pink outline-none transition-all text-cream"
+              className="w-full px-4 py-2.5 bg-ink border border-line rounded-xl focus:ring-2 focus:ring-chaber focus:border-chaber outline-none transition-all text-cream"
               placeholder="••••••••"
             />
           </div>
@@ -83,7 +83,7 @@ export default function Login() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-pink text-cream font-bold rounded-full hover:brightness-110 transition-all shadow-neon disabled:opacity-50 flex items-center justify-center gap-2"
+            className="w-full py-3 bg-chaber text-cream font-bold rounded-full hover:brightness-110 transition-all shadow-neon disabled:opacity-50 flex items-center justify-center gap-2"
           >
             <FaLock /> {loading ? 'Logowanie...' : 'Zaloguj się'}
           </button>
@@ -91,4 +91,4 @@ export default function Login() {
       </div>
     </div>
   );
-}
+}

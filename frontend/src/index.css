@@ -3,19 +3,19 @@
 
 /*
  * Paleta "Królewska" — na podstawie grafik z profilu Engibadwoman:
- * głęboka czerń, neonowy róż, złoto korony i kremowa biel.
+ * głęboka czerń, neonowy chaber, złoto korony i kremowa biel.
  */
 @theme {
-  --color-ink: #0B0609;        /* tło strony */
-  --color-panel: #140A10;      /* nagłówek, stopka, duże sekcje */
-  --color-card: #1D0E17;       /* karty i pola */
-  --color-line: #3A1730;       /* obramowania */
-  --color-pink: #FF2E93;       /* główny akcent (neon róż) */
-  --color-pink-soft: #FF8AC8;  /* akcent na ciemnym tle – tekst */
+  --color-ink: #070912;        /* tło strony (granatowa czerń) */
+  --color-panel: #0C1020;      /* nagłówek, stopka, duże sekcje */
+  --color-card: #121831;       /* karty i pola */
+  --color-line: #25305A;       /* obramowania */
+  --color-chaber: #4A7DFF;     /* główny akcent (neonowy chaber) */
+  --color-chaber-soft: #9EBBFF; /* chaber na ciemnym tle – tekst */
   --color-gold: #F4C752;       /* korona / wyróżnienia */
   --color-gold-deep: #C8952C;
-  --color-cream: #FFF6FA;      /* tekst podstawowy */
-  --color-muted: #C9A8BA;      /* tekst drugorzędny */
+  --color-cream: #F4F6FF;      /* tekst podstawowy */
+  --color-muted: #A7B0D2;      /* tekst drugorzędny */
 
   --font-sans: "Inter", system-ui, sans-serif;
   --font-display: "Anton", "Impact", sans-serif;
@@ -36,7 +36,7 @@ body {
 /* Delikatna poświata w tle – jak na grafikach, ale nie przeszkadza w czytaniu */
 .bg-royal {
   background:
-    radial-gradient(900px 400px at 85% -10%, rgba(255, 46, 147, 0.16), transparent 60%),
+    radial-gradient(900px 400px at 85% -10%, rgba(74, 125, 255, 0.18), transparent 60%),
     radial-gradient(700px 380px at 0% 10%, rgba(244, 199, 82, 0.07), transparent 60%),
     var(--color-ink);
 }
@@ -49,14 +49,14 @@ body {
   -webkit-text-fill-color: transparent;
 }
 
-/* Neonowy róż */
+/* Neonowy chaber */
 @utility text-neon {
-  color: #FF2E93;
-  text-shadow: 0 0 12px rgba(255, 46, 147, 0.55);
+  color: #4A7DFF;
+  text-shadow: 0 0 12px rgba(74, 125, 255, 0.55);
 }
 
 @utility shadow-neon {
-  box-shadow: 0 0 0 1px rgba(255, 46, 147, 0.35), 0 8px 30px -8px rgba(255, 46, 147, 0.45);
+  box-shadow: 0 0 0 1px rgba(74, 125, 255, 0.35), 0 8px 30px -8px rgba(74, 125, 255, 0.45);
 }
 
 @utility shadow-gold {
@@ -70,7 +70,7 @@ body {
   gap: 0.4rem;
   padding: 0.3rem 0.9rem;
   border-radius: 9999px;
-  background: #FF2E93;
+  background: #4A7DFF;
   color: #fff;
   font-family: var(--font-display);
   letter-spacing: 0.06em;
@@ -88,7 +88,7 @@ body {
 }
 
 :focus-visible {
-  outline: 2px solid #FF2E93;
+  outline: 2px solid #4A7DFF;
   outline-offset: 2px;
 }
 

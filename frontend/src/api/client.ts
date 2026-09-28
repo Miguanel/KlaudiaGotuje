@@ -82,8 +82,8 @@ export const apiClient = {
   },
   utils: {
     getImageUrl: (path: string | null): string => {
-      if (!path) return 'https://placehold.co/800x600/1D0E17/FF8AC8?text=Brak+zdj%C4%99cia';
+      if (!path) return 'https://placehold.co/800x600/121831/9EBBFF?text=Brak+zdj%C4%99cia';
       return `${BACKEND_URL}${path}`;
     }
   }
-};
+};

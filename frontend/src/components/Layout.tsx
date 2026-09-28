@@ -14,7 +14,7 @@ export function Logo({ onClick }: { onClick?: () => void }) {
       <FaCrown className="text-gold text-2xl sm:text-3xl shrink-0 drop-shadow-[0_0_8px_rgba(244,199,82,0.55)]" />
       <span className="flex flex-col leading-none">
         <span className="font-display text-xl sm:text-2xl tracking-wide uppercase text-gold">Diamentowe Smaki</span>
-        <span className="font-script text-pink-soft text-sm sm:text-base -mt-0.5">by Engibadwoman</span>
+        <span className="font-script text-chaber-soft text-sm sm:text-base -mt-0.5">by Engibadwoman</span>
       </span>
     </Link>
   );
@@ -44,9 +44,9 @@ function SearchBox({ onDone, autoFocus = false }: { onDone?: () => void; autoFoc
         onChange={(e) => setTerm(e.target.value)}
         placeholder="Szukaj przepisu lub składnika…"
         aria-label="Szukaj przepisu"
-        className="w-full h-11 pl-10 pr-24 rounded-full bg-card border border-line text-sm text-cream placeholder:text-muted focus:outline-none focus:border-pink focus:ring-2 focus:ring-pink/30 transition"
+        className="w-full h-11 pl-10 pr-24 rounded-full bg-card border border-line text-sm text-cream placeholder:text-muted focus:outline-none focus:border-chaber focus:ring-2 focus:ring-chaber/30 transition"
       />
-      <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 px-4 rounded-full bg-pink text-white text-xs font-bold uppercase tracking-wide hover:brightness-110 transition">
+      <button type="submit" className="absolute right-1.5 top-1/2 -translate-y-1/2 h-8 px-4 rounded-full bg-chaber text-white text-xs font-bold uppercase tracking-wide hover:brightness-110 transition">
         Szukaj
       </button>
     </form>
@@ -93,7 +93,7 @@ export default function Layout() {
   const activeCategory = new URLSearchParams(location.search).get('category');
   const navLinkCls = ({ isActive }: { isActive: boolean }) =>
     `flex items-center gap-2 h-full px-1 border-b-2 transition-colors ${
-      isActive ? 'border-pink text-cream' : 'border-transparent text-muted hover:text-cream'
+      isActive ? 'border-chaber text-cream' : 'border-transparent text-muted hover:text-cream'
     }`;
 
   return (
@@ -109,14 +109,14 @@ export default function Layout() {
 
           <div className="ml-auto flex items-center gap-1 sm:gap-2">
             <Link to="/ulubione" className="hidden md:flex items-center gap-2 px-3 h-10 rounded-full text-sm font-semibold text-muted hover:text-cream hover:bg-card transition" title="Ulubione">
-              <FaHeart className="text-pink" /> <span className="hidden lg:inline">Ulubione</span>
+              <FaHeart className="text-chaber" /> <span className="hidden lg:inline">Ulubione</span>
             </Link>
             <Link to="/zakupy" className="hidden md:flex items-center gap-2 px-3 h-10 rounded-full text-sm font-semibold text-muted hover:text-cream hover:bg-card transition" title="Lista zakupów">
               <FaShoppingBasket className="text-gold" /> <span className="hidden lg:inline">Zakupy</span>
             </Link>
             {isAuthenticated && (
               <>
-                <Link to="/dodaj-przepis" className="hidden md:flex items-center gap-2 px-4 h-10 rounded-full bg-pink text-white text-sm font-bold hover:brightness-110 transition shadow-neon">
+                <Link to="/dodaj-przepis" className="hidden md:flex items-center gap-2 px-4 h-10 rounded-full bg-chaber text-white text-sm font-bold hover:brightness-110 transition shadow-neon">
                   <FaPlus /> Dodaj
                 </Link>
                 <button onClick={handleLogout} className="hidden md:flex items-center justify-center w-10 h-10 rounded-full text-muted hover:text-cream hover:bg-card transition" title="Wyloguj">
@@ -141,7 +141,7 @@ export default function Layout() {
             <button
               onClick={() => setMegaOpen(o => !o)}
               aria-expanded={megaOpen}
-              className={`flex items-center gap-2 border-b-2 transition-colors ${megaOpen ? 'border-pink text-cream' : 'border-transparent text-cream hover:text-pink-soft'}`}
+              className={`flex items-center gap-2 border-b-2 transition-colors ${megaOpen ? 'border-chaber text-cream' : 'border-transparent text-cream hover:text-chaber-soft'}`}
             >
               <FaCrown className="text-gold" /> Przepisy
               <FaChevronDown className={`text-xs transition-transform duration-300 ${megaOpen ? 'rotate-180' : ''}`} />
@@ -166,16 +166,16 @@ export default function Layout() {
                   <div key={ch.id}>
                     <Link
                       to={`/?category=${ch.slug}`}
-                      className="flex items-center gap-2 font-display uppercase tracking-wide text-lg text-gold hover:text-pink-soft transition-colors mb-3"
+                      className="flex items-center gap-2 font-display uppercase tracking-wide text-lg text-gold hover:text-chaber-soft transition-colors mb-3"
                     >
-                      <Icon className="text-pink shrink-0" /> {ch.name}
+                      <Icon className="text-chaber shrink-0" /> {ch.name}
                     </Link>
                     <ul className="space-y-1.5 border-l border-line pl-3">
                       {ch.children.map(sub => (
                         <li key={sub.id}>
                           <Link
                             to={`/?category=${sub.slug}`}
-                            className={`text-sm transition-colors ${activeCategory === sub.slug ? 'text-pink font-semibold' : 'text-muted hover:text-cream'}`}
+                            className={`text-sm transition-colors ${activeCategory === sub.slug ? 'text-chaber font-semibold' : 'text-muted hover:text-cream'}`}
                           >
                             {sub.name}
                           </Link>
@@ -197,7 +197,7 @@ export default function Layout() {
 
               <div className="grid grid-cols-3 gap-2 text-xs font-semibold">
                 <Link to="/ulubione" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card border border-line">
-                  <FaHeart className="text-pink text-lg" /> Ulubione
+                  <FaHeart className="text-chaber text-lg" /> Ulubione
                 </Link>
                 <Link to="/zakupy" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card border border-line">
                   <FaShoppingBasket className="text-gold text-lg" /> Zakupy
@@ -217,7 +217,7 @@ export default function Layout() {
                       <li key={ch.id}>
                         <div className="flex items-center">
                           <Link to={`/?category=${ch.slug}`} className="flex-1 flex items-center gap-3 py-3 font-semibold">
-                            <Icon className="text-pink text-lg shrink-0" /> {ch.name}
+                            <Icon className="text-chaber text-lg shrink-0" /> {ch.name}
                           </Link>
                           {ch.children.length > 0 && (
                             <button
@@ -247,7 +247,7 @@ export default function Layout() {
 
               {isAuthenticated && (
                 <div className="flex gap-2">
-                  <Link to="/dodaj-przepis" className="flex-1 flex items-center justify-center gap-2 h-11 rounded-full bg-pink text-white font-bold text-sm">
+                  <Link to="/dodaj-przepis" className="flex-1 flex items-center justify-center gap-2 h-11 rounded-full bg-chaber text-white font-bold text-sm">
                     <FaPlus /> Dodaj przepis
                   </Link>
                   <button onClick={handleLogout} className="flex items-center justify-center gap-2 h-11 px-4 rounded-full border border-line text-muted text-sm font-semibold">
@@ -278,7 +278,7 @@ export default function Layout() {
             <ul className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
               {chapters.map(ch => (
                 <li key={ch.id}>
-                  <Link to={`/?category=${ch.slug}`} className="text-muted hover:text-pink-soft transition-colors">{ch.name}</Link>
+                  <Link to={`/?category=${ch.slug}`} className="text-muted hover:text-chaber-soft transition-colors">{ch.name}</Link>
                 </li>
               ))}
             </ul>
@@ -287,9 +287,9 @@ export default function Layout() {
           <div>
             <h4 className="font-display uppercase tracking-wide text-gold mb-3">Obserwuj</h4>
             <div className="flex gap-3 mb-4">
-              <a href="https://www.instagram.com/engibadwoman" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-pink hover:text-pink transition"><FaInstagram /></a>
-              <a href="https://www.tiktok.com/@engibadwoman" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-pink hover:text-pink transition"><FaTiktok /></a>
-              <a href="mailto:engibadwoman@gmail.com" aria-label="E-mail" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-pink hover:text-pink transition"><FaEnvelope /></a>
+              <a href="https://www.instagram.com/engibadwoman" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-chaber hover:text-chaber transition"><FaInstagram /></a>
+              <a href="https://www.tiktok.com/@engibadwoman" target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-chaber hover:text-chaber transition"><FaTiktok /></a>
+              <a href="mailto:engibadwoman@gmail.com" aria-label="E-mail" className="w-10 h-10 rounded-full bg-card border border-line flex items-center justify-center hover:border-chaber hover:text-chaber transition"><FaEnvelope /></a>
             </div>
             {!isAuthenticated && (
               <Link to="/login" className="text-xs text-muted/70 hover:text-muted transition-colors">Panel administratora</Link>

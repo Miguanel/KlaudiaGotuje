@@ -64,7 +64,7 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
     }
   };
 
-  const inputCls = 'w-full px-4 h-11 rounded-xl bg-ink/60 border border-line text-cream placeholder:text-muted focus:outline-none focus:border-pink focus:ring-2 focus:ring-pink/30 transition';
+  const inputCls = 'w-full px-4 h-11 rounded-xl bg-ink/60 border border-line text-cream placeholder:text-muted focus:outline-none focus:border-chaber focus:ring-2 focus:ring-chaber/30 transition';
 
   return (
     <section className="mt-12 bg-card border border-line rounded-3xl p-5 sm:p-8" aria-labelledby="opinie">
@@ -84,7 +84,7 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
         <form onSubmit={handleSubmit} className="space-y-4 bg-ink/40 border border-line rounded-2xl p-5 self-start">
           <h3 className="font-display uppercase tracking-wide text-lg text-gold">Jak Ci wyszło?</h3>
 
-          {error && <p className="text-pink-soft text-sm font-semibold">{error}</p>}
+          {error && <p className="text-chaber-soft text-sm font-semibold">{error}</p>}
 
           <div>
             <span className="block text-xs font-semibold text-muted mb-1.5">Twoja ocena</span>
@@ -125,7 +125,7 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
           <button
             type="submit"
             disabled={submitting}
-            className="w-full h-11 rounded-full bg-pink text-white font-bold hover:brightness-110 transition disabled:opacity-50"
+            className="w-full h-11 rounded-full bg-chaber text-white font-bold hover:brightness-110 transition disabled:opacity-50"
           >
             {submitting ? 'Wysyłanie…' : 'Opublikuj opinię'}
           </button>
@@ -149,7 +149,7 @@ export default function CommentsSection({ recipeId, initialComments, averageRati
                   {isAuthenticated && (
                     <button
                       onClick={() => handleDelete(comment.id)}
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-muted hover:text-pink hover:bg-pink/10 transition"
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-muted hover:text-chaber hover:bg-chaber/10 transition"
                       title="Usuń komentarz"
                       aria-label="Usuń komentarz"
                     >

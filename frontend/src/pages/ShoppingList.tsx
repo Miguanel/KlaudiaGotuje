@@ -76,14 +76,14 @@ export default function ShoppingList() {
     <div className="max-w-3xl mx-auto px-4 py-8 sm:py-12 text-cream">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8 border-b border-line pb-6">
         <div>
-          <p className="font-script text-pink text-3xl">Twoja</p>
+          <p className="font-script text-chaber text-3xl">Twoja</p>
           <h1 className="font-display uppercase tracking-wide text-4xl sm:text-5xl text-gold leading-none mb-2">Lista zakupów</h1>
           <p className="text-muted text-sm">Składniki z wielu przepisów zostały automatycznie zsumowane.</p>
         </div>
         {items.length > 0 && (
           <button
             onClick={clearList}
-            className="text-sm font-bold text-pink-soft hover:text-pink border border-line hover:border-pink px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5"
+            className="text-sm font-bold text-chaber-soft hover:text-chaber border border-line hover:border-chaber px-4 py-2 rounded-xl transition-colors flex items-center gap-1.5"
           >
             <FaTrash /> Wyczyść całą listę
           </button>
@@ -95,7 +95,7 @@ export default function ShoppingList() {
           <p className="text-muted text-lg mb-4">Twoja lista zakupów jest pusta.</p>
           <Link
             to="/"
-            className="inline-block bg-pink text-cream font-bold px-6 py-3 rounded-full hover:brightness-110 transition-all shadow-neon"
+            className="inline-block bg-chaber text-cream font-bold px-6 py-3 rounded-full hover:brightness-110 transition-all shadow-neon"
           >
             Przeglądaj przepisy
           </Link>
@@ -107,13 +107,13 @@ export default function ShoppingList() {
               <li
                 key={item.id}
                 onClick={() => toggleItem(item.id)}
-                className={`flex items-center justify-between p-4 hover:bg-pink/5 cursor-pointer transition-colors ${
+                className={`flex items-center justify-between p-4 hover:bg-chaber/5 cursor-pointer transition-colors ${
                   item.checked ? 'bg-ink/40' : ''
                 }`}
               >
                 <div className="flex items-center gap-3">
                   <div className={`w-6 h-6 rounded-lg border flex items-center justify-center transition-colors ${
-                    item.checked ? 'bg-pink border-pink text-cream shadow-neon' : 'border-line bg-ink'
+                    item.checked ? 'bg-chaber border-chaber text-cream shadow-neon' : 'border-line bg-ink'
                   }`}>
                     {item.checked && <FaCheck className="w-3.5 h-3.5" />}
                   </div>
@@ -140,7 +140,7 @@ export default function ShoppingList() {
                       e.stopPropagation();
                       removeItem(item.id);
                     }}
-                    className="text-muted hover:text-pink p-2 rounded-xl transition-colors"
+                    className="text-muted hover:text-chaber p-2 rounded-xl transition-colors"
                     title="Usuń pozycję"
                   >
                     ✕
@@ -153,4 +153,4 @@ export default function ShoppingList() {
       )}
     </div>
   );
-}
+}

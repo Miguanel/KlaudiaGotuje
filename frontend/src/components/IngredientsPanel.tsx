@@ -68,13 +68,13 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
           <div className="flex items-center gap-1 bg-ink/60 border border-line rounded-full p-1">
             <button
               onClick={() => setPorcje(p => Math.max(1, p - 1))}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-cream hover:bg-pink hover:text-white transition"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-cream hover:bg-chaber hover:text-white transition"
               aria-label="Mniej porcji"
             ><FaMinus className="text-xs" /></button>
             <span className="font-display text-xl w-8 text-center" aria-live="polite">{porcje}</span>
             <button
               onClick={() => setPorcje(p => p + 1)}
-              className="w-8 h-8 rounded-full flex items-center justify-center text-cream hover:bg-pink hover:text-white transition"
+              className="w-8 h-8 rounded-full flex items-center justify-center text-cream hover:bg-chaber hover:text-white transition"
               aria-label="Więcej porcji"
             ><FaPlus className="text-xs" /></button>
           </div>
@@ -89,7 +89,7 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
                 key={value}
                 onClick={() => setWeightMode(value)}
                 aria-pressed={weightMode === value}
-                className={`px-3 h-7 rounded-full transition ${weightMode === value ? 'bg-pink text-white' : 'text-muted hover:text-cream'}`}
+                className={`px-3 h-7 rounded-full transition ${weightMode === value ? 'bg-chaber text-white' : 'text-muted hover:text-cream'}`}
               >
                 {label}
               </button>
@@ -112,13 +112,13 @@ export default function IngredientsPanel({ skladniki, bazowePorcje = 4, recipeNa
                 className="w-full flex items-center gap-3 py-3 text-left group"
               >
                 <span className={`w-5 h-5 rounded-md border flex items-center justify-center shrink-0 transition print:hidden ${
-                  isChecked ? 'bg-pink border-pink text-white' : 'border-line group-hover:border-pink'
+                  isChecked ? 'bg-chaber border-chaber text-white' : 'border-line group-hover:border-chaber'
                 }`}>
                   {isChecked && <FaCheck className="text-[10px]" />}
                 </span>
                 <span className={`flex-1 flex justify-between gap-3 transition ${isChecked ? 'opacity-40 line-through' : ''} print:opacity-100 print:no-underline`}>
                   <span className="text-[15px] text-cream">{skladnik.name}</span>
-                  <span className="text-[15px] font-bold text-pink-soft whitespace-nowrap">{calc.quantity} {calc.unit}</span>
+                  <span className="text-[15px] font-bold text-chaber-soft whitespace-nowrap">{calc.quantity} {calc.unit}</span>
                 </span>
               </button>
             </li>

@@ -63,7 +63,7 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
           const rel = getRelevantIngredients(krok);
           return (
             <li key={krok.id} className="flex gap-4 sm:gap-5 print:break-inside-avoid">
-              <span className="shrink-0 w-10 h-10 rounded-full bg-pink text-white font-display text-xl flex items-center justify-center shadow-neon print:shadow-none print:bg-transparent print:text-black print:border print:border-black">
+              <span className="shrink-0 w-10 h-10 rounded-full bg-chaber text-white font-display text-xl flex items-center justify-center shadow-neon print:shadow-none print:bg-transparent print:text-black print:border print:border-black">
                 {krok.step_number}
               </span>
 
@@ -105,7 +105,7 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
             </div>
             <button
               onClick={() => setIsFocusMode(false)}
-              className="shrink-0 w-11 h-11 rounded-full bg-card border border-line flex items-center justify-center hover:border-pink transition"
+              className="shrink-0 w-11 h-11 rounded-full bg-card border border-line flex items-center justify-center hover:border-chaber transition"
               aria-label="Zamknij tryb gotowania"
             >
               <FaTimes />
@@ -114,11 +114,11 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
 
           {/* pasek postępu */}
           <div className="max-w-4xl mx-auto w-full mt-5 h-1.5 rounded-full bg-line overflow-hidden">
-            <div className="h-full bg-pink transition-all duration-300" style={{ width: `${((currentStepIndex + 1) / kroki.length) * 100}%` }} />
+            <div className="h-full bg-chaber transition-all duration-300" style={{ width: `${((currentStepIndex + 1) / kroki.length) * 100}%` }} />
           </div>
 
           <div className="flex-1 overflow-y-auto flex flex-col justify-center max-w-2xl mx-auto w-full text-center py-8">
-            <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-pink text-white font-display text-3xl flex items-center justify-center shadow-neon">
+            <div className="mx-auto mb-6 w-16 h-16 rounded-full bg-chaber text-white font-display text-3xl flex items-center justify-center shadow-neon">
               {currentStep.step_number}
             </div>
             <p className="text-2xl sm:text-3xl font-semibold leading-relaxed mb-6">{currentStep.instruction}</p>
@@ -152,14 +152,14 @@ export default function RecipeSteps({ kroki, recipeName = 'Przepis', wszystkieSk
               <button
                 onClick={() => setCurrentStepIndex(i => Math.max(0, i - 1))}
                 disabled={currentStepIndex === 0}
-                className="flex-1 h-14 rounded-full border border-line font-bold flex items-center justify-center gap-2 hover:border-pink disabled:opacity-30 transition"
+                className="flex-1 h-14 rounded-full border border-line font-bold flex items-center justify-center gap-2 hover:border-chaber disabled:opacity-30 transition"
               >
                 <FaArrowLeft /> Poprzedni
               </button>
               {currentStepIndex < kroki.length - 1 ? (
                 <button
                   onClick={() => setCurrentStepIndex(i => Math.min(kroki.length - 1, i + 1))}
-                  className="flex-1 h-14 rounded-full bg-pink text-white font-bold flex items-center justify-center gap-2 hover:brightness-110 transition shadow-neon"
+                  className="flex-1 h-14 rounded-full bg-chaber text-white font-bold flex items-center justify-center gap-2 hover:brightness-110 transition shadow-neon"
                 >
                   Następny <FaArrowRight />
                 </button>
