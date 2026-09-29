@@ -1,6 +1,11 @@
 from django.contrib import admin
 from unfold.admin import ModelAdmin, TabularInline, StackedInline
-from .models import Recipe, Ingredient, RecipeStep, Category
+from .models import Recipe, Ingredient, RecipeStep, Category, SiteImage
+
+
+@admin.register(SiteImage)
+class SiteImageAdmin(ModelAdmin):
+    list_display = ('key', 'updated_at')
 
 
 @admin.register(Category)

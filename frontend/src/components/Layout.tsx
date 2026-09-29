@@ -3,6 +3,8 @@ import { Link, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from
 import { useAuth } from '../context/AuthContext';
 import { useCategories } from '../hooks/useCategories';
 import ChapterAccordion from './ChapterAccordion';
+import ImageEditor from './ImageEditor';
+import { useSiteImages } from '../hooks/useSiteImages';
 import {
   FaCrown, FaHeart, FaShoppingBasket, FaPlus, FaSignOutAlt, FaSearch, FaChevronDown, FaBars, FaTimes,
   FaInstagram, FaTiktok, FaEnvelope,
@@ -56,6 +58,8 @@ function SearchBox({ onDone, autoFocus = false }: { onDone?: () => void; autoFoc
 export default function Layout() {
   const { isAuthenticated, logout } = useAuth();
   const { chapters } = useCategories();
+  const site = useSiteImages();
+  const pageBg = site.url('tlo-strony');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -96,7 +100,25 @@ export default function Layout() {
     }`;
 
   return (
-    <div className="min-h-screen flex flex-col bg-royal text-cream overflow-x-hidden">
+    <div
+      className="min-h-screen flex flex-col bg-royal text-cream overflow-x-hidden"
+      style={pageBg ? {
+        // własne tło strony przyciemnione granatem, żeby tekst był czytelny
+        backgroundImage: `linear-gradient(rgba(7, 11, 28, 0.72), rgba(7, 11, 28, 0.86)), url("${pageBg}")`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+      } : undefined}
+    >
+      <ImageEditor
+        label="Tło całej strony"
+        buttonLabel="Edytuj tło strony"
+        currentUrl={pageBg}
+        hint="poziome, min. 1920 × 1080 px, ciemne"
+        onUpload={(f, t) => site.upload('tlo-strony', f, t)}
+        onRemove={(t) => site.remove('tlo-strony', t)}
+        className="fixed bottom-4 left-4 z-40 !h-10 !px-4"
+      />
       <header className="sticky top-0 z-50 bg-panel/95 backdrop-blur-md border-b border-line">
         {/* GÓRNY PASEK: logo · wyszukiwarka · skróty */}
         <div className="max-w-6xl mx-auto px-4 h-16 sm:h-[72px] flex items-center gap-4">

@@ -50,6 +50,21 @@ class Category(models.Model):
         return self.name
 
 
+class SiteImage(models.Model):
+    """Grafika w stałym miejscu strony (tło strony, tło logo, zdjęcie „O mnie” …) – podmieniana przez administratorkę."""
+    key = models.SlugField(max_length=50, primary_key=True, verbose_name="Miejsce na stronie")
+    image = models.ImageField(upload_to='strona/', verbose_name="Grafika")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Ostatnia zmiana")
+
+    class Meta:
+        verbose_name = "Grafika strony"
+        verbose_name_plural = "Grafiki strony"
+        ordering = ['key']
+
+    def __str__(self):
+        return self.key
+
+
 class Recipe(models.Model):
     DIET_CHOICES = [
         ('dowolna', 'Dowolna'),

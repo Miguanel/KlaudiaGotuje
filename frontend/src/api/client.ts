@@ -20,25 +20,42 @@ async function fetchJson<T>(endpoint: string): Promise<T> {
   return response.json();
 }
 
+async function uploadFile<T>(endpoint: string, file: File, token: string): Promise<T> {
+  const body = new FormData();
+  body.append('image', file);
+  const res = await fetch(`${BACKEND_URL}${endpoint}`, {
+    method: 'POST',
+    headers: { 'Authorization': `Bearer ${token}` },
+    body,
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => null);
+    throw new ApiError(res.status, data?.detail ?? (res.status === 401 ? 'Sesja wygasła – zaloguj się ponownie.' : 'Nie udało się wgrać grafiki'));
+  }
+  return res.json();
+}
+
 export const apiClient = {
+  /** Grafiki w stałych miejscach strony (tło strony, tło logo, „O mnie” …). */
+  siteImages: {
+    getAll: () => fetchJson<{ key: string; image_url: string }[]>('/api/grafiki'),
+    upload: (key: string, file: File, token: string) =>
+      uploadFile<{ key: string; image_url: string }>(`/api/grafiki/${key}`, file, token),
+    remove: async (key: string, token: string) => {
+      const res = await fetch(`${BACKEND_URL}/api/grafiki/${key}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (!res.ok) throw new ApiError(res.status, 'Nie udało się usunąć grafiki');
+    },
+  },
+
   categories: {
     getAll: () => fetchJson<Category[]>('/api/kategorie'),
 
     /** Wgranie grafiki w tle banera rozdziału (tylko zalogowana administratorka). */
-    uploadImage: async (categoryId: string, file: File, token: string): Promise<Category> => {
-      const body = new FormData();
-      body.append('image', file);
-      const res = await fetch(`${BACKEND_URL}/api/kategorie/${categoryId}/obraz`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${token}` },
-        body,
-      });
-      if (!res.ok) {
-        const data = await res.json().catch(() => null);
-        throw new ApiError(res.status, data?.detail ?? 'Nie udało się wgrać grafiki');
-      }
-      return res.json();
-    },
+    uploadImage: (categoryId: string, file: File, token: string) =>
+      uploadFile<Category>(`/api/kategorie/${categoryId}/obraz`, file, token),
 
     /** Usunięcie grafiki – baner wraca do zdjęcia przepisu lub ikony. */
     removeImage: async (categoryId: string, token: string): Promise<Category> => {
@@ -66,6 +83,10 @@ export const apiClient = {
     },
 
     getById: (id: string) => fetchJson<Recipe>(`/api/przepisy/${id}`),
+
+    /** Podmiana zdjęcia głównego przepisu (tylko zalogowana administratorka). */
+    uploadImage: (id: string, file: File, token: string) =>
+      uploadFile<Recipe>(`/api/przepisy/${id}/zdjecie`, file, token),
 
     getSimilar: (id: string) => fetchJson<Recipe[]>(`/api/przepisy/${id}/podobne`),
 

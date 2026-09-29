@@ -1,6 +1,6 @@
 from ninja import ModelSchema
 from typing import List, Optional
-from .models import Recipe, Ingredient, RecipeStep, Category, Comment
+from .models import Recipe, Ingredient, RecipeStep, Category, Comment, SiteImage
 from ninja import Schema
 
 class IngredientCreateSchema(Schema):
@@ -32,6 +32,15 @@ class CommentCreateSchema(ModelSchema):
     class Meta:
         model = Comment
         fields = ['author_name', 'content', 'rating']
+
+class SiteImageSchema(Schema):
+    key: str
+    image_url: str
+
+    @staticmethod
+    def resolve_image_url(obj):
+        return obj.image.url
+
 
 # Uproszczony schemat zapobiegający pętli rekurencji Pydantic
 class ParentCategorySchema(ModelSchema):

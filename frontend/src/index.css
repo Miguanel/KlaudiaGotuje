@@ -137,6 +137,18 @@ body {
   mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.6) 30%, #000 60%);
 }
 
+/* Wgrane tło (logo, sekcja przepisów) łagodnie znika na wszystkich brzegach */
+@utility mask-fade-edges {
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 25%, #000 70%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 22%, #000 78%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 25%, #000 70%, transparent 100%);
+  mask-composite: intersect;
+}
+
 /* Burgundowy pas pod tytułem banera łagodnie znika w dół */
 @utility mask-fade-bottom {
   -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%);

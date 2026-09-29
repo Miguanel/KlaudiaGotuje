@@ -1,16 +1,17 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { useRecipes } from '../hooks/useRecipes';
 import { useCategories, updateCachedCategory, type Chapter } from '../hooks/useCategories';
-import { useAuth } from '../context/AuthContext';
 import { apiClient } from '../api/client';
+import { useSiteImages } from '../hooks/useSiteImages';
+import ImageEditor from '../components/ImageEditor';
 import { useFavorites } from '../hooks/useFavorites';
 import { RecipeGridSkeleton } from '../components/ui/Skeletons';
 import RecipeCard from '../components/RecipeCard';
 import { chapterIcon } from '../utils/chapterIcons';
 import { chapterImage } from '../utils/chapterArt';
 import { przepisy } from '../utils/plural';
-import { FaCrown, FaChevronRight, FaTimes, FaSearch, FaHeart, FaCamera, FaTrashAlt, FaSpinner } from 'react-icons/fa';
+import { FaCrown, FaChevronRight, FaTimes, FaSearch, FaHeart } from 'react-icons/fa';
 import { GiCutDiamond, GiCrown, GiSparkles } from 'react-icons/gi';
 import type { Category, Recipe } from '../types';
 
@@ -38,6 +39,7 @@ export default function Home() {
   const { recipes, loading, error } = useRecipes(categorySlug, query, 'dowolna', sort);
   const { categories, chapters, findBySlug } = useCategories();
   const { isFavorite, toggle } = useFavorites();
+  const site = useSiteImages();
 
   // Ustalenie, gdzie jesteśmy: rozdział i (opcjonalnie) podrozdział
   const activeCategory = findBySlug(categorySlug);
@@ -83,9 +85,9 @@ export default function Home() {
       {/* ===== STRONA STARTOWA (wg projektu klientki) ===== */}
       {isStart && (
         <>
-          <BrandHero />
+          <BrandHero site={site} />
 
-          <QuickLinks featured={featured} onSort={(s) => setParam('sort', s === 'date' ? null : s, true)} />
+          <QuickLinks site={site} featured={featured} onSort={(s) => setParam('sort', s === 'date' ? null : s, true)} />
 
           <section id="rozdzialy-sekcja" className="mt-6 sm:mt-8 space-y-4 sm:space-y-5 scroll-mt-36" aria-label="Rozdziały przepisów">
             {chapters.map(ch => (
@@ -135,8 +137,21 @@ export default function Home() {
       )}
 
       {/* ===== LISTA PRZEPISÓW ===== */}
-      <section id="lista-przepisow" className={`scroll-mt-32 ${isStart ? 'mt-12 sm:mt-14' : 'mt-8'}`} aria-live="polite">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
+      <section id="lista-przepisow" className={`relative scroll-mt-32 ${isStart ? 'mt-12 sm:mt-14' : 'mt-8'}`} aria-live="polite">
+        {isStart && site.url('tlo-przepisow') && (
+          <img src={site.url('tlo-przepisow')!} alt="" className="absolute -left-4 -top-8 h-48 sm:h-56 w-[calc(100%+2rem)] object-cover opacity-50 mask-fade-edges pointer-events-none" aria-hidden="true" />
+        )}
+        {isStart && (
+          <ImageEditor
+            label="Tło sekcji „Najnowsze przepisy”"
+            currentUrl={site.url('tlo-przepisow')}
+            hint="poziome, min. 1600 × 400 px"
+            onUpload={(f, t) => site.upload('tlo-przepisow', f, t)}
+            onRemove={(t) => site.remove('tlo-przepisow', t)}
+            className="absolute -top-6 right-0"
+          />
+        )}
+        <div className="relative flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
           <div className="min-w-0">
             <h2 className="flex items-center gap-3 font-display uppercase font-bold text-2xl sm:text-3xl tracking-wide text-gold-shine">
               <GiCrown className="text-gold shrink-0 text-3xl drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]" aria-hidden="true" />
@@ -175,6 +190,7 @@ export default function Home() {
           </div>
         </div>
 
+        <div className="relative">
         {error ? (
           <p className="py-16 text-center text-cream font-semibold">Nie udało się wczytać przepisów: {error}</p>
         ) : loading ? (
@@ -195,6 +211,7 @@ export default function Home() {
             ))}
           </div>
         )}
+        </div>
       </section>
     </div>
   );
@@ -205,9 +222,19 @@ export default function Home() {
 /* ------------------------------------------------------------------ */
 
 /** Duże logo „Diamentowe Smaki / Engibadwoman” z koroną – jak na grafice klientki. */
-function BrandHero() {
+function BrandHero({ site }: { site: ReturnType<typeof useSiteImages> }) {
+  const bg = site.url('tlo-logo');
   return (
     <section className="relative pt-8 sm:pt-12 pb-2 text-center">
+      {bg && <img src={bg} alt="" className="absolute -left-4 top-0 w-[calc(100%+2rem)] h-full object-cover opacity-60 mask-fade-edges pointer-events-none" aria-hidden="true" />}
+      <ImageEditor
+        label="Tło za logo"
+        currentUrl={bg}
+        hint="poziome, min. 1600 × 500 px, środek ciemny"
+        onUpload={(f, t) => site.upload('tlo-logo', f, t)}
+        onRemove={(t) => site.remove('tlo-logo', t)}
+        className="absolute top-3 right-0"
+      />
       {/* poświata i ozdobne diamenty */}
       <div className="absolute left-1/2 top-6 -translate-x-1/2 w-[34rem] max-w-full h-48 rounded-full bg-cobalt/15 blur-3xl pointer-events-none" aria-hidden="true" />
       <GiCutDiamond className="hidden sm:block absolute left-[6%] top-16 text-4xl text-cream/70 rotate-[-18deg] drop-shadow-[0_0_12px_rgba(159,187,255,0.7)] animate-twinkle" aria-hidden="true" />
@@ -230,15 +257,18 @@ function BrandHero() {
 }
 
 /** Pasek skrótów w złotej ramce: ostatnio dodane, klasyki i wybrane podrozdziały. */
-function QuickLinks({ featured, onSort }: { featured: Category[]; onSort: (s: Sort) => void }) {
+function QuickLinks({ site, featured, onSort }: { site: ReturnType<typeof useSiteImages>; featured: Category[]; onSort: (s: Sort) => void }) {
+  const bg = site.url('tlo-skrotow');
   const [expanded, setExpanded] = useState(false);
   const VISIBLE = 2;
   const shown = expanded ? featured : featured.slice(0, VISIBLE);
   const hidden = featured.length - VISIBLE;
 
   return (
-    <nav aria-label="Szybkie skróty" className="mt-6 sm:mt-8 frame-gold rounded-2xl p-3 sm:p-4">
-      <ul className="-mx-3 px-3 py-1 sm:mx-0 sm:px-0 flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar sm:flex-wrap sm:justify-center">
+    <div className="relative mt-6 sm:mt-8">
+    <nav aria-label="Szybkie skróty" className="relative overflow-hidden frame-gold rounded-2xl p-3 sm:p-4">
+      {bg && <img src={bg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none" aria-hidden="true" />}
+      <ul className="relative -mx-3 px-3 py-1 sm:mx-0 sm:px-0 flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar sm:flex-wrap sm:justify-center">
         <li className="shrink-0">
           <button onClick={() => onSort('date')} className="pill pill-burgundy whitespace-nowrap">
             <GiCutDiamond className="text-gold text-base" aria-hidden="true" /> Ostatnio dodane
@@ -261,6 +291,15 @@ function QuickLinks({ featured, onSort }: { featured: Category[]; onSort: (s: So
         )}
       </ul>
     </nav>
+      <ImageEditor
+        label="Tło paska skrótów"
+        currentUrl={bg}
+        hint="bardzo szerokie, min. 1600 × 200 px"
+        onUpload={(f, t) => site.upload('tlo-skrotow', f, t)}
+        onRemove={(t) => site.remove('tlo-skrotow', t)}
+        className="absolute -top-3 right-4"
+      />
+    </div>
   );
 }
 
@@ -321,66 +360,15 @@ function ChapterBanner({ chapter, image }: { chapter: Chapter; image: string | n
         )}
       </div>
 
-      <AdminImageControls chapter={chapter} />
+      <ImageEditor
+        label={`Tło rozdziału „${chapter.name}”`}
+        currentUrl={chapter.image_url ? apiClient.utils.getImageUrl(chapter.image_url) : null}
+        hint="poziome, min. 1200 × 500 px, potrawa po prawej stronie"
+        onUpload={async (f, t) => updateCachedCategory(await apiClient.categories.uploadImage(chapter.id, f, t))}
+        onRemove={async (t) => updateCachedCategory(await apiClient.categories.removeImage(chapter.id, t))}
+        className="relative ml-4 mb-4 -mt-1 sm:absolute sm:top-3 sm:right-3 sm:m-0"
+      />
     </article>
-  );
-}
-
-/**
- * Widoczne tylko po zalogowaniu: wgranie / zmiana / usunięcie grafiki w tle banera.
- * Grafika zapisuje się na serwerze (pole Category.image) i od razu pojawia się na stronie.
- */
-function AdminImageControls({ chapter }: { chapter: Chapter }) {
-  const { isAuthenticated, token } = useAuth();
-  const inputRef = useRef<HTMLInputElement>(null);
-  const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  if (!isAuthenticated || !token) return null;
-
-  const run = async (action: () => Promise<Parameters<typeof updateCachedCategory>[0]>) => {
-    setBusy(true);
-    setError(null);
-    try {
-      updateCachedCategory(await action());
-    } catch (e) {
-      setError(e instanceof Error ? e.message : 'Coś poszło nie tak');
-    } finally {
-      setBusy(false);
-    }
-  };
-
-  const onFile = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    e.target.value = '';
-    if (file) run(() => apiClient.categories.uploadImage(chapter.id, file, token));
-  };
-
-  const btn = 'inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-semibold bg-ink/85 backdrop-blur border border-gold/50 text-cream hover:border-gold hover:text-gold transition disabled:opacity-60';
-
-  return (
-    <div className="relative z-20 flex flex-col items-start gap-1.5 px-4 pb-4 -mt-1 sm:absolute sm:top-3 sm:right-3 sm:items-end sm:p-0 sm:mt-0">
-      <div className="flex gap-1.5">
-        <button type="button" className={btn} disabled={busy} onClick={() => inputRef.current?.click()} title="Wgraj grafikę w tle tego rozdziału">
-          {busy ? <FaSpinner className="animate-spin" /> : <FaCamera className="text-gold" />}
-          {chapter.image_url ? 'Zmień tło' : 'Dodaj tło'}
-        </button>
-        {chapter.image_url && (
-          <button
-            type="button"
-            className={btn}
-            disabled={busy}
-            onClick={() => { if (window.confirm(`Usunąć grafikę z rozdziału „${chapter.name}”?`)) run(() => apiClient.categories.removeImage(chapter.id, token)); }}
-            title="Usuń grafikę"
-            aria-label="Usuń grafikę"
-          >
-            <FaTrashAlt className="text-chili" />
-          </button>
-        )}
-      </div>
-      {error && <p role="alert" className="max-w-56 sm:text-right text-xs font-semibold text-cream bg-chili/90 rounded-lg px-2.5 py-1">{error}</p>}
-      <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={onFile} />
-    </div>
   );
 }
 

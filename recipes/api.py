@@ -2,9 +2,11 @@ from ninja import NinjaAPI, Form, File
 from ninja.files import UploadedFile
 from typing import List, Optional
 import json
+import os
+import uuid
 from django.shortcuts import get_object_or_404
-from .models import Recipe, Category, Comment, RecipeStep, Ingredient
-from .schemas import RecipeSchema, CategorySchema, CommentSchema, CommentCreateSchema, RecipeCreateSchema
+from .models import Recipe, Category, Comment, RecipeStep, Ingredient, SiteImage
+from .schemas import RecipeSchema, CategorySchema, CommentSchema, CommentCreateSchema, RecipeCreateSchema, SiteImageSchema
 from django.db.models import Q
 from ninja.security import HttpBearer
 from rest_framework_simplejwt.tokens import AccessToken
@@ -38,17 +40,83 @@ ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
 MAX_IMAGE_SIZE = 8 * 1024 * 1024  # 8 MB
 
 
+# Miejsca na stronie, w których administratorka może podmienić grafikę
+SITE_IMAGE_KEYS = {
+    "tlo-strony",      # tło całej strony
+    "tlo-logo",        # tło za dużym logo na stronie głównej
+    "tlo-skrotow",     # tło złotej ramki ze skrótami
+    "tlo-przepisow",   # tło sekcji „Najnowsze przepisy”
+    "o-mnie",          # zdjęcie na stronie „O mnie”
+}
+
+
+def unique_name(filename: str) -> str:
+    """Nowa nazwa pliku przy każdej podmianie – przeglądarka nie pokaże starej grafiki z pamięci podręcznej."""
+    ext = os.path.splitext(filename)[1].lower() or '.jpg'
+    return f"{uuid.uuid4().hex[:12]}{ext}"
+
+
+def image_error(image):
+    """Zwraca komunikat błędu albo None, jeśli plik jest poprawny."""
+    if image.content_type not in ALLOWED_IMAGE_TYPES:
+        return "Dozwolone formaty: JPG, PNG, WEBP."
+    if image.size > MAX_IMAGE_SIZE:
+        return "Plik jest za duży (maks. 8 MB)."
+    return None
+
+
+@api.get("/grafiki", response=List[SiteImageSchema])
+def list_site_images(request):
+    return SiteImage.objects.all()
+
+
+@api.post("/grafiki/{key}", response={200: SiteImageSchema, 400: dict}, auth=JWTAuth())
+def upload_site_image(request, key: str, image: UploadedFile = File(...)):
+    """Wgranie / podmiana grafiki w jednym z miejsc strony (SITE_IMAGE_KEYS)."""
+    if key not in SITE_IMAGE_KEYS:
+        return 400, {"detail": "Nieznane miejsce na grafikę."}
+    if (err := image_error(image)):
+        return 400, {"detail": err}
+    obj = SiteImage.objects.filter(key=key).first()
+    if obj and obj.image:
+        obj.image.delete(save=False)  # usuń poprzedni plik z dysku
+    obj = obj or SiteImage(key=key)
+    obj.image.save(unique_name(image.name), image, save=True)
+    return 200, obj
+
+
+@api.delete("/grafiki/{key}", response={204: None}, auth=JWTAuth())
+def delete_site_image(request, key: str):
+    obj = SiteImage.objects.filter(key=key).first()
+    if obj:
+        obj.image.delete(save=False)
+        obj.delete()
+    return 204, None
+
+
+@api.post("/przepisy/{recipe_id}/zdjecie", response={200: RecipeSchema, 400: dict}, auth=JWTAuth())
+def upload_recipe_image(request, recipe_id: str, image: UploadedFile = File(...)):
+    """Podmiana zdjęcia głównego przepisu prosto ze strony przepisu."""
+    qs = Recipe.objects.select_related('category', 'category__parent_category') \
+        .prefetch_related('ingredients', 'steps', 'comments')
+    recipe = get_object_or_404(qs, id=recipe_id)
+    if (err := image_error(image)):
+        return 400, {"detail": err}
+    if recipe.main_image:
+        recipe.main_image.delete(save=False)
+    recipe.main_image.save(unique_name(image.name), image, save=True)
+    return 200, recipe
+
+
 @api.post("/kategorie/{category_id}/obraz", response={200: CategorySchema, 400: dict}, auth=JWTAuth())
 def upload_category_image(request, category_id: str, image: UploadedFile = File(...)):
     """Administratorka wgrywa grafikę w tle banera rozdziału (strona główna)."""
     category = get_object_or_404(Category.objects.select_related('parent_category'), id=category_id)
-    if image.content_type not in ALLOWED_IMAGE_TYPES:
-        return 400, {"detail": "Dozwolone formaty: JPG, PNG, WEBP."}
-    if image.size > MAX_IMAGE_SIZE:
-        return 400, {"detail": "Plik jest za duży (maks. 8 MB)."}
+    if (err := image_error(image)):
+        return 400, {"detail": err}
     if category.image:
         category.image.delete(save=False)  # usuń poprzednią grafikę z dysku
-    category.image.save(image.name, image, save=True)
+    category.image.save(unique_name(image.name), image, save=True)
     return 200, category
 
 
