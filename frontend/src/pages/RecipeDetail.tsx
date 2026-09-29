@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { useRecipeDetail, useSimilarRecipes } from '../hooks/useRecipes';
+import ImageEditor from '../components/ImageEditor';
 import { useFavorites } from '../hooks/useFavorites';
 import { apiClient } from '../api/client';
 import IngredientsPanel from '../components/IngredientsPanel';
@@ -12,7 +13,7 @@ import { FaHeart, FaRegHeart, FaPrint, FaStar, FaRegClock, FaRegComment, FaListO
 
 export default function RecipeDetail() {
   const { id } = useParams();
-  const { recipe, loading, error } = useRecipeDetail(id);
+  const { recipe, loading, error, setRecipe } = useRecipeDetail(id);
   const { recipes: similarRecipes } = useSimilarRecipes(id);
   const { isFavorite, toggle } = useFavorites();
 
@@ -69,6 +70,13 @@ export default function RecipeDetail() {
             src={apiClient.utils.getImageUrl(recipe.main_image_url)}
             alt={recipe.name}
             className="w-full h-full object-cover print:max-h-72"
+          />
+          <ImageEditor
+            label="Zdjęcie przepisu"
+            currentUrl={recipe.main_image_url ? apiClient.utils.getImageUrl(recipe.main_image_url) : null}
+            hint="poziome 4:3, min. 1200 × 900 px"
+            onUpload={async (f, t) => setRecipe(await apiClient.recipes.uploadImage(recipe.id, f, t))}
+            className="absolute top-3 right-3"
           />
         </div>
 

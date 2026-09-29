@@ -1,5 +1,7 @@
 import { FaCrown, FaEnvelope, FaInstagram, FaTiktok } from 'react-icons/fa';
 import profileImg from '../assets/engibadwoman.jpg';
+import ImageEditor from '../components/ImageEditor';
+import { useSiteImages } from '../hooks/useSiteImages';
 
 const socials = [
   { href: 'https://www.instagram.com/engibadwoman?stkn=emYxdmN4eXAzcmo%3D&utm_source=qr', icon: FaInstagram, label: 'Instagram', handle: '@engibadwoman', external: true },
@@ -8,6 +10,9 @@ const socials = [
 ];
 
 export default function About() {
+  const site = useSiteImages();
+  const photo = site.url('o-mnie');
+
   return (
     <div className="max-w-5xl mx-auto px-4 py-10 sm:py-16">
       <div className="grid md:grid-cols-[320px_1fr] gap-10 md:gap-14 items-start">
@@ -17,8 +22,16 @@ export default function About() {
           <div className="relative w-56 h-56 sm:w-72 sm:h-72 mt-8">
             <FaCrown className="absolute -top-10 left-1/2 -translate-x-1/2 text-gold text-5xl z-10 drop-shadow-[0_0_14px_rgba(244,199,82,0.7)]" />
             <div className="absolute inset-0 rounded-full bg-gradient-to-br from-gold via-burgundy to-gold-deep p-[3px] shadow-glow">
-              <img src={profileImg} alt="Engibadwoman" className="w-full h-full rounded-full object-cover bg-ink" />
+              <img src={photo ?? profileImg} alt="Engibadwoman" className="w-full h-full rounded-full object-cover bg-ink" />
             </div>
+            <ImageEditor
+              label="Zdjęcie „O mnie”"
+              currentUrl={photo}
+              hint="kwadratowe, min. 800 × 800 px"
+              onUpload={(f, t) => site.upload('o-mnie', f, t)}
+              onRemove={(t) => site.remove('o-mnie', t)}
+              className="absolute -bottom-3 left-1/2 -translate-x-1/2"
+            />
           </div>
         </div>
 

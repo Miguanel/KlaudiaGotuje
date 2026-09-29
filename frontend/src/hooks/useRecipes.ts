@@ -61,7 +61,7 @@ export function useRecipeDetail(id: string | undefined) {
     return () => { isMounted = false; };
   }, [id]);
 
-  return { recipe, loading, error };
+  return { recipe, loading, error, setRecipe };
 }
 
 export function useSimilarRecipes(id: string | undefined) {
@@ -91,4 +91,4 @@ export function useSimilarRecipes(id: string | undefined) {
   }, [id]);
 
   return { recipes, loading };
-}
+}
