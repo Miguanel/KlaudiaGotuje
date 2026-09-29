@@ -27,6 +27,11 @@ class Category(models.Model):
         verbose_name="Kategoria nadrzędna"
     )
 
+    # Grafika w tle banera rozdziału na stronie głównej (wgrywana przez administratorkę)
+    image = models.ImageField(
+        upload_to='rozdzialy/', null=True, blank=True, verbose_name="Grafika w tle (baner na stronie głównej)"
+    )
+
     class Meta:
         verbose_name = "Kategoria"
         verbose_name_plural = "Kategorie"

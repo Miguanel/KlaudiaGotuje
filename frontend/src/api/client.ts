@@ -23,6 +23,32 @@ async function fetchJson<T>(endpoint: string): Promise<T> {
 export const apiClient = {
   categories: {
     getAll: () => fetchJson<Category[]>('/api/kategorie'),
+
+    /** Wgranie grafiki w tle banera rozdziału (tylko zalogowana administratorka). */
+    uploadImage: async (categoryId: string, file: File, token: string): Promise<Category> => {
+      const body = new FormData();
+      body.append('image', file);
+      const res = await fetch(`${BACKEND_URL}/api/kategorie/${categoryId}/obraz`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${token}` },
+        body,
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => null);
+        throw new ApiError(res.status, data?.detail ?? 'Nie udało się wgrać grafiki');
+      }
+      return res.json();
+    },
+
+    /** Usunięcie grafiki – baner wraca do zdjęcia przepisu lub ikony. */
+    removeImage: async (categoryId: string, token: string): Promise<Category> => {
+      const res = await fetch(`${BACKEND_URL}/api/kategorie/${categoryId}/obraz`, {
+        method: 'DELETE',
+        headers: { 'Authorization': `Bearer ${token}` },
+      });
+      if (!res.ok) throw new ApiError(res.status, 'Nie udało się usunąć grafiki');
+      return res.json();
+    },
   },
   recipes: {
     // Metoda obsługująca filtry i sortowanie

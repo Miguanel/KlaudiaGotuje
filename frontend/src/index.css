@@ -1,19 +1,19 @@
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@700;900&family=Great+Vibes&family=Inter:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 /*
  * Paleta "Diamentowe Smaki" (wytyczne klientki, zasada 60 / 30 / 10):
- *  60% baza      – śliwka (tło) + atramentowy granat (karty, stopka)
+ *  60% baza      – granatowy aksamit (tło, wg projektu strony startowej) + atramentowy granat (karty, stopka)
  *  30% akcenty   – chabrowy kobalt (tylko poświata!) + głęboki burgund (ramki, sekcje specjalne)
  *  10% biżuteria – czerwień chili (przyciski CTA, aktywne filtry) + szczotkowane złoto (detale premium)
  * Zasada: chaber nigdy nie jest tłem pod czerwienią i odwrotnie – chaber to wyłącznie światło (box-shadow).
  */
 @theme {
-  --color-ink: #1A0D16;        /* śliwka – główne tło strony */
-  --color-panel: #0D1321;      /* atramentowy granat – nagłówek, stopka */
-  --color-card: #0D1321;       /* atramentowy granat – karty przepisów */
-  --color-field: #151C2E;      /* pola formularzy wewnątrz kart */
-  --color-line: #232C45;       /* delikatne obramowania i separatory */
+  --color-ink: #070B1C;        /* granatowy aksamit – główne tło strony (projekt klientki) */
+  --color-panel: #0A1024;      /* atramentowy granat – nagłówek, stopka */
+  --color-card: #0E1631;       /* atramentowy granat – karty przepisów */
+  --color-field: #162045;      /* pola formularzy wewnątrz kart */
+  --color-line: #253160;       /* delikatne obramowania i separatory */
   --color-cobalt: #1F51FF;     /* chabrowy kobalt – TYLKO poświata / ikona koszyka */
   --color-burgundy: #540B0E;   /* głęboki burgund – ramka wyszukiwarki, sekcje specjalne */
   --color-chili: #E60026;      /* czerwień chili – przyciski CTA, aktywne filtry */
@@ -23,8 +23,15 @@
   --color-muted: #C3B6BF;      /* tekst drugorzędny */
 
   --font-sans: "Inter", system-ui, sans-serif;
-  --font-display: "Anton", "Impact", sans-serif;
-  --font-script: "Dancing Script", cursive;
+  --font-display: "Cinzel", "Times New Roman", serif;       /* nagłówki – szeryfowe kapitaliki */
+  --font-brand: "Cinzel Decorative", "Cinzel", serif;        /* logo „Diamentowe Smaki” */
+  --font-script: "Great Vibes", "Dancing Script", cursive;   /* „Engibadwoman”, akcenty pisane */
+
+  --animate-twinkle: twinkle 3.2s ease-in-out infinite;
+  @keyframes twinkle {
+    0%, 100% { opacity: 0.35; transform: scale(0.9); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
 }
 
 html {
@@ -38,12 +45,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Śliwkowe tło z delikatnym światłem kobaltu (góra) i burgundu (dół) */
+/* Granatowy aksamit: miękkie fałdy światła kobaltu + burgundowe narożniki */
 .bg-royal {
   background:
-    radial-gradient(900px 420px at 85% -10%, rgba(31, 81, 255, 0.10), transparent 60%),
-    radial-gradient(800px 420px at 0% 100%, rgba(84, 11, 14, 0.35), transparent 60%),
+    radial-gradient(700px 380px at 50% -5%, rgba(31, 81, 255, 0.16), transparent 65%),
+    radial-gradient(600px 500px at 100% 20%, rgba(84, 11, 14, 0.30), transparent 60%),
+    radial-gradient(600px 500px at 0% 70%, rgba(84, 11, 14, 0.28), transparent 60%),
+    radial-gradient(900px 600px at 30% 40%, rgba(22, 40, 110, 0.35), transparent 70%),
     var(--color-ink);
+  background-attachment: fixed;
 }
 
 /* Metaliczne, szczotkowane złoto – logotyp i duże nagłówki */
@@ -91,6 +101,95 @@ body {
   text-transform: uppercase;
   font-size: 1rem;
   line-height: 1.2;
+}
+
+/* ===== Strona startowa wg projektu klientki ===== */
+
+/* Tło banera rozdziału – granatowy aksamit z połyskiem */
+@utility bg-velvet {
+  background:
+    radial-gradient(120% 90% at 85% 10%, rgba(40, 64, 150, 0.45), transparent 60%),
+    radial-gradient(80% 70% at 20% 110%, rgba(31, 81, 255, 0.12), transparent 70%),
+    linear-gradient(180deg, #111B3D 0%, #0A1128 100%);
+}
+
+/* Cień banerów: głęboki cień + delikatny chabrowy blask */
+@utility shadow-banner {
+  box-shadow:
+    0 14px 34px -14px rgba(0, 0, 0, 0.85),
+    0 0 24px -8px rgba(31, 81, 255, 0.35),
+    inset 0 1px 0 rgba(243, 227, 163, 0.25);
+}
+
+/* Złota ramka paska skrótów */
+@utility frame-gold {
+  background: linear-gradient(180deg, rgba(17, 27, 61, 0.92), rgba(10, 17, 40, 0.92));
+  border: 1px solid rgba(212, 175, 55, 0.7);
+  box-shadow:
+    inset 0 0 0 4px rgba(10, 17, 40, 0.9),
+    inset 0 0 0 5px rgba(212, 175, 55, 0.22),
+    0 14px 30px -14px rgba(0, 0, 0, 0.8);
+}
+
+/* Zdjęcie w banerze płynnie znika w lewo */
+@utility mask-fade-left {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.6) 30%, #000 60%);
+  mask-image: linear-gradient(90deg, transparent 0%, rgba(0, 0, 0, 0.6) 30%, #000 60%);
+}
+
+/* Burgundowy pas pod tytułem banera łagodnie znika w dół */
+@utility mask-fade-bottom {
+  -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
+  mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
+}
+
+/* Kształt tarczy pod ikoną rozdziału */
+@utility shield {
+  clip-path: polygon(0 0, 100% 0, 100% 72%, 50% 100%, 0 72%);
+  border-radius: 10px 10px 0 0;
+}
+
+/* Pigułki podrozdziałów – złota obwódka, na przemian burgund i granat */
+@utility pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-height: 2.25rem;
+  padding: 0.3rem 1.1rem;
+  border-radius: 9999px;
+  border: 1px solid rgba(212, 175, 55, 0.75);
+  color: var(--color-cream);
+  font-size: 0.9rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.12), 0 4px 10px -4px rgba(0, 0, 0, 0.8);
+  transition: color .2s, border-color .2s, box-shadow .3s, transform .2s;
+  &:hover {
+    color: #F3E3A3;
+    border-color: #F3E3A3;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18), 0 0 14px -2px rgba(212, 175, 55, 0.55);
+    transform: translateY(-1px);
+  }
+  @media (width >= 40rem) {
+    font-size: 1rem;
+    min-height: 2.5rem;
+    padding: 0.35rem 1.35rem;
+  }
+}
+@utility pill-burgundy {
+  background: linear-gradient(180deg, #7A171C 0%, #540B0E 55%, #3D0709 100%);
+}
+@utility pill-navy {
+  background: linear-gradient(180deg, #1D2C63 0%, #111C45 55%, #0B1333 100%);
+}
+/* Aktywny filtr – czerwień chili (bez chabru pod spodem) */
+@utility pill-active {
+  background: #E60026;
+  border-color: #E60026;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 0 8px 22px -8px rgba(230, 0, 38, 0.6);
 }
 
 /* Ukryty pasek przewijania (poziome listy) */

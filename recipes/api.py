@@ -34,6 +34,33 @@ def list_categories(request):
     return Category.objects.select_related('parent_category').all()
 
 
+ALLOWED_IMAGE_TYPES = {"image/jpeg", "image/png", "image/webp"}
+MAX_IMAGE_SIZE = 8 * 1024 * 1024  # 8 MB
+
+
+@api.post("/kategorie/{category_id}/obraz", response={200: CategorySchema, 400: dict}, auth=JWTAuth())
+def upload_category_image(request, category_id: str, image: UploadedFile = File(...)):
+    """Administratorka wgrywa grafikę w tle banera rozdziału (strona główna)."""
+    category = get_object_or_404(Category.objects.select_related('parent_category'), id=category_id)
+    if image.content_type not in ALLOWED_IMAGE_TYPES:
+        return 400, {"detail": "Dozwolone formaty: JPG, PNG, WEBP."}
+    if image.size > MAX_IMAGE_SIZE:
+        return 400, {"detail": "Plik jest za duży (maks. 8 MB)."}
+    if category.image:
+        category.image.delete(save=False)  # usuń poprzednią grafikę z dysku
+    category.image.save(image.name, image, save=True)
+    return 200, category
+
+
+@api.delete("/kategorie/{category_id}/obraz", response=CategorySchema, auth=JWTAuth())
+def delete_category_image(request, category_id: str):
+    """Usunięcie grafiki – baner wraca do zdjęcia z przepisu albo ozdobnej ikony."""
+    category = get_object_or_404(Category.objects.select_related('parent_category'), id=category_id)
+    if category.image:
+        category.image.delete(save=True)
+    return category
+
+
 @api.get("/przepisy", response=List[RecipeSchema])
 def list_recipes(
         request,
@@ -169,4 +196,4 @@ def get_similar_recipes(request, recipe_id: str):
 def delete_comment(request, comment_id: str):
     comment = get_object_or_404(Comment, id=comment_id)
     comment.delete()
-    return {"success": True}
+    return {"success": True}

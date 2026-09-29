@@ -3,6 +3,8 @@ export interface Category {
   name: string;
   slug: string;
   parent_category?: Category | null;
+  /** grafika w tle banera rozdziału (wgrywana przez administratorkę) */
+  image_url?: string | null;
 }
 
 export interface Ingredient {

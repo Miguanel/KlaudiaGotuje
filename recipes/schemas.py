@@ -42,10 +42,17 @@ class ParentCategorySchema(ModelSchema):
 
 class CategorySchema(ModelSchema):
     parent_category: Optional[ParentCategorySchema] = None
+    image_url: Optional[str] = None
 
     class Meta:
         model = Category
         fields = ['id', 'name', 'slug']
+
+    @staticmethod
+    def resolve_image_url(obj):
+        if obj.image:
+            return obj.image.url
+        return None
 
 
 class IngredientSchema(ModelSchema):
@@ -106,4 +113,4 @@ class RecipeSchema(ModelSchema):
         # Liczymy zdjęcie główne (jeśli istnieje) + zdjęcia kroków posiadające plik
         count = 1 if obj.main_image else 0
         count += sum(1 for step in obj.steps.all() if step.image)
-        return count
+        return count

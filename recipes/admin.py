@@ -6,6 +6,7 @@ from .models import Recipe, Ingredient, RecipeStep, Category
 @admin.register(Category)
 class CategoryAdmin(ModelAdmin):
     list_display = ('name', 'parent_category', 'slug')
+    fields = ('name', 'slug', 'parent_category', 'image')
     list_filter = ('parent_category',)
     prepopulated_fields = {'slug': ('name',)}
     search_fields = ('name',)
@@ -44,4 +45,4 @@ class RecipeAdmin(ModelAdmin):
             'classes': ('collapse',),
             'fields': ('created_at', 'updated_at'),
         }),
-    )
+    )

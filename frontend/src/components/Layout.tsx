@@ -13,8 +13,8 @@ export function Logo({ onClick }: { onClick?: () => void }) {
     <Link to="/" onClick={onClick} className="flex items-center gap-2 min-w-0 shrink-0" aria-label="Diamentowe Smaki – strona główna">
       <FaCrown className="text-gold text-2xl sm:text-3xl shrink-0 drop-shadow-[0_0_8px_rgba(244,199,82,0.55)]" />
       <span className="flex flex-col leading-none">
-        <span className="font-display text-xl sm:text-2xl tracking-wide uppercase text-gold-shine">Diamentowe Smaki</span>
-        <span className="font-script text-gold text-sm sm:text-base -mt-0.5">by Engibadwoman</span>
+        <span className="font-brand font-bold text-lg sm:text-2xl tracking-wide text-gold-shine whitespace-nowrap">Diamentowe Smaki</span>
+        <span className="font-script text-gold text-base sm:text-lg leading-tight">by Engibadwoman</span>
       </span>
     </Link>
   );

@@ -1,13 +1,13 @@
 import type { IconType } from 'react-icons';
 import {
-  GiCookingPot, GiAvocado, GiSteak, GiWheat, GiPumpkin, GiCarrot, GiHoneyJar, GiStopwatch, GiCrown,
+  GiCookingPot, GiAvocado, GiHamShank, GiWheat, GiPumpkin, GiCarrot, GiHoneyJar, GiStopwatch, GiCrown,
 } from 'react-icons/gi';
 
 // Ikony rozdziałów – dopasowanie po początku nazwy (odporne na drobne zmiany w nazwach).
 const ICONS: Array<[string, IconType]> = [
   ['kategorie dań', GiCookingPot],
   ['diety', GiAvocado],
-  ['mięso', GiSteak],
+  ['mięso', GiHamShank],
   ['mączna', GiWheat],
   ['sezonowe', GiPumpkin],
   ['składniki', GiCarrot],

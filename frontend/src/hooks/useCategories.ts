@@ -10,6 +10,15 @@ export interface Chapter extends Category {
 // Wspólna pamięć podręczna – nagłówek i strona główna nie pobierają kategorii dwa razy.
 let cache: Category[] | null = null;
 let pending: Promise<Category[]> | null = null;
+// Subskrybenci – po wgraniu grafiki wszystkie komponenty dostają nową wersję kategorii
+const listeners = new Set<(data: Category[]) => void>();
+
+/** Podmienia kategorię w pamięci podręcznej (np. po wgraniu grafiki) i odświeża widoki. */
+export function updateCachedCategory(updated: Category) {
+  if (!cache) return;
+  cache = cache.map(c => (c.id === updated.id ? { ...c, ...updated } : c));
+  listeners.forEach(fn => fn(cache!));
+}
 
 function loadCategories(): Promise<Category[]> {
   if (cache) return Promise.resolve(cache);
@@ -33,13 +42,15 @@ export function useCategories() {
 
   useEffect(() => {
     let isMounted = true;
+    const onChange = (data: Category[]) => { if (isMounted) setCategories(data); };
+    listeners.add(onChange);
     loadCategories()
       .then(data => { if (isMounted) { setCategories(data); setLoading(false); } })
       .catch(err => {
         console.error('Błąd pobierania kategorii:', err);
         if (isMounted) setLoading(false);
       });
-    return () => { isMounted = false; };
+    return () => { isMounted = false; listeners.delete(onChange); };
   }, []);
 
   // Drzewo: rozdziały → podrozdziały (alfabetycznie, po polsku)
