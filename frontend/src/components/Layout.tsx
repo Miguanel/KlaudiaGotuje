@@ -59,7 +59,7 @@ export default function Layout() {
   const { isAuthenticated, logout } = useAuth();
   const { chapters } = useCategories();
   const site = useSiteImages();
-  const pageBg = site.url('tlo-strony');
+  const pageBg = site.src('tlo-strony');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -104,7 +104,7 @@ export default function Layout() {
       className="min-h-screen flex flex-col bg-royal text-cream overflow-x-hidden"
       style={pageBg ? {
         // własne tło strony przyciemnione granatem, żeby tekst był czytelny
-        backgroundImage: `linear-gradient(rgba(7, 11, 28, 0.72), rgba(7, 11, 28, 0.86)), url("${pageBg}")`,
+        backgroundImage: `linear-gradient(rgba(7, 11, 28, 0.35), rgba(7, 11, 28, 0.6)), url("${pageBg}")`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundAttachment: 'fixed',
@@ -113,7 +113,8 @@ export default function Layout() {
       <ImageEditor
         label="Tło całej strony"
         buttonLabel="Edytuj tło strony"
-        currentUrl={pageBg}
+        currentUrl={site.url('tlo-strony')}
+        defaultUrl={site.fallback('tlo-strony')}
         hint="poziome, min. 1920 × 1080 px, ciemne"
         onUpload={(f, t) => site.upload('tlo-strony', f, t)}
         onRemove={(t) => site.remove('tlo-strony', t)}

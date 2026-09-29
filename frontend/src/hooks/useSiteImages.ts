@@ -1,5 +1,9 @@
 import { useEffect, useState } from 'react';
 import { apiClient } from '../api/client';
+import tloStrony from '../assets/tla/tlo-strony.jpg';
+import tloLogo from '../assets/tla/tlo-logo.jpg';
+import tloSkrotow from '../assets/tla/tlo-skrotow.jpg';
+import tloPrzepisow from '../assets/tla/tlo-przepisow.jpg';
 
 /**
  * Miejsca na stronie, w których administratorka może podmienić grafikę.
@@ -8,6 +12,14 @@ import { apiClient } from '../api/client';
 export type SiteImageKey = 'tlo-strony' | 'tlo-logo' | 'tlo-skrotow' | 'tlo-przepisow' | 'o-mnie';
 
 type Images = Partial<Record<SiteImageKey, string>>;
+
+/** Grafiki domyślne (w projekcie) – używane, dopóki administratorka nie wgra własnych. */
+const DEFAULTS: Images = {
+  'tlo-strony': tloStrony,
+  'tlo-logo': tloLogo,
+  'tlo-skrotow': tloSkrotow,
+  'tlo-przepisow': tloPrzepisow,
+};
 
 // Wspólna pamięć podręczna + subskrybenci (po wgraniu grafiki wszystkie widoki od razu się odświeżają)
 let cache: Images | null = null;
@@ -50,6 +62,12 @@ export function useSiteImages() {
   const url = (key: SiteImageKey): string | null =>
     images[key] ? apiClient.utils.getImageUrl(images[key]!) : null;
 
+  /** Grafika do wyświetlenia: wgrana przez administratorkę, a jeśli brak – domyślna. */
+  const src = (key: SiteImageKey): string | null => url(key) ?? DEFAULTS[key] ?? null;
+
+  /** Grafika domyślna danego miejsca (podgląd w oknie edycji). */
+  const fallback = (key: SiteImageKey): string | null => DEFAULTS[key] ?? null;
+
   const upload = async (key: SiteImageKey, file: File, token: string) => {
     const saved = await apiClient.siteImages.upload(key, file, token);
     publish({ ...(cache ?? {}), [key]: saved.image_url });
@@ -62,5 +80,5 @@ export function useSiteImages() {
     publish(next);
   };
 
-  return { url, upload, remove };
+  return { url, src, fallback, upload, remove };
 }

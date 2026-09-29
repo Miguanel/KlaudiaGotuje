@@ -138,21 +138,26 @@ export default function Home() {
 
       {/* ===== LISTA PRZEPISÓW ===== */}
       <section id="lista-przepisow" className={`relative scroll-mt-32 ${isStart ? 'mt-12 sm:mt-14' : 'mt-8'}`} aria-live="polite">
-        {isStart && site.url('tlo-przepisow') && (
-          <img src={site.url('tlo-przepisow')!} alt="" className="absolute -left-4 -top-8 h-48 sm:h-56 w-[calc(100%+2rem)] object-cover opacity-50 mask-fade-edges pointer-events-none" aria-hidden="true" />
-        )}
-        {isStart && (
-          <ImageEditor
-            label="Tło sekcji „Najnowsze przepisy”"
-            currentUrl={site.url('tlo-przepisow')}
-            hint="poziome, min. 1600 × 400 px"
-            onUpload={(f, t) => site.upload('tlo-przepisow', f, t)}
-            onRemove={(t) => site.remove('tlo-przepisow', t)}
-            className="absolute -top-6 right-0"
-          />
-        )}
-        <div className="relative flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
-          <div className="min-w-0">
+        <div className={`relative flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6 ${
+          isStart ? 'overflow-hidden rounded-2xl border border-gold/60 bg-velvet shadow-banner p-4 sm:p-6 sm:min-h-[150px]' : ''
+        }`}>
+          {/* baner sekcji na stronie głównej – grafika po prawej, wtapiana w lewo */}
+          {isStart && site.src('tlo-przepisow') && (
+            <img src={site.src('tlo-przepisow')!} alt="" className="absolute inset-y-0 right-0 h-full w-[85%] sm:w-[60%] object-cover object-[right_40%] opacity-50 sm:opacity-90 mask-fade-left pointer-events-none" aria-hidden="true" />
+          )}
+          {isStart && <div className="absolute inset-1.5 rounded-xl border border-gold/20 pointer-events-none" aria-hidden="true" />}
+          {isStart && (
+            <ImageEditor
+              label="Tło sekcji „Najnowsze przepisy”"
+              currentUrl={site.url('tlo-przepisow')}
+              defaultUrl={site.fallback('tlo-przepisow')}
+              hint="poziome, min. 1600 × 400 px, dekoracje po prawej"
+              onUpload={(f, t) => site.upload('tlo-przepisow', f, t)}
+              onRemove={(t) => site.remove('tlo-przepisow', t)}
+              className="absolute top-3 right-3"
+            />
+          )}
+          <div className="relative min-w-0">
             <h2 className="flex items-center gap-3 font-display uppercase font-bold text-2xl sm:text-3xl tracking-wide text-gold-shine">
               <GiCrown className="text-gold shrink-0 text-3xl drop-shadow-[0_0_8px_rgba(212,175,55,0.6)]" aria-hidden="true" />
               <span className="min-w-0">{sectionTitle}</span>
@@ -165,7 +170,7 @@ export default function Home() {
             )}
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="relative flex items-center gap-3">
             {query && (
               <button onClick={() => setParam('q', null)} className="flex items-center gap-1.5 text-sm text-muted hover:text-cream">
                 <FaTimes /> Wyczyść
@@ -223,13 +228,14 @@ export default function Home() {
 
 /** Duże logo „Diamentowe Smaki / Engibadwoman” z koroną – jak na grafice klientki. */
 function BrandHero({ site }: { site: ReturnType<typeof useSiteImages> }) {
-  const bg = site.url('tlo-logo');
+  const bg = site.src('tlo-logo');
   return (
-    <section className="relative pt-8 sm:pt-12 pb-2 text-center">
-      {bg && <img src={bg} alt="" className="absolute -left-4 top-0 w-[calc(100%+2rem)] h-full object-cover opacity-60 mask-fade-edges pointer-events-none" aria-hidden="true" />}
+    <section className="relative pt-8 sm:pt-14 pb-4 sm:pb-10 text-center">
+      {bg && <img src={bg} alt="" className="absolute -left-4 top-0 w-[calc(100%+2rem)] h-full object-cover object-[center_30%] opacity-95 mask-fade-hero pointer-events-none" aria-hidden="true" />}
       <ImageEditor
         label="Tło za logo"
-        currentUrl={bg}
+        currentUrl={site.url('tlo-logo')}
+        defaultUrl={site.fallback('tlo-logo')}
         hint="poziome, min. 1600 × 500 px, środek ciemny"
         onUpload={(f, t) => site.upload('tlo-logo', f, t)}
         onRemove={(t) => site.remove('tlo-logo', t)}
@@ -237,10 +243,10 @@ function BrandHero({ site }: { site: ReturnType<typeof useSiteImages> }) {
       />
       {/* poświata i ozdobne diamenty */}
       <div className="absolute left-1/2 top-6 -translate-x-1/2 w-[34rem] max-w-full h-48 rounded-full bg-cobalt/15 blur-3xl pointer-events-none" aria-hidden="true" />
-      <GiCutDiamond className="hidden sm:block absolute left-[6%] top-16 text-4xl text-cream/70 rotate-[-18deg] drop-shadow-[0_0_12px_rgba(159,187,255,0.7)] animate-twinkle" aria-hidden="true" />
-      <GiSparkles className="hidden sm:block absolute left-[14%] top-8 text-xl text-gold/80 animate-twinkle [animation-delay:1.2s]" aria-hidden="true" />
-      <FaHeart className="hidden sm:block absolute right-[8%] top-20 text-3xl text-gold/80 rotate-12 drop-shadow-[0_0_10px_rgba(212,175,55,0.6)]" aria-hidden="true" />
-      <GiSparkles className="hidden sm:block absolute right-[16%] top-6 text-2xl text-cream/70 animate-twinkle [animation-delay:.6s]" aria-hidden="true" />
+      {!bg && <GiCutDiamond className="hidden sm:block absolute left-[6%] top-16 text-4xl text-cream/70 rotate-[-18deg] drop-shadow-[0_0_12px_rgba(159,187,255,0.7)] animate-twinkle" aria-hidden="true" />}
+      {!bg && <GiSparkles className="hidden sm:block absolute left-[14%] top-8 text-xl text-gold/80 animate-twinkle [animation-delay:1.2s]" aria-hidden="true" />}
+      {!bg && <FaHeart className="hidden sm:block absolute right-[8%] top-20 text-3xl text-gold/80 rotate-12 drop-shadow-[0_0_10px_rgba(212,175,55,0.6)]" aria-hidden="true" />}
+      {!bg && <GiSparkles className="hidden sm:block absolute right-[16%] top-6 text-2xl text-cream/70 animate-twinkle [animation-delay:.6s]" aria-hidden="true" />}
 
       <div className="relative">
         <GiCrown className="mx-auto text-gold text-4xl sm:text-5xl drop-shadow-[0_0_14px_rgba(212,175,55,0.75)]" aria-hidden="true" />
@@ -258,7 +264,7 @@ function BrandHero({ site }: { site: ReturnType<typeof useSiteImages> }) {
 
 /** Pasek skrótów w złotej ramce: ostatnio dodane, klasyki i wybrane podrozdziały. */
 function QuickLinks({ site, featured, onSort }: { site: ReturnType<typeof useSiteImages>; featured: Category[]; onSort: (s: Sort) => void }) {
-  const bg = site.url('tlo-skrotow');
+  const bg = site.src('tlo-skrotow');
   const [expanded, setExpanded] = useState(false);
   const VISIBLE = 2;
   const shown = expanded ? featured : featured.slice(0, VISIBLE);
@@ -267,7 +273,7 @@ function QuickLinks({ site, featured, onSort }: { site: ReturnType<typeof useSit
   return (
     <div className="relative mt-6 sm:mt-8">
     <nav aria-label="Szybkie skróty" className="relative overflow-hidden frame-gold rounded-2xl p-3 sm:p-4">
-      {bg && <img src={bg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-40 pointer-events-none" aria-hidden="true" />}
+      {bg && <img src={bg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none" aria-hidden="true" />}
       <ul className="relative -mx-3 px-3 py-1 sm:mx-0 sm:px-0 flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar sm:flex-wrap sm:justify-center">
         <li className="shrink-0">
           <button onClick={() => onSort('date')} className="pill pill-burgundy whitespace-nowrap">
@@ -293,7 +299,8 @@ function QuickLinks({ site, featured, onSort }: { site: ReturnType<typeof useSit
     </nav>
       <ImageEditor
         label="Tło paska skrótów"
-        currentUrl={bg}
+        currentUrl={site.url('tlo-skrotow')}
+        defaultUrl={site.fallback('tlo-skrotow')}
         hint="bardzo szerokie, min. 1600 × 200 px"
         onUpload={(f, t) => site.upload('tlo-skrotow', f, t)}
         onRemove={(t) => site.remove('tlo-skrotow', t)}

@@ -11,6 +11,8 @@ interface Props {
   label: string;
   /** Aktualna grafika (null = używana jest grafika domyślna). */
   currentUrl: string | null;
+  /** Grafika domyślna – pokazywana w oknie, gdy nic nie wgrano. */
+  defaultUrl?: string | null;
   /** Zapis nowej grafiki na serwerze. */
   onUpload: (file: File, token: string) => Promise<void>;
   /** Usunięcie grafiki (powrót do domyślnej). Brak = przycisk „Usuń” się nie pokazuje. */
@@ -27,7 +29,7 @@ interface Props {
  * Przycisk „Edytuj” widoczny tylko po zalogowaniu + okno wyboru i wgrania grafiki.
  * Użycie: <ImageEditor label="Tło strony" currentUrl={…} onUpload={…} onRemove={…} className="absolute top-3 right-3" />
  */
-export default function ImageEditor({ label, currentUrl, onUpload, onRemove, hint, className = '', buttonLabel = 'Edytuj' }: Props) {
+export default function ImageEditor({ label, currentUrl, defaultUrl = null, onUpload, onRemove, hint, className = '', buttonLabel = 'Edytuj' }: Props) {
   const { isAuthenticated, token } = useAuth();
   const [open, setOpen] = useState(false);
 
@@ -47,6 +49,7 @@ export default function ImageEditor({ label, currentUrl, onUpload, onRemove, hin
         <ImageDialog
           label={label}
           currentUrl={currentUrl}
+          defaultUrl={defaultUrl}
           hint={hint}
           onClose={() => setOpen(false)}
           onUpload={(f) => onUpload(f, token)}
@@ -57,9 +60,10 @@ export default function ImageEditor({ label, currentUrl, onUpload, onRemove, hin
   );
 }
 
-function ImageDialog({ label, currentUrl, hint, onClose, onUpload, onRemove }: {
+function ImageDialog({ label, currentUrl, defaultUrl, hint, onClose, onUpload, onRemove }: {
   label: string;
   currentUrl: string | null;
+  defaultUrl: string | null;
   hint?: string;
   onClose: () => void;
   onUpload: (file: File) => Promise<void>;
@@ -126,10 +130,10 @@ function ImageDialog({ label, currentUrl, hint, onClose, onUpload, onRemove }: {
 
         <div className="grid sm:grid-cols-2 gap-4">
           <figure>
-            <figcaption className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">Obecna</figcaption>
+            <figcaption className="text-xs font-semibold uppercase tracking-wider text-muted mb-2">{currentUrl || !defaultUrl ? 'Obecna' : 'Obecna (domyślna)'}</figcaption>
             <div className="aspect-video rounded-xl overflow-hidden border border-line bg-panel flex items-center justify-center">
-              {currentUrl
-                ? <img src={currentUrl} alt="" className="w-full h-full object-cover" />
+              {currentUrl || defaultUrl
+                ? <img src={(currentUrl ?? defaultUrl)!} alt="" className="w-full h-full object-cover" />
                 : <span className="flex flex-col items-center gap-2 text-sm text-muted px-4 text-center"><FaRegImage className="text-2xl" />Brak – używana jest grafika domyślna</span>}
             </div>
           </figure>
@@ -174,7 +178,7 @@ function ImageDialog({ label, currentUrl, hint, onClose, onUpload, onRemove }: {
             <button
               type="button"
               disabled={!!busy}
-              onClick={() => { if (window.confirm('Usunąć obecną grafikę? Wróci grafika domyślna.')) run('remove', onRemove); }}
+              onClick={() => { if (window.confirm('Usunąć wgraną grafikę? Wróci grafika domyślna.')) run('remove', onRemove); }}
               className="inline-flex items-center justify-center gap-2 h-11 px-4 rounded-full border border-line text-muted text-sm font-semibold hover:border-chili hover:text-cream transition disabled:opacity-50"
             >
               {busy === 'remove' ? <FaSpinner className="animate-spin" /> : <FaTrashAlt className="text-chili" />} Usuń obecną

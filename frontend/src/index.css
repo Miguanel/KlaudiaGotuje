@@ -149,6 +149,18 @@ body {
   mask-composite: intersect;
 }
 
+/* Tło za logo: ozdoby po bokach zostają, wygaszone tylko skraje */
+@utility mask-fade-hero {
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 14%, #000 78%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-image:
+    linear-gradient(90deg, transparent 0%, #000 7%, #000 93%, transparent 100%),
+    linear-gradient(180deg, transparent 0%, #000 14%, #000 78%, transparent 100%);
+  mask-composite: intersect;
+}
+
 /* Burgundowy pas pod tytułem banera łagodnie znika w dół */
 @utility mask-fade-bottom {
   -webkit-mask-image: linear-gradient(180deg, #000 50%, transparent 100%);
