@@ -324,7 +324,7 @@ function ChapterBanner({ chapter, image }: { chapter: Chapter; image: string | n
         <img
           src={image}
           alt=""
-          loading="lazy"
+          decoding="async"
           className="absolute inset-y-0 right-0 h-full w-auto max-w-none opacity-30 sm:opacity-95 mask-fade-left origin-right transition-transform duration-[1.2s] group-hover:scale-105"
         />
       ) : (
