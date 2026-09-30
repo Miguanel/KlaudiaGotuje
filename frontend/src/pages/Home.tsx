@@ -9,7 +9,7 @@ import { useFavorites } from '../hooks/useFavorites';
 import { RecipeGridSkeleton } from '../components/ui/Skeletons';
 import RecipeCard from '../components/RecipeCard';
 import { chapterIcon } from '../utils/chapterIcons';
-import { chapterImage } from '../utils/chapterArt';
+import { chapterImage, chapterDefaultImage } from '../utils/chapterArt';
 import { przepisy } from '../utils/plural';
 import { FaCrown, FaChevronRight, FaTimes, FaSearch, FaHeart } from 'react-icons/fa';
 import { GiCutDiamond, GiCrown, GiSparkles } from 'react-icons/gi';
@@ -325,7 +325,7 @@ function ChapterBanner({ chapter, image }: { chapter: Chapter; image: string | n
           src={image}
           alt=""
           loading="lazy"
-          className="absolute inset-y-0 right-0 h-full w-[75%] sm:w-[55%] object-cover opacity-45 sm:opacity-90 mask-fade-left transition-transform duration-[1.2s] group-hover:scale-105"
+          className="absolute inset-y-0 right-0 h-full w-auto max-w-none opacity-30 sm:opacity-95 mask-fade-left origin-right transition-transform duration-[1.2s] group-hover:scale-105"
         />
       ) : (
         <Icon className="absolute -right-6 sm:right-6 top-1/2 -translate-y-1/2 text-[9rem] sm:text-[12rem] text-gold/10 rotate-12 pointer-events-none" aria-hidden="true" />
@@ -370,7 +370,8 @@ function ChapterBanner({ chapter, image }: { chapter: Chapter; image: string | n
       <ImageEditor
         label={`Tło rozdziału „${chapter.name}”`}
         currentUrl={chapter.image_url ? apiClient.utils.getImageUrl(chapter.image_url) : null}
-        hint="poziome, min. 1200 × 500 px, potrawa po prawej stronie"
+        defaultUrl={chapterDefaultImage(chapter)}
+        hint="poziome ok. 3:2, potrawa po prawej, lewa strona ciemna"
         onUpload={async (f, t) => updateCachedCategory(await apiClient.categories.uploadImage(chapter.id, f, t))}
         onRemove={async (t) => updateCachedCategory(await apiClient.categories.removeImage(chapter.id, t))}
         className="relative ml-4 mb-4 -mt-1 sm:absolute sm:top-3 sm:right-3 sm:m-0"
