@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useCategories } from '../hooks/useCategories';
 import ChapterAccordion from './ChapterAccordion';
 import ImageEditor from './ImageEditor';
+import OrnateFrame from './OrnateFrame';
 import { useSiteImages } from '../hooks/useSiteImages';
 import {
   FaCrown, FaHeart, FaShoppingBasket, FaPlus, FaSignOutAlt, FaSearch, FaChevronDown, FaBars, FaTimes,
@@ -177,37 +178,42 @@ export default function Layout() {
 
           {/* MEGA-MENU: wszystkie rozdziały i podrozdziały w jednym miejscu */}
           <div
-            className={`absolute left-0 right-0 top-full bg-panel border-b border-line shadow-2xl shadow-black/60 transition-all duration-300 origin-top ${
+            className={`absolute left-0 right-0 top-full bg-ink/90 backdrop-blur-md border-b border-line shadow-2xl shadow-black/60 transition-all duration-300 origin-top ${
               megaOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
             }`}
           >
-            <div className="max-w-6xl mx-auto px-4 py-6 max-h-[70vh] overflow-y-auto">
-              <p className="text-xs font-bold uppercase tracking-widest text-muted mb-4">Wybierz rozdział, aby zobaczyć podrozdziały</p>
-              <ChapterAccordion chapters={chapters} activeSlug={activeCategory} twoColumns />
+            <div className="max-w-6xl mx-auto px-4 py-4 max-h-[calc(100vh-8.5rem)] overflow-y-auto no-scrollbar">
+              <OrnateFrame className="shadow-banner">
+                <p className="text-center font-display uppercase tracking-[0.2em] text-sm text-gold mb-1">Rozdziały przepisów</p>
+                <p className="text-center text-xs text-muted mb-5">Wybierz rozdział, aby zobaczyć podrozdziały</p>
+                <ChapterAccordion chapters={chapters} activeSlug={activeCategory} twoColumns />
+              </OrnateFrame>
             </div>
           </div>
         </div>
 
         {/* MENU MOBILNE */}
         {mobileOpen && (
-          <div className="md:hidden absolute top-full inset-x-0 bg-panel border-b border-line shadow-2xl shadow-black/70 max-h-[calc(100vh-4rem)] overflow-y-auto">
-            <div className="px-4 py-4 space-y-5">
+          <div className="md:hidden absolute top-full inset-x-0 bg-ink/85 backdrop-blur-md border-b border-line shadow-2xl shadow-black/70 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain animate-menu-in">
+            <div className="p-2">
+            <OrnateFrame>
+            <div className="space-y-5">
               <SearchBox onDone={() => setMobileOpen(false)} />
 
               <div className="grid grid-cols-3 gap-2 text-xs font-semibold">
-                <Link to="/ulubione" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card border border-line">
+                <Link to="/ulubione" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card/60 backdrop-blur-sm border border-gold/25 hover:border-gold/60 transition">
                   <FaHeart className="text-chili text-lg" /> Ulubione
                 </Link>
-                <Link to="/zakupy" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card border border-line">
+                <Link to="/zakupy" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card/60 backdrop-blur-sm border border-gold/25 hover:border-gold/60 transition">
                   <FaShoppingBasket className="text-cobalt text-lg drop-shadow-[0_0_6px_rgba(31,81,255,0.8)]" /> Zakupy
                 </Link>
-                <Link to="/o-mnie" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card border border-line">
+                <Link to="/o-mnie" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card/60 backdrop-blur-sm border border-gold/25 hover:border-gold/60 transition">
                   <FaCrown className="text-gold text-lg" /> O mnie
                 </Link>
               </div>
 
               <div>
-                <p className="label-pill mb-3">Rozdziały</p>
+                <p className="text-center font-display uppercase tracking-[0.2em] text-sm text-gold mb-3">Rozdziały</p>
                 <ChapterAccordion chapters={chapters} activeSlug={activeCategory} />
               </div>
 
@@ -221,6 +227,8 @@ export default function Layout() {
                   </button>
                 </div>
               )}
+            </div>
+            </OrnateFrame>
             </div>
           </div>
         )}

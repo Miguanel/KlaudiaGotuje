@@ -32,7 +32,7 @@ export default function ChapterAccordion({ chapters, activeSlug, twoColumns = fa
         return (
           <li
             key={ch.id}
-            className={`rounded-2xl border transition-all duration-300 ${open ? 'border-cobalt/40 bg-card shadow-glow' : 'border-line bg-card/60 hover:border-cobalt/30 hover:shadow-glow'}`}
+            className={`rounded-2xl border backdrop-blur-sm transition-all duration-300 ${open ? 'border-gold/50 bg-card/85 shadow-glow' : 'border-gold/15 bg-card/55 hover:border-gold/40 hover:bg-card/70 hover:shadow-glow'}`}
           >
             <button
               type="button"

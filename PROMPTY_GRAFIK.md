@@ -223,3 +223,35 @@ Gemini polecenia typu „lewa strona ma zanikać w ciemność” rysuje dosłown
 - [ ] Przy banerach rozdziałów lewa strona jest pusta, a potrawa po prawej na wysokości środka.
 - [ ] Przy tle za logo środek jest pusty.
 - [ ] Plik JPG/PNG/WEBP do 8 MB.
+
+---
+
+## 6. Tło listy rozdziałów (menu „Przepisy”)
+
+Styl jak na grafice-wzorze od klientki: złota ramka z koroną, diamenty i serca, a w rogach owoce, świece i róże na aksamicie. **Środek ma być pusty**, bo tam leży lista rozdziałów. Lista rozwija się i zmienia wysokość, więc ozdoby są tylko w rogach i na górnej i dolnej krawędzi. Boki ramki są prostymi liniami, dzięki czemu tło można rozciągać w pionie. Do ChatGPT warto dołączyć grafikę-wzór jako referencję stylu.
+
+### 6.1 Telefon (pionowo) – menu mobilne
+
+```
+Create a luxurious ornamental background for a vertical mobile menu, portrait 1024x1536.
+Use the attached image only as a style reference (same mood, colors and ornament style), but make it a tall portrait layout.
+Layout: an elegant thin brushed-gold frame running close to all four edges (about 6% margin), with rounded corners. At the top center of the frame: a small gold crown with a cut diamond and symmetrical gold filigree scrolls. At the bottom center: a matching gold filigree ornament with a diamond. Small sparkling diamonds at the four frame corners. The long left and right sides of the frame are plain, straight gold lines with no ornaments, so the image can be stretched vertically.
+Decorations ONLY in the four corners, outside or overlapping the frame edge: top-left a lit candle in a gold holder and a deep burgundy rose; top-right dark berries on a gold stand; bottom-left raspberries and blueberries in a gold bowl with a crystal heart; bottom-right a gold fork and a navy porcelain cup with a gold crown pattern. Keep them small, the corners only.
+The whole interior inside the frame (about 85% of the image) must be EMPTY: smooth, dark midnight-navy velvet (#0A1230) with a faint deep burgundy (#540B0E) marbled glow and a few tiny gold dust specks, low contrast, calm, so white and gold menu text stays readable on top of it.
+Palette: midnight navy, deep burgundy, brushed gold (#D4AF37), crystal white highlights. No pink, no purple tint.
+Style: photorealistic luxury still life, cinematic low-key lighting, rich detail on the ornaments.
+Absolutely no text, no letters, no logos, no watermark, nothing inside the frame.
+```
+
+### 6.2 Komputer (poziomo) – rozwijane menu „Przepisy”
+
+```
+Create a luxurious ornamental background for a wide dropdown menu panel, landscape 1536x1024.
+Use the attached image only as a style reference (same mood, colors and ornament style).
+Layout: a thin brushed-gold frame close to all four edges (about 4% margin) with rounded corners; at the top center a small gold crown with a cut diamond and symmetrical gold filigree scrolls; at the bottom center a matching filigree ornament with a diamond; small sparkling diamonds at the corners. Frame sides are plain straight gold lines.
+Decorations ONLY in the four corners and kept small: a lit candle and a burgundy rose top-left, dark berries on a gold stand top-right, raspberries and blueberries in a gold bowl with a crystal heart bottom-left, a gold fork and a navy cup with a gold crown pattern bottom-right.
+The interior inside the frame (about 85% of the image) must be EMPTY: smooth dark midnight-navy velvet (#0A1230) with a faint deep burgundy (#540B0E) marbled glow and a few tiny gold dust specks, low contrast, so menu text stays readable.
+Palette: midnight navy, deep burgundy, brushed gold (#D4AF37). No pink, no purple tint.
+Style: photorealistic luxury still life, cinematic low-key lighting.
+Absolutely no text, no letters, no logos, no watermark, nothing inside the frame.
+```
