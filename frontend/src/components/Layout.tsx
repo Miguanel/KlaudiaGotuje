@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import type React from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCategories } from '../hooks/useCategories';
@@ -7,7 +8,7 @@ import ImageEditor from './ImageEditor';
 import OrnateFrame from './OrnateFrame';
 import { useSiteImages } from '../hooks/useSiteImages';
 import {
-  FaCrown, FaHeart, FaShoppingBasket, FaPlus, FaSignOutAlt, FaSearch, FaChevronDown, FaBars, FaTimes,
+  FaCrown, FaHeart, FaShoppingBasket, FaPlus, FaSignOutAlt, FaSearch, FaChevronDown,
   FaInstagram, FaTiktok, FaEnvelope,
 } from 'react-icons/fa';
 
@@ -89,6 +90,33 @@ export default function Layout() {
     };
   }, [megaOpen]);
 
+  // Blokada przewijania strony pod otwartym menu mobilnym
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setMobileOpen(false); };
+    document.addEventListener('keydown', onKey);
+    return () => { document.body.style.overflow = prev; document.removeEventListener('keydown', onKey); };
+  }, [mobileOpen]);
+
+  // Animacje „przy przewijaniu”: elementy z atrybutem data-reveal płynnie wjeżdżają, gdy pojawią się na ekranie
+  useEffect(() => {
+    const root = document.documentElement;
+    if (!('IntersectionObserver' in window)) return;
+    root.classList.add('reveal-on');
+    const io = new IntersectionObserver(entries => {
+      entries.forEach(e => {
+        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
+      });
+    }, { rootMargin: '0px 0px -6% 0px', threshold: 0.06 });
+    const scan = () => document.querySelectorAll('[data-reveal]:not(.is-visible)').forEach(el => io.observe(el));
+    scan();
+    const mo = new MutationObserver(scan);
+    mo.observe(document.body, { childList: true, subtree: true });
+    return () => { io.disconnect(); mo.disconnect(); root.classList.remove('reveal-on'); };
+  }, []);
+
   const handleLogout = () => {
     logout();
     navigate('/');
@@ -153,7 +181,7 @@ export default function Layout() {
               aria-label={mobileOpen ? 'Zamknij menu' : 'Otwórz menu'}
               aria-expanded={mobileOpen}
             >
-              {mobileOpen ? <FaTimes className="text-xl" /> : <FaBars className="text-xl" />}
+              <MenuIcon open={mobileOpen} />
             </button>
           </div>
         </div>
@@ -178,29 +206,34 @@ export default function Layout() {
 
           {/* MEGA-MENU: wszystkie rozdziały i podrozdziały w jednym miejscu */}
           <div
-            className={`absolute left-0 right-0 top-full bg-ink/90 backdrop-blur-md border-b border-line shadow-2xl shadow-black/60 transition-all duration-300 origin-top ${
-              megaOpen ? 'opacity-100 visible translate-y-0' : 'opacity-0 invisible -translate-y-2'
-            }`}
+            data-open={megaOpen}
+            inert={!megaOpen}
+            className="menu-panel absolute left-0 right-0 top-full bg-ink/90 backdrop-blur-md border-b border-line shadow-2xl shadow-black/60"
           >
             <div className="max-w-6xl mx-auto px-4 py-4 max-h-[calc(100vh-8.5rem)] overflow-y-auto no-scrollbar">
-              <OrnateFrame className="shadow-banner">
-                <p className="text-center font-display uppercase tracking-[0.2em] text-sm text-gold mb-1">Rozdziały przepisów</p>
-                <p className="text-center text-xs text-muted mb-5">Wybierz rozdział, aby zobaczyć podrozdziały</p>
-                <ChapterAccordion chapters={chapters} activeSlug={activeCategory} twoColumns />
+              <OrnateFrame className="shadow-banner menu-frame">
+                <p className="menu-item text-center font-display uppercase tracking-[0.2em] text-sm text-gold mb-1">Rozdziały przepisów</p>
+                <p className="menu-item text-center text-xs text-muted mb-5">Wybierz rozdział, aby zobaczyć podrozdziały</p>
+                <ChapterAccordion chapters={chapters} activeSlug={activeCategory} twoColumns staggered />
               </OrnateFrame>
             </div>
           </div>
         </div>
 
         {/* MENU MOBILNE */}
-        {mobileOpen && (
-          <div className="md:hidden absolute top-full inset-x-0 bg-ink/85 backdrop-blur-md border-b border-line shadow-2xl shadow-black/70 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain animate-menu-in">
+        <div
+          data-open={mobileOpen}
+          inert={!mobileOpen}
+          className="menu-panel md:hidden absolute top-full inset-x-0 bg-ink/85 backdrop-blur-md border-b border-line shadow-2xl shadow-black/70 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain"
+        >
             <div className="p-2">
-            <OrnateFrame>
+            <OrnateFrame className="menu-frame">
             <div className="space-y-5">
-              <SearchBox onDone={() => setMobileOpen(false)} />
+              <div className="menu-item" style={{ '--i': 0 } as React.CSSProperties}>
+                <SearchBox onDone={() => setMobileOpen(false)} />
+              </div>
 
-              <div className="grid grid-cols-3 gap-2 text-xs font-semibold">
+              <div className="menu-item grid grid-cols-3 gap-2 text-xs font-semibold" style={{ '--i': 1 } as React.CSSProperties}>
                 <Link to="/ulubione" className="flex flex-col items-center gap-1.5 py-3 rounded-xl bg-card/60 backdrop-blur-sm border border-gold/25 hover:border-gold/60 transition">
                   <FaHeart className="text-chili text-lg" /> Ulubione
                 </Link>
@@ -213,8 +246,8 @@ export default function Layout() {
               </div>
 
               <div>
-                <p className="text-center font-display uppercase tracking-[0.2em] text-sm text-gold mb-3">Rozdziały</p>
-                <ChapterAccordion chapters={chapters} activeSlug={activeCategory} />
+                <p className="menu-item text-center font-display uppercase tracking-[0.2em] text-sm text-gold mb-3" style={{ '--i': 2 } as React.CSSProperties}>Rozdziały</p>
+                <ChapterAccordion chapters={chapters} activeSlug={activeCategory} staggered />
               </div>
 
               {isAuthenticated && (
@@ -230,11 +263,10 @@ export default function Layout() {
             </div>
             </OrnateFrame>
             </div>
-          </div>
-        )}
+        </div>
       </header>
 
-      <main className="flex-grow w-full">
+      <main key={location.pathname} className="flex-grow w-full animate-page-in">
         <Outlet />
       </main>
 
@@ -275,5 +307,17 @@ export default function Layout() {
         </div>
       </footer>
     </div>
+  );
+}
+
+/** Hamburger, który płynnie zamienia się w „X”. */
+function MenuIcon({ open }: { open: boolean }) {
+  const bar = 'absolute left-0 h-[2px] w-full rounded-full bg-current transition-all duration-500 ease-[cubic-bezier(.68,-0.4,.27,1.4)]';
+  return (
+    <span className="relative block w-5 h-4" aria-hidden="true">
+      <span className={`${bar} ${open ? 'top-[7px] rotate-45 bg-gold' : 'top-0'}`} />
+      <span className={`${bar} top-[7px] ${open ? 'opacity-0 scale-x-0' : 'opacity-100'}`} />
+      <span className={`${bar} ${open ? 'top-[7px] -rotate-45 bg-gold' : 'top-[14px]'}`} />
+    </span>
   );
 }

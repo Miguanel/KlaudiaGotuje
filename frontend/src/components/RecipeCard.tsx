@@ -17,7 +17,7 @@ export default function RecipeCard({ recipe, isFavorite = false, onToggleFavorit
   return (
     <Link
       to={`/przepis/${recipe.id}`}
-      className="group flex flex-col bg-card rounded-2xl overflow-hidden border border-line shadow-glow hover:shadow-glow-strong hover:border-cobalt/40 transition-all duration-500 ease-out hover:-translate-y-1"
+      className="group w-full flex flex-col bg-card rounded-2xl overflow-hidden border border-line shadow-glow hover:shadow-glow-strong hover:border-cobalt/40 transition-all duration-500 ease-out hover:-translate-y-1"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-panel">
         <img

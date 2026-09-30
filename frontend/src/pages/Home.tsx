@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import type React from 'react';
 import { Link, useLocation, useSearchParams } from 'react-router-dom';
 import { useRecipes } from '../hooks/useRecipes';
 import { useCategories, updateCachedCategory, type Chapter } from '../hooks/useCategories';
@@ -90,8 +91,10 @@ export default function Home() {
           <QuickLinks site={site} featured={featured} onSort={(s) => setParam('sort', s === 'date' ? null : s, true)} />
 
           <section id="rozdzialy-sekcja" className="mt-6 sm:mt-8 space-y-4 sm:space-y-5 scroll-mt-36" aria-label="Rozdziały przepisów">
-            {chapters.map(ch => (
-              <ChapterBanner key={ch.id} chapter={ch} image={chapterImage(ch, recipes)} />
+            {chapters.map((ch, i) => (
+              <div key={ch.id} data-reveal style={{ '--d': `${(i % 2) * 90}ms` } as React.CSSProperties}>
+                <ChapterBanner chapter={ch} image={chapterImage(ch, recipes)} />
+              </div>
             ))}
           </section>
         </>
@@ -211,8 +214,10 @@ export default function Home() {
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {recipes.map((recipe: Recipe) => (
-              <RecipeCard key={recipe.id} recipe={recipe} isFavorite={isFavorite(recipe.id)} onToggleFavorite={toggle} />
+            {recipes.map((recipe: Recipe, i: number) => (
+              <div key={recipe.id} data-reveal className="flex" style={{ '--d': `${(i % 3) * 110}ms` } as React.CSSProperties}>
+                <RecipeCard recipe={recipe} isFavorite={isFavorite(recipe.id)} onToggleFavorite={toggle} />
+              </div>
             ))}
           </div>
         )}
@@ -231,7 +236,7 @@ function BrandHero({ site }: { site: ReturnType<typeof useSiteImages> }) {
   const bg = site.src('tlo-logo');
   return (
     <section className="relative pt-8 sm:pt-14 pb-4 sm:pb-10 text-center">
-      {bg && <img src={bg} alt="" className="absolute -left-4 top-0 w-[calc(100%+2rem)] h-full object-cover object-[center_30%] opacity-95 mask-fade-hero pointer-events-none" aria-hidden="true" />}
+      {bg && <img src={bg} alt="" className="absolute -left-4 top-0 w-[calc(100%+2rem)] h-full object-cover object-[center_30%] opacity-95 mask-fade-hero pointer-events-none animate-hero-bg" aria-hidden="true" />}
       <ImageEditor
         label="Tło za logo"
         currentUrl={site.url('tlo-logo')}
@@ -249,14 +254,14 @@ function BrandHero({ site }: { site: ReturnType<typeof useSiteImages> }) {
       {!bg && <GiSparkles className="hidden sm:block absolute right-[16%] top-6 text-2xl text-cream/70 animate-twinkle [animation-delay:.6s]" aria-hidden="true" />}
 
       <div className="relative">
-        <GiCrown className="mx-auto text-gold text-4xl sm:text-5xl drop-shadow-[0_0_14px_rgba(212,175,55,0.75)]" aria-hidden="true" />
-        <h1 className="font-brand font-bold leading-none text-[2.6rem] sm:text-6xl lg:text-7xl text-gold-shine drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
+        <GiCrown className="mx-auto text-gold text-4xl sm:text-5xl drop-shadow-[0_0_14px_rgba(212,175,55,0.75)] animate-crown-in" aria-hidden="true" />
+        <h1 className="animate-hero-in [animation-delay:.15s] font-brand font-bold leading-none text-[2.6rem] sm:text-6xl lg:text-7xl text-gold-shine drop-shadow-[0_2px_10px_rgba(0,0,0,0.6)]">
           Diamentowe Smaki
         </h1>
-        <p className="font-script text-gold text-4xl sm:text-5xl lg:text-6xl -mt-1 sm:-mt-2 drop-shadow-[0_0_10px_rgba(212,175,55,0.35)]">
+        <p className="animate-hero-in [animation-delay:.35s] font-script text-gold text-4xl sm:text-5xl lg:text-6xl -mt-1 sm:-mt-2 drop-shadow-[0_0_10px_rgba(212,175,55,0.35)]">
           Engibadwoman
         </p>
-        <Flourish className="justify-center mt-2" wide />
+        <Flourish className="justify-center mt-2 animate-hero-in [animation-delay:.5s]" wide />
       </div>
     </section>
   );
@@ -271,7 +276,7 @@ function QuickLinks({ site, featured, onSort }: { site: ReturnType<typeof useSit
   const hidden = featured.length - VISIBLE;
 
   return (
-    <div className="relative mt-6 sm:mt-8">
+    <div className="relative mt-6 sm:mt-8" data-reveal>
     <nav aria-label="Szybkie skróty" className="relative overflow-hidden frame-gold rounded-2xl p-3 sm:p-4">
       {bg && <img src={bg} alt="" className="absolute inset-0 w-full h-full object-cover opacity-70 pointer-events-none" aria-hidden="true" />}
       <ul className="relative -mx-3 px-3 py-1 sm:mx-0 sm:px-0 flex items-center gap-2 sm:gap-3 overflow-x-auto no-scrollbar sm:flex-wrap sm:justify-center">
@@ -286,7 +291,11 @@ function QuickLinks({ site, featured, onSort }: { site: ReturnType<typeof useSit
           </button>
         </li>
         {shown.map((c, i) => (
-          <li key={c.id} className="shrink-0">
+          <li
+            key={c.id}
+            className={`shrink-0 ${i >= VISIBLE ? 'animate-pill-in' : ''}`}
+            style={i >= VISIBLE ? { animationDelay: `${(i - VISIBLE) * 40}ms` } : undefined}
+          >
             <Link to={`/?category=${c.slug}`} className={`pill whitespace-nowrap ${i % 2 === 0 ? 'pill-burgundy' : 'pill-navy'}`}>{c.name}</Link>
           </li>
         ))}
@@ -352,7 +361,11 @@ function ChapterBanner({ chapter, image }: { chapter: Chapter; image: string | n
         {chapter.children.length > 0 && (
           <ul className="mt-4 sm:mt-5 flex flex-wrap items-center gap-2 sm:gap-3 sm:max-w-[80%]">
             {subs.map((sub, i) => (
-              <li key={sub.id}>
+              <li
+                key={sub.id}
+                className={i >= VISIBLE_SUBS ? 'animate-pill-in' : undefined}
+                style={i >= VISIBLE_SUBS ? { animationDelay: `${(i - VISIBLE_SUBS) * 45}ms` } : undefined}
+              >
                 <Link to={`/?category=${sub.slug}`} className={`pill ${i % 2 === 0 ? 'pill-burgundy' : 'pill-navy'}`}>
                   {sub.name}
                 </Link>
