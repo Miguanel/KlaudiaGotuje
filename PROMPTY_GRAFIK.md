@@ -226,32 +226,40 @@ Gemini polecenia typu „lewa strona ma zanikać w ciemność” rysuje dosłown
 
 ---
 
-## 6. Tło listy rozdziałów (menu „Przepisy”)
+## 6. Tło listy rozdziałów (menu „Przepisy”) – wersja 2
 
-Styl jak na grafice-wzorze od klientki: złota ramka z koroną, diamenty i serca, a w rogach owoce, świece i róże na aksamicie. **Środek ma być pusty**, bo tam leży lista rozdziałów. Lista rozwija się i zmienia wysokość, więc ozdoby są tylko w rogach i na górnej i dolnej krawędzi. Boki ramki są prostymi liniami, dzięki czemu tło można rozciągać w pionie. Do ChatGPT warto dołączyć grafikę-wzór jako referencję stylu.
+Pierwsza wersja wyszła zbyt pusta, ciemna i skromna w porównaniu z grafiką klientki. Ten prompt wprost każe odtworzyć jej „bogactwo”: więcej aksamitnych draperii w burgundzie i granacie wokół ramki, wiele błysków i bokeh, diamenty wzdłuż ramki, bogate złote ornamenty, kilka świec, filiżanki i tarcze z koronami, desery z owocami oraz wnętrze z fioletowo-burgundowym marmurkowym aksamitem.
 
-### 6.1 Telefon (pionowo) – menu mobilne
+**Zawsze dołącz grafikę klientki jako referencję.** Prompt odwołuje się do niej wprost.
+
+### 6.1 Telefon (pionowo) – najważniejsza
 
 ```
-Create a luxurious ornamental background for a vertical mobile menu, portrait 1024x1536.
-Use the attached image only as a style reference (same mood, colors and ornament style), but make it a tall portrait layout.
-Layout: an elegant thin brushed-gold frame running close to all four edges (about 6% margin), with rounded corners. At the top center of the frame: a small gold crown with a cut diamond and symmetrical gold filigree scrolls. At the bottom center: a matching gold filigree ornament with a diamond. Small sparkling diamonds at the four frame corners. The long left and right sides of the frame are plain, straight gold lines with no ornaments, so the image can be stretched vertically.
-Decorations ONLY in the four corners, outside or overlapping the frame edge: top-left a lit candle in a gold holder and a deep burgundy rose; top-right dark berries on a gold stand; bottom-left raspberries and blueberries in a gold bowl with a crystal heart; bottom-right a gold fork and a navy porcelain cup with a gold crown pattern. Keep them small, the corners only.
-The whole interior inside the frame (about 85% of the image) must be EMPTY: smooth, dark midnight-navy velvet (#0A1230) with a faint deep burgundy (#540B0E) marbled glow and a few tiny gold dust specks, low contrast, calm, so white and gold menu text stays readable on top of it.
-Palette: midnight navy, deep burgundy, brushed gold (#D4AF37), crystal white highlights. No pink, no purple tint.
-Style: photorealistic luxury still life, cinematic low-key lighting, rich detail on the ornaments.
-Absolutely no text, no letters, no logos, no watermark, nothing inside the frame.
+Recreate the attached reference image as closely as possible in style, richness, lighting and color, but as a TALL PORTRAIT composition, 1024x1536. Match the reference's opulent, dramatic, glowing look – it must look just as rich and busy around the edges as the reference, not minimal.
+
+FRAME: an ornate brushed-gold frame with slightly rounded corners, set about 9% in from the left and right edges and about 9% from the top and bottom. At the top center: a jeweled gold crown with a large cut diamond, flanked by elaborate symmetrical gold filigree scrolls with tiny sparkles and small four-point star glints. At the bottom center: a matching filigree ornament with a cut diamond. At each of the four frame corners: a cluster of 2–3 sparkling cut diamonds and gold filigree curls. Along the upper and lower quarters of the left and right frame sides: small diamond studs and climbing gold leaves. The middle of each long side stays a clean, straight gold line (so the image can be stretched vertically).
+
+OUTSIDE THE FRAME (the whole border area, dense and layered like the reference): deep burgundy and midnight-navy velvet draped in heavy folds with glossy highlights. Top-left: a lit candle in a gold candle holder embossed with a crown, a deep red rose, gold leaves. Top-right: a gold cake stand with a berry dessert (blackberries, raspberries, blueberries), a second small candle glowing. Bottom-left: a gold bowl overflowing with raspberries and blueberries, a faceted crystal heart pendant, gold leaves. Bottom-right: a navy porcelain cup with a gold crown emblem and creamy dessert, a gold fork, a few berries. Faint embossed gold crown motifs on navy shields in the shadows. Warm bokeh, glitter and small lens-flare sparkles scattered around the border.
+
+INSIDE THE FRAME (about 80% of the image): EMPTY of objects – rich dark velvet with a marbled texture of deep navy, plum-purple and burgundy (#0A1230, #2A0F2E, #540B0E), subtle glowing gold dust along the inner edge of the frame, a soft vignette. Dark and calm enough for light menu text, but textured and luminous like the reference, not flat black.
+
+LIGHT & COLOR: cinematic, warm candlelight glow from the corners, strong gold highlights and sparkle, saturated burgundy and navy, crystal-white diamond glints. No pink.
+Style: photorealistic luxury fantasy still life, ultra detailed, high contrast.
+Absolutely no text, no letters, no logos, no watermark, no objects inside the frame.
 ```
 
 ### 6.2 Komputer (poziomo) – rozwijane menu „Przepisy”
 
 ```
-Create a luxurious ornamental background for a wide dropdown menu panel, landscape 1536x1024.
-Use the attached image only as a style reference (same mood, colors and ornament style).
-Layout: a thin brushed-gold frame close to all four edges (about 4% margin) with rounded corners; at the top center a small gold crown with a cut diamond and symmetrical gold filigree scrolls; at the bottom center a matching filigree ornament with a diamond; small sparkling diamonds at the corners. Frame sides are plain straight gold lines.
-Decorations ONLY in the four corners and kept small: a lit candle and a burgundy rose top-left, dark berries on a gold stand top-right, raspberries and blueberries in a gold bowl with a crystal heart bottom-left, a gold fork and a navy cup with a gold crown pattern bottom-right.
-The interior inside the frame (about 85% of the image) must be EMPTY: smooth dark midnight-navy velvet (#0A1230) with a faint deep burgundy (#540B0E) marbled glow and a few tiny gold dust specks, low contrast, so menu text stays readable.
-Palette: midnight navy, deep burgundy, brushed gold (#D4AF37). No pink, no purple tint.
-Style: photorealistic luxury still life, cinematic low-key lighting.
-Absolutely no text, no letters, no logos, no watermark, nothing inside the frame.
+Recreate the attached reference image as closely as possible in style, richness, lighting and color, landscape 1536x1024. Match its opulent, dramatic, glowing look – dense decorations around the edges, not minimal.
+FRAME: ornate brushed-gold frame with slightly rounded corners, about 7% in from the left/right edges and 10% from top/bottom; jeweled gold crown with a large cut diamond and elaborate filigree scrolls at the top center; matching filigree with a cut diamond at the bottom center; clusters of sparkling cut diamonds at the four corners; small diamond studs and climbing gold leaves near the corners; the middle parts of all four sides are clean straight gold lines.
+OUTSIDE THE FRAME: heavy burgundy and midnight-navy velvet drapery; top-left a lit candle in a crown-embossed gold holder and a red rose; top-right a gold cake stand with a berry dessert and a candle; bottom-left a gold bowl of raspberries and blueberries with a crystal heart pendant; bottom-right a navy cup with a gold crown emblem, creamy dessert and a gold fork; faint gold crown emblems on navy shields in the shadows; warm bokeh, glitter and lens-flare sparkles.
+INSIDE THE FRAME (about 80%): empty of objects – dark marbled velvet in deep navy, plum-purple and burgundy (#0A1230, #2A0F2E, #540B0E) with subtle gold dust along the inner frame edge; calm enough for light text but luminous, not flat.
+Cinematic warm candlelight, strong gold sparkle, saturated burgundy and navy. No pink. Photorealistic luxury fantasy still life, ultra detailed.
+Absolutely no text, no letters, no logos, no watermark, no objects inside the frame.
 ```
+
+**Jeśli wyjdzie za skromnie**, dopisz w tej samej rozmowie:
+*„Make it much richer and more glowing, like the reference: more velvet drapery, more sparkles and diamonds, brighter gold, bigger corner decorations – keep the inside of the frame empty.”*
+
+Po wygenerowaniu nowej grafiki pocięcie w kodzie trzeba dopasować do nowego położenia ramki, więc prześlij plik do przygotowania.

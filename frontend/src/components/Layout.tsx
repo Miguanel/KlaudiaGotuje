@@ -226,7 +226,7 @@ export default function Layout() {
           inert={!mobileOpen}
           className="menu-panel md:hidden absolute top-full inset-x-0 bg-ink/85 backdrop-blur-md border-b border-line shadow-2xl shadow-black/70 max-h-[calc(100dvh-4rem)] overflow-y-auto overscroll-contain"
         >
-            <div className="p-2">
+            <div className="p-1">
             <OrnateFrame className="menu-frame">
             <div className="space-y-5">
               <div className="menu-item" style={{ '--i': 0 } as React.CSSProperties}>

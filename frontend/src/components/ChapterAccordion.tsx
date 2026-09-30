@@ -49,7 +49,7 @@ export default function ChapterAccordion({ chapters, activeSlug, twoColumns = fa
               <span className={`w-9 h-9 shrink-0 rounded-xl flex items-center justify-center transition-all duration-500 ease-[cubic-bezier(.34,1.56,.64,1)] ${open ? 'bg-burgundy text-gold border border-gold/60 -rotate-12 scale-110 shadow-[0_0_14px_rgba(212,175,55,0.45)]' : 'bg-burgundy/50 text-gold border border-burgundy group-hover/acc:scale-105 group-hover/acc:-rotate-6'}`}>
                 <Icon className="text-xl" />
               </span>
-              <span className={`flex-1 font-display uppercase tracking-wide text-base sm:text-lg transition-colors ${open ? 'text-gold' : 'text-cream'}`}>
+              <span className={`flex-1 font-display uppercase tracking-wide text-[15px] leading-snug sm:text-lg transition-colors ${open ? 'text-gold' : 'text-cream'}`}>
                 {ch.name}
               </span>
               <span className="text-xs text-muted hidden sm:inline">{ch.children.length}</span>

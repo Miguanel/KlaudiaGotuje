@@ -334,9 +334,9 @@ li[data-open="true"] .sub-pill:hover { transform: translateY(-2px); }
 }
 
 /* Ozdobna ramka menu (OrnateFrame) – skala grafiki zależna od ekranu */
-.ornate-frame { --s: 0.36; }
-@media (width < 22rem) { .ornate-frame { --s: 0.32; } }
-@media (width >= 48rem) { .ornate-frame { --s: 0.5; } }
+.ornate-frame { --s: 0.3; }
+@media (width < 22rem) { .ornate-frame { --s: 0.26; } }
+@media (width >= 48rem) { .ornate-frame { --s: 0.42; } }
 
 /* Ukryty pasek przewijania (poziome listy) */
 @utility no-scrollbar {
