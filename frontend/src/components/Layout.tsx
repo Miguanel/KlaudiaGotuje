@@ -275,7 +275,7 @@ export default function Layout() {
           <div className="space-y-3">
             <Logo />
             <p className="text-sm text-muted leading-relaxed max-w-xs">
-              Królewskie przepisy na co dzień – lekko, sycąco i z charakterem.
+              Gotuj po królewsku każdego dnia! Odkryj pyszne i sycące dania z charakterem.
             </p>
           </div>
 
